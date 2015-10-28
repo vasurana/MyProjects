@@ -1,0 +1,547 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:background="@android:color/black">
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="left"
+        android:background="@color/buttonBackground"
+        android:orientation="horizontal">
+        <!--<ImageView-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:padding="@dimen/activity__margin_small"-->
+            <!--android:layout_marginLeft="@dimen/activity__margin_small"-->
+            <!--android:background="@drawable/logo" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text ="@string/action_settings"
+            android:layout_marginTop="@dimen/activity__margin_small"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity__margin_small"
+            android:layout_gravity="center"
+            android:textSize="@dimen/text_size"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="@dimen/activity__margin_small"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/logo" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_DisplayName"
+                    android:textColor="@android:color/white" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/id_txtDisplayName"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.3"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:hint="@string/str_hint_DisplayName"
+                        android:singleLine="true"
+                        android:text="" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.7"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_Address"
+                    android:textColor="@android:color/white" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/id_txtAddress"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.3"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:height="@dimen/address_editbox_height"
+                        android:hint="@string/str_hint_Address"
+                        android:maxLines="5"
+                        android:text="" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.7"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_Asset_Id"
+                    android:textColor="@android:color/white"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/id_txtAssetId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:layout_gravity="center_horizontal"
+                        android:hint="@string/str_hint_Asser_Id"
+                        android:singleLine="true"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:text="" />
+
+                    <Button
+                        android:id="@+id/btnSaveAsset"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.10"
+                        android:layout_height="@dimen/button_height"
+                        android:background="@drawable/button_state"
+                        android:paddingLeft="@dimen/activity_vertical_margin"
+                        android:paddingRight="@dimen/activity_vertical_margin"
+                        android:textColor="@android:color/white"
+                        android:textAlignment="center"
+                        android:text="@string/btnSave" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.7"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"/>
+
+                </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/str_ScreenOrientation"
+                        android:textColor="@android:color/white"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:id="@+id/spinner_orientation"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.3"
+                        android:layout_height="wrap_content"
+                        android:minHeight="0dp"
+                        android:textSize="@dimen/text_size" />
+                    <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"/>
+
+                </LinearLayout>
+                <!--<RadioGroup
+                    android:id="@+id/id_rgrp_sound"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/landscape"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:checked="true"
+                        android:gravity="left|center_vertical"
+                        android:textColor="@android:color/darker_gray" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_LandScape"
+                        android:textAppearance="?android:attr/textAppearance"
+                        android:textColor="@android:color/darker_gray" />
+
+                    <RadioButton
+                        android:id="@+id/landscapeReverse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:gravity="left|center_vertical"
+                        android:textColor="@android:color/darker_gray" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_LandscapeReverse"
+                        android:textAppearance="?android:attr/textAppearance"
+                        android:textColor="@android:color/darker_gray" />
+
+                    <RadioButton
+                        android:id="@+id/Portrait"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:gravity="left|center_vertical"
+                        android:textColor="@android:color/darker_gray" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_Portrait"
+                        android:textAppearance="?android:attr/textAppearance"
+                        android:textColor="@android:color/darker_gray" />
+
+                    <RadioButton
+                        android:id="@+id/portraitReverse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:gravity="left|center_vertical"
+                        android:textColor="@android:color/darker_gray" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_PortraitReverse"
+                        android:textAppearance="?android:attr/textAppearance"
+                        android:textColor="@android:color/darker_gray" />
+                </RadioGroup>-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/btnRegister"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_height"
+                        android:background="@drawable/button_state"
+                        android:paddingLeft="@dimen/activity_vertical_margin"
+                        android:paddingRight="@dimen/activity_vertical_margin"
+                        android:text="@string/btnRegister"
+                        android:textColor="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/btnRefresh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:background="@drawable/button_state"
+                        android:paddingLeft="@dimen/activity_vertical_margin"
+                        android:paddingRight="@dimen/activity_vertical_margin"
+                        android:text="@string/btnRefresh"
+                        android:textColor="@android:color/white" />
+                    <Button
+                    android:id="@+id/btnRoot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginLeft="@dimen/activity_vertical_margin"
+                    android:background="@drawable/button_state"
+                    android:paddingLeft="@dimen/activity_vertical_margin"
+                    android:paddingRight="@dimen/activity_vertical_margin"
+                    android:text="Root"
+                    android:textColor="@android:color/white" />
+                    <Button
+                        android:id="@+id/btnwifi_setting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_marginLeft="@dimen/activity_vertical_margin"
+                        android:background="@drawable/button_state"
+                        android:paddingLeft="@dimen/activity_vertical_margin"
+                        android:paddingRight="@dimen/activity_vertical_margin"
+                        android:text="@string/wifi_settings"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.21"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_connectionStatus"
+                        android:textColor="@android:color/white"
+                        />
+                    <TextView
+                        android:id="@+id/id_txtConnection"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="not connected"
+                        android:textColor="@android:color/secondary_text_dark" />
+                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_RegisterID"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/id_txtRegistrationId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Registration ID"
+                        android:textColor="@android:color/secondary_text_dark" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_macId"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/id_txtMacId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Mac Address"
+                        android:textColor="@android:color/secondary_text_dark" />
+                </LinearLayout>
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_IpAddress"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/id_txtIpId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Ip Address"
+                        android:textColor="@android:color/secondary_text_dark" />
+                </LinearLayout>
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_resolution"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/id_txtResolution"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="---"
+                        android:textColor="@android:color/darker_gray" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/layout_Location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:paddingTop="@dimen/activity_vertical_margin"
+                        android:text="@string/str_location"
+                        android:textColor="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/id_txtLocation"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="---"
+                        android:textColor="@android:color/darker_gray" />
+                </LinearLayout>
+                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2"
+                            android:paddingTop="@dimen/activity_vertical_margin"
+                            android:text="@string/str_app_version"
+                            android:textColor="@android:color/white" />
+
+                        <TextView
+                            android:id="@+id/id_version"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.7"
+                            android:text="1.0"
+                            android:textColor="@android:color/darker_gray" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <Button
+                        android:id="@+id/btnSave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/btnSave" />
+
+                    <Button
+                        android:id="@+id/btnStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="@string/btnStart" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!--<ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:indeterminate="false"
+        android:progress="1" />
+-->
+    <TextView
+        android:id="@+id/id_txtInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:text="@string/process_text"
+        android:textColor="@color/buttonBackground"
+        android:textSize="@dimen/process_text_size" />
+
+    <!-- <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_centerInParent="true"
+         android:orientation="horizontal" >
+
+         <Button
+             android:id="@+id/btnRegister"
+             android:layout_width="wrap_content"
+             android:layout_height="@dimen/button_height"
+             android:background="@drawable/button_state"
+             android:paddingLeft="@dimen/activity_vertical_margin"
+             android:paddingRight="@dimen/activity_vertical_margin"
+             android:text="@string/btnRegister"
+             android:textColor="@android:color/white" />
+
+         <Button
+             android:id="@+id/btnRefresh"
+             android:layout_width="wrap_content"
+             android:layout_height="@dimen/button_height"
+             android:layout_marginLeft="@dimen/activity_vertical_margin"
+             android:background="@drawable/button_state"
+             android:paddingLeft="@dimen/activity_vertical_margin"
+             android:paddingRight="@dimen/activity_vertical_margin"
+             android:text="@string/btnRefresh"
+             android:textColor="@android:color/white" />
+         <Button
+             android:id="@+id/btnRoot"
+             android:layout_width="wrap_content"
+             android:layout_height="@dimen/button_height"
+             android:layout_marginLeft="@dimen/activity_vertical_margin"
+             android:background="@drawable/button_state"
+             android:paddingLeft="@dimen/activity_vertical_margin"
+             android:paddingRight="@dimen/activity_vertical_margin"
+             android:text="Root"
+             android:textColor="@android:color/white" />
+     </LinearLayout>-->
+    <!--
+       <ImageView
+        android:layout_width="250dp"
+        android:layout_height="102dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/logo" />
+    -->
+
+</RelativeLayout>

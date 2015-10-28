@@ -1,0 +1,3619 @@
+package in.com.app;
+
+import in.com.app.background.BackgroundServerDownloadIndividualFilesDisplay;
+import in.com.app.background.StateMachineDisplay;
+import in.com.app.data.LogData;
+import in.com.app.data.RawData;
+import in.com.app.data.RefreshMediaData;
+import in.com.app.data.SignageData;
+import in.com.app.data.SyncMediaData;
+import in.com.app.domain.DisplayLayout;
+import in.com.app.domain.DisplayLayout.MediaOptions;
+import in.com.app.domain.DisplayLayoutFile;
+import in.com.app.domain.DisplayLayoutFiles;
+import in.com.app.domain.DisplayLayoutSchedule;
+import in.com.app.domain.DisplayLayoutScheduleDefaultFile;
+import in.com.app.model.LayoutTimeData;
+import in.com.app.model.LocationData;
+import in.com.app.model.MediaTimeData;
+import in.com.app.model.OnOffTimeData;
+import in.com.app.model.IAPIConstants;
+import in.com.app.network.ServiceURLManager;
+import in.com.app.network.VolleySingleton;
+import in.com.app.storage.caching.sqlight.MySqliteHelper;
+import in.com.app.storage.caching.sqlight.manager.DataCacheManager;
+import in.com.app.updater.LogUtility;
+import in.com.app.updater.SyncLayoutReceiver;
+import in.com.app.utility.MyExceptionHandler;
+import in.com.app.utility.Utility;
+import in.com.app.wsdl.XMDS;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Vector;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnInfoListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.util.Log;
+import android.view.Display;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+import android.widget.VideoView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+//import com.google.gson.Gson;
+
+/**
+ *
+ * @author Ravi@Xvidia Technologies
+ * @version 1.0 This is the display class where layout is dynamically created
+ *          according the layout received from the server.
+ *
+ */
+public class SignageDisplay extends Activity implements IDisplayLayout {
+
+	// public static Bitmap bmp ;
+
+	final int _TIME_TO_REHIT_SERVER = 1 * 30 * 1000;// 5*60*1000;
+	// public static boolean backGroundFlag = false;
+	public static boolean backGroundDownloadStarted = false;
+	public static boolean backGroundRefresh = false;
+	static boolean scheduleRefresh = false;
+	static String displayedLayout = "";
+	static String nextLayout = "";
+	static long nextLayoutTime = 0, nextStartTime = 0, nextEndTime = 0;
+	public static boolean alarmRefresh = false;
+	static Handler handler = null, timerTaskHandler = null,
+			timerTaskMediaUpdate = null, refreshHandler = null,
+			nextLayoutHandler = null, currentFileHandler = null;
+	static private Runnable runnable, runnableTimerTask, runnableMediaUpdate,
+			refreshRunnable, nextLayoutRunnable, currentFileRunnble;
+	Vector<OnOffTimeData> onOffListBox = new Vector<OnOffTimeData>();
+	Vector<OnOffTimeData> onOffListScreen = new Vector<OnOffTimeData>();
+	Vector<OnOffTimeData> onOffListAPP = new Vector<OnOffTimeData>();
+	Vector<MediaTimeData> mList = new Vector<MediaTimeData>();
+	Vector<LayoutTimeData> mListLayout = new Vector<LayoutTimeData>();
+	// static MediaTimeData mediaTimeObj;
+	// static LayoutTimeData layoutTimeObj;
+	ArrayList<SyncMediaData> syncMediaList = null;
+	int currentApiVersion;
+	ArrayList<RefreshMediaData> refreshMediaList = null;
+
+	// String testVar="Connected";
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		// View decorView = getWindow().getDecorView();
+		// int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+		// View.SYSTEM_UI_FLAG_FULLSCREEN;
+		// decorView.setSystemUiVisibility(uiOptions);
+		currentApiVersion = android.os.Build.VERSION.SDK_INT;
+
+		final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+				| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+				| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+				| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+				| View.SYSTEM_UI_FLAG_FULLSCREEN
+				| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
+		// This work only for android 4.4+
+		if (currentApiVersion >= Build.VERSION_CODES.KITKAT) {
+
+			getWindow().getDecorView().setSystemUiVisibility(flags);
+
+			// Code below is to handle presses of Volume up or Volume down.
+			// Without this, after pressing volume buttons, the navigation bar
+			// will
+			// show up and won't hide
+			final View decorView = getWindow().getDecorView();
+			decorView
+					.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+
+						@Override
+						public void onSystemUiVisibilityChange(int visibility) {
+							if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+								decorView.setSystemUiVisibility(flags);
+							}
+						}
+					});
+		}
+		setContentView(R.layout.layout_signage);
+		// if(getIntent().getExtras()!=null){
+		// String info = getIntent().getExtras().getString("name");
+		// Log.d("getIntent() getIntent()", ""+info);
+		// }
+		AppState.ACTION_ON_PAUSE = false;
+		Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this,
+				AppMain.class));
+		// onPost();
+		// showImage();
+		AppState.BACKPRESSED_SIGNAGE_SCREEN = false;
+		setScreenOn();
+		backGroundDownloadStarted = false;
+		createUI();
+		// boolean flag =
+		// LogData.getInstance().setActiveLayout(AppMain.getAppMainContext(),
+		// getCurrentLayout());
+		// if(flag){
+		// sendLogRequest(AppMain.getAppMainContext(),
+		// LogUtility.getInstance().getActiveLayoutJSON(AppMain.getAppMainContext()),LogUtility.getActiveLayoutLogtUrl());
+		// }
+
+		// if(LogUtility.checkNetwrk(AppMain.getAppMainContext())){
+		// try {
+		// syncSavedListMediaLayoutData();
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// }
+		sendMediaUpdate();
+		// setSyncLayoutAlarm(this);
+	}
+
+	@Deprecated
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		// if (getResources().getConfiguration().orientation ==
+		// Configuration.ORIENTATION_LANDSCAPE) {
+		// setContentView(R.layout.landscapeView);
+		//
+		// } else {
+		// setContentView(R.layout.portraitView);
+		// }
+	}
+
+	@Deprecated
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		if (currentApiVersion >= Build.VERSION_CODES.KITKAT && hasFocus) {
+			getWindow().getDecorView().setSystemUiVisibility(
+					View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+							| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+							| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+							| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+							| View.SYSTEM_UI_FLAG_FULLSCREEN
+							| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		}
+	}
+
+	@Deprecated
+	private void sendLogRequest(Context ctx, JSONObject jsonObject,
+			String urlStr) {
+		try {
+			if (LogUtility.checkNetwrk(ctx)) {
+
+				Log.d("Request sending", "" + urlStr);
+				JsonObjectRequest request = new JsonObjectRequest(
+						Request.Method.POST, urlStr, jsonObject,
+						new Response.Listener<JSONObject>() {
+
+							@Override
+							public void onResponse(JSONObject response) {
+								// TODO Auto-generated method stub
+
+							}
+						}, new Response.ErrorListener() {
+
+							@Override
+							public void onErrorResponse(VolleyError error) {
+								// TODO Auto-generated method stub
+
+							}
+						});
+				VolleySingleton.getInstance(MyApplication.getAppContext())
+						.addToRequestQueue(request);
+			}
+		} catch (Exception e) {
+
+		}
+
+	}
+
+	/**
+	 * In this method byte array is converted to string
+	 * 
+	 * @param byt
+	 * @return string from byte array
+	 * @since version 1.0
+	 */
+	@Deprecated
+	String getLayoutString(byte[] byt) {
+		String str = "";
+		if (byt != null) {
+			str = new String(byt);
+		}
+		return str;
+	}
+
+	/**
+	 *
+	 * @param fileName
+	 *            from where layout string is fetched
+	 * @return the layout string from the layout file
+	 * @see {@link DisplayLayout}
+	 * @since version 1.0
+	 */
+	@Deprecated
+	String getLayoutStringFromFile(String fileName) {
+
+		String PATH = Environment.getExternalStorageDirectory()
+				+ AppState.DISPLAY_FOLDER;
+		File file = new File(PATH, fileName);
+
+		// Read text from file
+		StringBuilder text = new StringBuilder();
+
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				text.append(line);
+			}
+			br.close();
+		} catch (IOException e) {
+			// e.printStackTrace();
+		}
+		return new String(text);
+	}
+
+	public void setScreenOn() {
+		try {
+			getWindow().addFlags(LayoutParams.FLAG_KEEP_SCREEN_ON);
+		} catch (Exception e) {
+		}
+	}
+
+	@Deprecated
+	private void setSyncLayoutAlarm(Context context) {
+		cancelLayoutAlarm(context);
+		Calendar updateTime = Calendar.getInstance();
+		int hr = updateTime.get(Calendar.HOUR_OF_DAY);
+		int min = updateTime.get(Calendar.MINUTE);
+		// hr = hr+1;
+		min = min + 3;
+		// if(hr!=12){
+		//
+		// }
+		updateTime.set(Calendar.HOUR_OF_DAY, hr);
+
+		updateTime.set(Calendar.MINUTE, min);
+		Intent downloader = new Intent(context, SyncLayoutReceiver.class);
+		PendingIntent recurringDownload = PendingIntent.getBroadcast(context,
+				0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+		AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+		// alarms.setExact(AlarmManager.RTC_WAKEUP,updateTime.getTimeInMillis(),
+		// recurringDownload);
+
+	}
+
+	@Deprecated
+	private void cancelLayoutAlarm(Context context) {
+		try {
+			Intent downloader = new Intent(context, SyncLayoutReceiver.class);
+			PendingIntent recurringDownload = PendingIntent.getBroadcast(
+					context, 0, downloader, PendingIntent.FLAG_CANCEL_CURRENT);
+			AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+			alarms.cancel(recurringDownload);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * In this method layout string is converted to DisplayLayout
+	 * 
+	 * @see DisplayLayout
+	 */
+	public void createUI() {
+		try {
+			displayedLayout = SignageData.getInstance().getCurrentLayout();
+			DisplayLayout ly = null;
+			Serializer srLayout = new Persister();
+			String layoutStaring = "";
+			try {
+				// ly = srLayout.read(XiboLayout.class,
+				// getLayoutString(xiboLayoutRawData.dataBytes));
+				layoutStaring = LogUtility
+						.getLayoutStringFromFile(displayedLayout);
+				if (layoutStaring == null || layoutStaring.length() == 0) {
+					if (!LogData.getInstance()
+							.getCurrentLayoutXml(AppMain.getAppMainContext())
+							.equalsIgnoreCase(LogData.STR_UNKNOWN)) {
+						layoutStaring = LogData.getInstance()
+								.getCurrentLayoutXml(
+										AppMain.getAppMainContext());
+						String destPath = Environment
+								.getExternalStorageDirectory()
+								+ AppState.DISPLAY_FOLDER;
+						File sourceLocation = new File(destPath,
+								displayedLayout);
+						FileManager.deleteDir(sourceLocation);
+						Serializer serializer = new Persister();
+						DisplayLayoutFiles lstFiles = null;
+
+						try {
+							String strFiles = LogData.getInstance()
+									.getCurrentDisplayFiles(
+											AppMain.getAppMainContext());
+							lstFiles = serializer.read(
+									DisplayLayoutFiles.class, strFiles);
+							if (lstFiles != null)
+								LogData.getInstance().setDownloadPending(
+										AppMain.getAppMainContext(), false);
+							new BackgroundServerDownloadIndividualFilesDisplay(
+									getApplicationContext(),
+									SignageDisplay.this).execute(lstFiles);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				} else {
+					LogData.getInstance().setCurrentLayoutXml(
+							AppMain.getAppMainContext(), layoutStaring);
+
+					try {
+						ly = srLayout.read(DisplayLayout.class, layoutStaring);
+					} catch (IOException io) {
+						io.printStackTrace();
+						ly = null;
+					} catch (Exception e) {
+						ly = null;
+						e.printStackTrace();
+					}
+					if (ly != null) {
+						scheduleRefresh = true;
+						nextStartTime = System.currentTimeMillis();
+						displayLayout(ly, false);
+					} else {
+						// Toast.makeText(this,
+						// "error in CreateUI displayLayoutRawData",
+						// 3000).show();
+						// backGroundFlag = true;
+						// SignageData.setOldInstance();
+						SignageData.resetSignageData();
+						StateMachineDisplay.gi(getApplicationContext(),
+								SignageDisplay.this).initProcess(true,
+								StateMachineDisplay.GETSCHEDULE);
+					}
+					// break;
+				}
+			} catch (Exception e) {
+				Toast.makeText(this,
+						"error in CreateUI srLayout " + e.getMessage(),
+						Toast.LENGTH_SHORT).show();
+				// e.printStackTrace();
+				// createUI();
+			}
+			// }
+			// }
+			getCurrentFileHandler();
+			refreshScreen();
+		} catch (Exception e) {
+			// Toast.makeText(this, "error in CreateUI  "+e.getMessage(),
+			// 3000).show();
+			// e.printStackTrace();
+		}
+	}
+
+	/**
+	 * The network connection status is returned
+	 * 
+	 * @return true if network is connected else false
+	 * @since version 1.0
+	 */
+	boolean checkNetwrk() {
+		boolean nwFlag = false;
+		try {
+			ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+			if (networkInfo != null && networkInfo.isConnected()) {
+				nwFlag = true;
+			}
+			if (!nwFlag) {
+				nwFlag = LogData.getInstance().getInternetConnection(
+						AppMain.getAppMainContext());
+			}
+		} catch (Exception e) {
+		}
+
+		return nwFlag;
+	}
+
+	DisplayLayoutServerGetFiles objXXiboServerGetFiles = null;
+
+	/**
+	 * This method queries server to check if any new layout has been assigned
+	 * the STB and starts downloading the updated layout file in the background
+	 * This method is called after certain interval.
+	 * 
+	 * @see DisplayLayoutServerGetFiles
+	 * @since version 1.0
+	 */
+	void refreshScreen() {
+		if (AppState.BACKPRESSED_SIGNAGE_SCREEN)
+			return;
+		try {
+			// if(refreshHandler != null){
+			// refreshHandler.removeCallbacks(refreshRunnable);
+			// refreshHandler = null;
+			// }
+			if (refreshHandler == null) {
+				refreshRunnable = new Runnable() {
+					@Override
+					public void run() {
+						if (checkNetwrk()) {
+							LogData.getInstance().setOfflineSinceTimeStamp(
+									AppMain.getAppMainContext(), 0);
+
+							objXXiboServerGetFiles = new DisplayLayoutServerGetFiles();
+							objXXiboServerGetFiles.execute();
+						} else {
+							if (LogData.getInstance().getOfflineSinceTimeStamp(
+									AppMain.getAppMainContext()) == 0) {
+								LogData.getInstance().setOfflineSinceTimeStamp(
+										AppMain.getAppMainContext(),
+										System.currentTimeMillis());
+							}
+							if (refreshHandler != null
+									&& refreshRunnable != null) {
+								refreshHandler.postDelayed(refreshRunnable,
+										_TIME_TO_REHIT_SERVER);
+							} else {
+								refreshHandler = new Handler();
+								refreshHandler.postDelayed(refreshRunnable,
+										_TIME_TO_REHIT_SERVER);
+							}
+						}
+					}
+				};
+				refreshHandler = new Handler();
+				refreshHandler.postDelayed(refreshRunnable,
+						_TIME_TO_REHIT_SERVER);
+			} else {
+				if (refreshRunnable != null) {
+					refreshHandler.postDelayed(refreshRunnable, 10000);
+				}
+			}
+		} catch (Exception e) {
+			refreshScreen();
+		}
+
+	}
+
+	void getCurrentFileHandler() {
+		try {
+			if (currentFileHandler != null) {
+				currentFileHandler.removeCallbacks(currentFileRunnble);
+				currentFileHandler = null;
+			}
+			currentFileRunnble = new Runnable() {
+				@Override
+				public void run() {
+					getCurrentFile();
+					if (currentFileHandler != null
+							&& currentFileRunnble != null) {
+						currentFileHandler.postDelayed(currentFileRunnble,
+								10000);
+					} else {
+						currentFileHandler = new Handler();
+						currentFileHandler.postDelayed(currentFileRunnble,
+								10000);
+					}
+				}
+			};
+			currentFileHandler = new Handler();
+			currentFileHandler.postDelayed(currentFileRunnble, 10000);
+
+		} catch (Exception e) {
+			getCurrentFileHandler();
+		}
+
+	}
+
+	private void nextLayout() {
+		try {
+			boolean resetHandler = false;
+			if (nextLayoutHandler != null) {
+				if (!nextLayout.equalsIgnoreCase(Utility.getNextLayout())) {
+					nextLayout = Utility.getNextLayout();
+					nextLayoutTime = Utility.getNextLayoutChangeTime();
+					nextLayoutHandler.removeCallbacks(refreshRunnable);
+					nextLayoutHandler = null;
+					resetHandler = true;
+				}
+			} else {
+				resetHandler = true;
+			}
+
+			if (resetHandler) {
+				nextLayout = Utility.getNextLayout();
+				nextLayoutTime = Utility.getNextLayoutChangeTime();
+
+				if (!nextLayout.isEmpty() && nextLayoutTime > 0) {
+					nextLayoutRunnable = new Runnable() {
+						@Override
+						public void run() {
+							// SignageData.getInstance().setCurrentLayout(nextLayout);
+							// if(!displayedLayout.equalsIgnoreCase(nextLayout)){
+							// // createUI();
+							//
+							// Log.i("next layout..",""+nextLayout);
+							// displayedLayout =
+							// SignageData.getInstance().getCurrentLayout();
+							//
+							// //
+							// Log.i("next displayedLayout..",""+displayedLayout);
+							// Intent intent = getIntent();
+							// finish();
+							// startActivity(intent);
+							// }
+							if (!displayedLayout.equalsIgnoreCase(nextLayout)) {
+								if (checkIfFileExistsElseDownload()) {
+									SignageData.getInstance().setCurrentLayout(
+											nextLayout);
+									DataCacheManager
+											.getInstance(
+													AppMain.getAppMainContext())
+											.saveSettingData(
+													_KEY_XVIDIA_STATE_SCHEDULE_CURRENTFILE,
+													SignageData.getInstance()
+															.getCurrentLayout());
+
+									Intent intent = getIntent();
+									finish();
+									startActivity(intent);
+								} else {
+									if (!backGroundDownloadStarted) {
+										// backGroundFlag = true;
+										backGroundDownloadStarted = true;
+										// SignageData.setOldInstance();
+										SignageData.resetSignageData();
+										StateMachineDisplay
+												.gi(getApplicationContext(),
+														SignageDisplay.this)
+												.initProcess(
+														true,
+														StateMachineDisplay.GETSCHEDULE);
+									}
+								}
+								// createUI();
+							}
+						}
+					};
+					nextLayoutHandler = new Handler();
+					nextLayoutHandler.postDelayed(nextLayoutRunnable,
+							nextLayoutTime);
+				}
+			}
+
+		} catch (Exception e) {
+			// refreshScreen();
+		}
+
+	}
+
+	/**
+	 * 
+	 * This method find layout file among the downloaded files
+	 *
+	 * @return true if file is found else false
+	 */
+	@Deprecated
+	public String getCurrentLayout() {
+		String retval = LogData.STR_UNKNOWN;
+		String destPath = Environment.getExternalStorageDirectory()
+				+ AppState.DISPLAY_FOLDER;
+		File dir = new File(destPath);
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			File temp;
+			for (int i = 0; i < children.length; i++) {
+				temp = new File(dir, children[i]);
+				if (!temp.getName().contains(".")) {
+					retval = temp.getName();
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	/**
+	 * 
+	 * This method checks whether layout currently assigned to the STB on server
+	 * is same as the layout being displyed now.
+	 * 
+	 * @return true layout has been updated on server else false
+	 */
+	boolean makeRefreshRequest() {
+
+		boolean flag = true;
+		try {
+			ActivityManager activityManager = (ActivityManager) getApplicationContext()
+					.getSystemService(Context.ACTIVITY_SERVICE);
+			List<RunningTaskInfo> runningTasks = activityManager
+					.getRunningTasks(Integer.MAX_VALUE);
+			RunningTaskInfo object = runningTasks.get(runningTasks.size() - 1);
+			if (object.topActivity.getClass().equals(AppMain.class)) {
+				// Intent intent = getIntent();
+				// finish();
+				// startActivity(intent);
+				// finish();
+			}
+		} catch (Exception e) {
+		}
+		try {
+			String serverUrl = ClientConnectionConfig._SERVERURL;
+			String uniqueKey = ClientConnectionConfig._UNIQUE_SERVER_KEY;
+			String hardwareKey = ClientConnectionConfig._HARDWAREKEY;
+			String ver = ClientConnectionConfig._VERSION;
+			XMDS xmds = new XMDS(serverUrl);
+			if (checkNetwrk()) {
+				if (LogData.getInstance().getDownloadPending(
+						AppMain.getAppMainContext())) {
+					return true;
+				}
+				String strReqFiles = "";
+				String strScheduleFiles = "";
+				if (ClientConnectionConfig._UNIQUE_SERVER_KEY != null
+						&& ClientConnectionConfig._HARDWAREKEY != null) {
+					strReqFiles = xmds.RequiredFiles(uniqueKey, hardwareKey,
+							ver);
+					strScheduleFiles = xmds.Schedule(
+							ClientConnectionConfig._UNIQUE_SERVER_KEY,
+							ClientConnectionConfig._HARDWAREKEY,
+							ClientConnectionConfig._VERSION);
+
+					if (strReqFiles != null) {
+						strReqFiles = strReqFiles.trim();
+						LogData.getInstance().setNewDisplayFilesXml(
+								AppMain.getAppMainContext(), strReqFiles);
+
+					} else {
+						strReqFiles = "";
+					}
+					// String lastSchedule =
+					// DataCacheManager.getInstance(AppMain.getAppMainContext()).readSettingData(_KEY_XVIDIA_STATE_SCHEDULE_XML);
+
+					if (strScheduleFiles != null) {
+						strScheduleFiles = strScheduleFiles.trim();
+						DataCacheManager.getInstance(
+								AppMain.getAppMainContext()).saveSettingData(
+								_KEY_XVIDIA_STATE_SCHEDULE_XML,
+								strScheduleFiles);
+
+					} else {
+						strScheduleFiles = "";
+					}
+					// if(lastSchedule!=null){
+					// lastSchedule = lastSchedule.trim();
+					// }else{
+					// lastSchedule = "";
+					// }
+					ClientConnectionConfig.LAST_REQUEST_DATA = LogData
+							.getInstance().getCurrentDisplayFiles(
+									AppMain.getAppMainContext());
+					ClientConnectionConfig.LAST_REQUEST_DATA = ClientConnectionConfig.LAST_REQUEST_DATA
+							.trim();
+					Serializer serializer = new Persister();
+					DisplayLayoutFiles lstFiles = null, lstFilesOld = null;
+
+					try {
+						lstFilesOld = serializer.read(DisplayLayoutFiles.class,
+								ClientConnectionConfig.LAST_REQUEST_DATA);
+					} catch (Exception e) {
+						// e.printStackTrace();
+					}
+					try {
+						lstFiles = serializer.read(DisplayLayoutFiles.class,
+								strReqFiles);
+					} catch (Exception e) {
+						// e.printStackTrace();
+					}
+					ArrayList<DisplayLayoutFile> fileListold = new ArrayList<DisplayLayoutFile>();
+					ArrayList<DisplayLayoutFile> fileList = new ArrayList<DisplayLayoutFile>();
+
+					if (lstFiles != null && lstFilesOld != null) {
+						fileList = lstFiles.getFileList();
+						fileListold = lstFilesOld.getFileList();
+						if ((fileList != null && fileListold != null)
+								&& (fileList.size() == fileListold.size())) {
+							for (int i = 0; i < fileListold.size(); i++) {
+								if (fileListold.get(i).getType()
+										.equalsIgnoreCase("resource")) {
+									fileListold.remove(i);
+									fileList.remove(i);
+								}
+
+							}
+
+							if (fileList.size() == fileListold.size()) {
+								int count1 = fileList.size();
+								flag = false;
+								for (int i = 0; i < count1; i++) {
+									if (fileList.get(i).getPath() == null
+											&& fileListold.get(i).getPath() == null) {
+										continue;
+									}
+									if (!fileList
+											.get(i)
+											.getPath()
+											.equalsIgnoreCase(
+													fileListold.get(i)
+															.getPath())) {
+										flag = true;
+										break;
+									}
+								}
+							}
+						} else {
+							flag = true;
+						}
+					} else {
+						flag = false;
+					}
+				} else {
+					flag = false;
+				}
+				// Log.d(getClass().getCanonicalName(),"Result makeRefreshRequest "+
+				// flag);
+			} else {
+				flag = false;
+			}
+		} catch (Exception e) {
+			flag = false;
+		}
+		return flag;
+	}
+
+	void getCurrentFile() {
+		Serializer serializer = new Persister();
+		DisplayLayoutSchedule displayLayoutSchedule = null;
+		String strReqFiles = DataCacheManager.getInstance(
+				AppMain.getAppMainContext()).readSettingData(
+				_KEY_XVIDIA_STATE_SCHEDULE_XML);
+		try {
+			if (strReqFiles != null) {
+				displayLayoutSchedule = serializer.read(
+						DisplayLayoutSchedule.class, strReqFiles);
+			}
+			if (displayLayoutSchedule != null) {
+				// Log.d(appmainInstance.TAG, "CountofGotFiles " +
+				// displayLayoutSchedule.toString());
+				SignageData.getInstance().setLayoutSchedule(
+						displayLayoutSchedule);
+				fillDataOfSchedule();
+			}
+		} catch (Exception e) {
+		}
+	}
+
+	boolean checkIfFileExistsElseDownload() {
+		boolean changeLayout = true;
+		ArrayList<String> fileList = SignageData.getInstance()
+				.getCurrentLayoutFiles();
+		if (fileList != null) {
+			for (String filename : fileList) {
+				if (!Utility.IsFileExists(filename, false)) {
+					changeLayout = false;
+					break;
+				}
+			}
+		} else {
+			String strFiles = LogData.getInstance().getNewDisplayFiles(
+					AppMain.getAppMainContext());
+			if (!strFiles.equalsIgnoreCase(LogData.STR_UNKNOWN)) {
+				changeLayout = isFileExistToDisplay(strFiles);
+			} else {
+				changeLayout = false;
+			}
+		}
+		return changeLayout;
+	}
+
+	void fillDataOfSchedule() {
+		DisplayLayoutSchedule displayLayoutSchedule = SignageData.getInstance()
+				.getLayoutSchedule();
+		if (displayLayoutSchedule != null) {
+			DisplayLayoutScheduleDefaultFile displayLayoutScheduleDefault = displayLayoutSchedule
+					.getScheduleDefault();
+			SignageData.getInstance().setDefaultLayout(
+					displayLayoutScheduleDefault.getFile());
+			// SignageData.getInstance().setCurrentLayout(Utility.getCurrentFile(displayLayoutSchedule.getLayout()));
+			String currentFile = Utility.getCurrentFile(displayLayoutSchedule
+					.getLayout());
+			nextLayout();
+			// SignageData.getInstance().getCurrentLayout();
+
+			if (!displayedLayout.equalsIgnoreCase(currentFile)) {
+				if (checkIfFileExistsElseDownload()) {
+					SignageData.getInstance().setCurrentLayout(currentFile);
+					DataCacheManager.getInstance(AppMain.getAppMainContext())
+							.saveSettingData(
+									_KEY_XVIDIA_STATE_SCHEDULE_CURRENTFILE,
+									SignageData.getInstance()
+											.getCurrentLayout());
+
+					Intent intent = getIntent();
+					finish();
+					startActivity(intent);
+				} else {
+					if (!backGroundDownloadStarted) {
+						// backGroundFlag = true;
+						backGroundDownloadStarted = true;
+						// SignageData.setOldInstance();
+						SignageData.resetSignageData();
+						StateMachineDisplay.gi(getApplicationContext(),
+								SignageDisplay.this).initProcess(true,
+								StateMachineDisplay.GETSCHEDULE);
+					}
+				}
+				// createUI();
+			}
+		}
+	}
+
+	boolean isFileExistToDisplay(String data) {
+		boolean retVal = true;
+		Serializer serializer = new Persister();
+		DisplayLayoutFiles lstFiles = null;
+
+		try {
+			lstFiles = serializer.read(DisplayLayoutFiles.class, data);
+			for (DisplayLayoutFile file : lstFiles.getFileList()) {
+
+				if (!file.getType().equalsIgnoreCase(_BLACKLIST_CATEGORY)) {
+					String fileID = file.getId();
+					String fileType = file.getType();
+					String fileName = file.getPath();
+					int fileSize = 0;
+					if (file.getSize() != null) {
+						fileSize = Integer.parseInt(file.getSize());
+					}
+					if (fileType != null && fileType.contains("resource")) {
+						continue;
+					}
+					if (fileName == null) {
+						continue;
+					} else if (fileName.isEmpty()) {
+						continue;
+					}
+					if (!fileName.endsWith(".js")) {
+						if (!Utility.IsFileExists(fileName, false)) {
+							Log.d("fileName doe not exits", fileName);
+							retVal = false;
+							break;
+						}
+					}
+
+					// SignageData.getInstance().addRawDataNode(getUniqueFileId(fileType,
+					// fileID), fileName, fileType, fileSize);
+					// retVal = true;
+				}
+			}
+		} catch (Exception e) {
+			retVal = false;
+			// e.printStackTrace();
+		}
+		return retVal;
+	}
+
+	/**
+	 * This method returns unique file id
+	 * 
+	 * @param fileType
+	 * @param fileID
+	 * @return
+	 */
+	@Deprecated
+	String getUniqueFileId(String fileType, String fileID) {
+		return fileType + "_" + fileID;
+	}
+
+	private class SynMediaDataListTask extends
+			AsyncTask<DisplayLayout.Region, Void, Void> {
+		@Override
+		protected Void doInBackground(DisplayLayout.Region... arg0) {
+			DisplayLayout.Region region = arg0[0];
+			long endTime, startTime;
+			startTime = nextStartTime;
+			syncMediaList = new ArrayList<SyncMediaData>();
+			for (DisplayLayout.Media media : region.getMedia()) { // GET REGION
+				SyncMediaData mediaData = new SyncMediaData();
+				mediaData.setStartTimeStamp(startTime);
+				mediaData.setMedia(media);
+				// /GET MEDIA
+				long duration = Long.parseLong(media.getDuration());
+				endTime = startTime + (duration * 1000);
+				mediaData.setEndTimeStamp(endTime);
+				mediaData.setDuration(duration);
+				mediaData.setRegion(region);
+				syncMediaList.add(mediaData);
+				startTime = endTime;
+				// Log.e("SyncDataList", mediaData.toString());
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * This class is a asyncTask that downloads the latest layout available on
+	 * server for the STB
+	 * 
+	 * @author Ravi_office
+	 * @seeversion 1.0
+	 *
+	 */
+	private class DisplayLayoutServerGetFiles extends
+			AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... arg0) {
+
+			if (makeRefreshRequest()) {
+				return null;
+			} else {
+				return "";
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			// getCurrentFile();
+			// Toast.makeText(SignageDisplay.this, "onPostExecute "+testVar,
+			// 3000).show();
+			if (result == null) {
+				// Intent i = new Intent(SignageDisplay.this, AppMain.class);
+				// i.putExtra(_ACTION_FROM_SIGNAGE, true);
+				// ClientConnectionConfig.LAST_REQUEST_DATA = "";
+				// AppState.ACTION_FROM_SIGNAGE = true;
+				//
+				// SignageData.resetSignageData();
+				// startActivity(i);
+				// finish();
+
+				if (!backGroundDownloadStarted) {
+					// backGroundFlag = true;
+					backGroundDownloadStarted = true;
+					// SignageData.setOldInstance();
+					SignageData.resetSignageData();
+					StateMachineDisplay.gi(getApplicationContext(),
+							SignageDisplay.this).initProcess(true,
+							StateMachineDisplay.GETSCHEDULE);
+				}
+
+			}
+			refreshScreen();
+		}
+	}
+
+	// int maxMediaCount = 0 ;
+	// int mediaCounterToDisplay = 0;
+	long methodEntryTime = 0;
+	boolean failRefreshFlag = false;
+	static Bitmap previousBitmap = null;
+	static String mediaUri = "";
+
+	/**
+	 * This method dynamically creates layout to be displayed on the STB
+	 * according to displayLayout
+	 * 
+	 * @param ly
+	 *            object of the layout string
+	 * @see DisplayLayout
+	 * @since version 1.0
+	 */
+	void displayLayout(DisplayLayout ly, boolean refreshFlag) {
+		try {
+
+			// / CALCULATE SCREEN SIZE
+			float prodWidth = (float) ly.getWidth();// .floatValue();
+			float prodHeight = (float) ly.getHeight();// .floatValue();
+			if (!refreshFlag) {
+				if (prodWidth < prodHeight) {
+					if (LogData.getInstance().getOrientation(
+							AppMain.getAppMainContext()) == ORIENTATION_REVERSE_PORTRAIT) {
+						setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+					} else {
+						setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+					}
+				} else {
+					if (LogData.getInstance().getOrientation(
+							AppMain.getAppMainContext()) == ORIENTATION_REVERSE_LANSCAPE) {
+						setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+					} else {
+						setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+					}
+				}
+			}
+			Display display = getWindowManager().getDefaultDisplay();
+			Point size = new Point();
+			display.getRealSize(size);
+			int layoutWidth = size.x;
+			int layoutHeight = size.y;
+
+			// float prodWidth = (float)ly.getWidth();//.floatValue();
+			// float prodHeight = (float)ly.getHeight();//.floatValue();
+			//
+			float widthMultiplierFactor = (float) layoutWidth / prodWidth;
+			float heightMultiplierFactor = (float) layoutHeight / prodHeight;
+
+			int callBackTime = 0;
+			// RelativeLayout layoutMain = (RelativeLayout)
+			// SignageDisplay.this.findViewById(R.id.displayClass);
+			// LayoutParams layoutParams=new
+			// LayoutParams(LayoutParams.WRAP_CONTENT,
+			// LayoutParams.WRAP_CONTENT);
+			// layoutMain.setLayoutParams(layoutParams);
+			RelativeLayout parentLayout = (RelativeLayout) SignageDisplay.this
+					.findViewById(R.id.relative_id);
+			// if(mediaCounterToDisplay == 0){
+			// layout.removeAllViews();
+			// }
+			if (ly.getBackground() != null) {
+				String PATH = "";
+				try {
+					PATH = Environment.getExternalStorageDirectory()
+							+ AppState.DISPLAY_FOLDER + ly.getBackground();
+					Bitmap bmImg = Utility.decodeScaledBitmapFromSdCard(PATH,
+							layoutWidth, layoutHeight);
+					Drawable background = new BitmapDrawable(getResources(),
+							bmImg);// Drawable.createFromPath(PATH);
+					// File imgFile = new File(PATH);
+					// if(imgFile.exists()){
+					if (background != null) {
+						parentLayout.setBackground(background);
+					}
+				} catch (OutOfMemoryError e) {
+					Log.i("Out of memmory error", "" + PATH);
+				} catch (Exception e) {
+
+				}
+			}
+			// }
+			int regionCount = 0;
+			int maxMediaCount = 0, mediaCounterToDisplay = 0;
+			// int counnnntt= 0;
+			ArrayList<RefreshMediaData> tempRefreshMediaList = new ArrayList<RefreshMediaData>();
+			syncMediaList = new ArrayList<SyncMediaData>();
+			for (DisplayLayout.Region region : ly.getRegion()) { // GET REGION
+				// if(maxMediaCount < (region.getMedia()).size()){
+				maxMediaCount = (region.getMedia()).size();
+				// }
+				// refresh individual region change//////////////
+				RefreshMediaData refreshMediaData = new RefreshMediaData();
+				refreshMediaData.setRegion(region);
+				refreshMediaData.setMediaCount(0);
+				// /////////////////////////////////////////////////////////////////
+				// mediaTimeObj.setId("");
+				// mediaTimeObj.setBoxId(ClientConnectionConfig._HARDWAREKEY);
+				// mediaTimeObj.setLayoutId(displayedLayout);
+				// /////////////////////////////////////////////////////////
+				new SynMediaDataListTask().executeOnExecutor(
+						AsyncTask.THREAD_POOL_EXECUTOR, region);
+				int regionWidth = (int) Math.floor(region.getWidth());
+				int regionHeight = (int) Math.floor(region.getHeight());
+				int layoutMarginLeft = (int) Math.floor(region.getLeft());
+				int layoutMarginTop = (int) Math.floor(region.getTop());
+				try {
+					float newRegionWidth = regionWidth * widthMultiplierFactor;
+					float newRegionHeight = regionHeight
+							* heightMultiplierFactor;
+					float newlayoutMarginLeft = layoutMarginLeft
+							* widthMultiplierFactor;
+					float newlayoutMarginTop = layoutMarginTop
+							* heightMultiplierFactor;
+					regionWidth = (int) newRegionWidth;
+					regionHeight = (int) newRegionHeight;
+					layoutMarginLeft = (int) newlayoutMarginLeft;
+					layoutMarginTop = (int) newlayoutMarginTop;
+				} catch (NumberFormatException e) {
+
+				} catch (Exception e) {
+
+				}
+				// /GET MEDIA
+				int count = 0;
+				int regionMediaCount = region.getMedia().size();
+				if (mediaCounterToDisplay < regionMediaCount) {
+					count = mediaCounterToDisplay;
+				}
+				// //////
+
+				if (regionCount == 0) {
+					LayoutTimeData layoutTimeObj = new LayoutTimeData();
+					layoutTimeObj.setId("");
+					layoutTimeObj.setBoxId(ClientConnectionConfig._HARDWAREKEY);
+					layoutTimeObj.setLayoutId(displayedLayout);
+					layoutTimeObj.setStartTime(LogUtility.getTimeStamp());
+					layoutTimeObj.setEndTime("");
+					DataCacheManager.getInstance(AppMain.getAppMainContext())
+							.saveLayoutTimeData(layoutTimeObj);
+					sendLayoutTimeRequest(layoutTimeObj);
+				}
+				// ////////////////
+
+				DisplayLayout.Media media = (region.getMedia()).get(count);
+				nextEndTime = nextStartTime
+						+ (Integer.parseInt(media.getDuration())) * 1000;
+				String id = (_MEDIA + "_" + media.getId());
+				String type = media.getType();
+				// Log.d(getClass().getCanonicalName(),"regionCount before "+
+				// regionCount);
+				RelativeLayout v = (RelativeLayout) parentLayout
+						.findViewById(regionCount);
+				refreshMediaData.setTimestamp(nextEndTime);
+
+				int timediff = (int) (nextEndTime - nextStartTime);
+				if (callBackTime == 0) {
+					callBackTime = timediff;
+				} else if (callBackTime > timediff) {
+					callBackTime = timediff;
+				}
+				// nextStartTime = nextEndTime;
+				// }
+				// RawData data = null;
+				// if(backGroundFlag){
+				// data = SignageData.getOldInstance().getDataFromId(id);
+				// }else{
+				// data = SignageData.getInstance().getDataFromId(id);
+				// }
+
+				// / IF SIZE MORE THAN READ DATA FROM DB///
+				// if (data != null) {
+				// if(data.dataSoredInDB){
+				// try{
+				// // data.dataBytes =
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).readResourceData(Integer.parseInt(data.id));
+				// data.dataBytes =
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).readResourceData(data.id);
+				// }catch(Exception e ){
+				// }
+				// }
+				// }
+				if (count == 0 && mediaCounterToDisplay > 0) {
+
+				} else {
+					try {
+						boolean flagAction = true;
+						// if(count ==0 && v!=null && regionMediaCount == 1){
+						// //DO NOTHING
+						// flagAction = false;
+						// }
+
+						if (flagAction) {
+							if (v != null) {
+								try {
+									parentLayout.removeViewAt(regionCount);
+
+									// ((RelativeLayout)v.getParent()).removeView(v);
+								} catch (Exception e) {
+									// e.printStackTrace();
+								}
+							}
+							if (type.equalsIgnoreCase(_MEDIATYPE_IMAGE)) {
+								callBackTime = drawImageViewRegion(
+										parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media, callBackTime,
+										regionCount, refreshMediaData);
+							} else if (type
+									.equalsIgnoreCase(_MEDIATYPE_EMBEDEDHTML)) {
+								drawEmbeddedHtmlRegion(parentLayout,
+										regionWidth, regionHeight,
+										layoutMarginLeft, layoutMarginTop,
+										media, regionCount);
+							} else if (type.equalsIgnoreCase(_MEDIATYPE_TEXT)) {
+								drawTextRegion(parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media, regionCount,
+										refreshMediaData);
+							} else if (type.equalsIgnoreCase(_MEDIATYPE_TICKER)) {
+								drawWebViewTickerRegion(parentLayout,
+										regionWidth, regionHeight,
+										layoutMarginLeft, layoutMarginTop,
+										media, regionCount, refreshMediaData);
+							} else if (type
+									.equalsIgnoreCase(_MEDIATYPE_WEBPAGE)) {
+								drawWebViewRegion(parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media, regionCount,
+										refreshMediaData);
+							} else if (type
+									.equalsIgnoreCase(_MEDIATYPE_URL_STREAM_VIDEO)) {
+								callBackTime = drawVideoViewStreamingRegion(
+										parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media, callBackTime,
+										regionCount, refreshMediaData);
+								// }else
+								// if(type.equalsIgnoreCase(_MEDIATYPE_HDMI_STREAMING))
+								// {
+								// callBackTime =
+								// drawHDMIRegion(parentLayout,regionWidth,regionHeight,layoutMarginLeft,layoutMarginTop,media,
+								// callBackTime, regionCount);
+							} else if (type.equalsIgnoreCase(_MEDIATYPE_VIDEO)) {
+								callBackTime = drawVideoViewRegion(
+										parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media, callBackTime,
+										regionCount, refreshMediaData);
+							}
+						}
+						// layout.refreshDrawableState();
+					} catch (Exception e) {
+						failRefreshFlag = true;
+						showToastMessage("error in main Layout  "
+								+ e.getMessage());
+						break;
+					}
+
+					// sendMediaTimeRequest(mediaTimeObj);
+				}
+				// if(counnnntt== 1)
+				regionCount++;
+				// try {
+				// if(timerTaskHandler != null){
+				// timerTaskHandler.removeCallbacks(runnableTimerTask);
+				// timerTaskHandler = null;
+				// }
+				// runnableTimerTask = new Runnable() {
+				// @Override
+				// public void run() {
+				// if(mediaTimeObj !=null){
+				// mediaTimeObj.setLongitude(LogUtility.getTimeStamp());
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveMediaTimeData(mediaTimeObj);
+
+				// }
+				// if(layoutTimeObj !=null){
+				// layoutTimeObj.setLongitude(LogUtility.getTimeStamp());
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveLayoutTimeData(layoutTimeObj);
+				// sendLayoutTimeRequest(layoutTimeObj);
+				// }
+				// if(timerTaskHandler != null && runnableTimerTask != null)
+				// timerTaskHandler.postDelayed(runnableTimerTask, 1000);
+				// }
+				// };
+				// timerTaskHandler = new Handler();
+				// timerTaskHandler.postDelayed(runnableTimerTask, 1500);
+				//
+				// }catch (Exception e) {
+				// }
+
+				tempRefreshMediaList.add(refreshMediaData);
+			}
+			refreshMediaList = tempRefreshMediaList;
+
+			backGroundRefresh = false;
+			scheduleRefresh = false;
+			final DisplayLayout lyDisplay = ly;
+			mediaCounterToDisplay++;
+			if (mediaCounterToDisplay == maxMediaCount) {
+				mediaCounterToDisplay = 0;
+				// if(layoutTimeObj != null){
+				// layoutTimeObj.setLongitude(LogUtility.getTimeStamp());
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveLayoutTimeData(layoutTimeObj);
+				// sendLayoutTimeRequest(layoutTimeObj);
+				// }
+			}
+
+			final int nextMediaCounterToDisplay = mediaCounterToDisplay;
+			if (failRefreshFlag) {
+				try {
+					if (handler != null) {
+						handler.removeCallbacks(runnable);
+						handler = null;
+					}
+					runnable = new Runnable() {
+						@Override
+						public void run() {
+							scheduleRefresh = true;
+							// if(lyDisplay !=null){
+							failRefreshFlag = false;
+							showToastMessage("Restarting Display");
+							Intent i = getIntent();
+							// i.putExtra("name", "displayLayout");
+							finish();
+							startActivity(i);
+							// displayLayout(lyDisplay,true);
+							// }
+						}
+					};
+					handler = new Handler();
+					handler.post(runnable);
+
+				} catch (Exception e) {
+				}
+			} else if (callBackTime > 0) {
+
+				try {
+					if (handler != null) {
+						handler.removeCallbacks(runnable);
+						handler = null;
+					}
+					runnable = new Runnable() {
+						@Override
+						public void run() {
+							scheduleRefresh = true;
+							if (lyDisplay != null) {
+								showToastMessage("Refreshing "
+										+ nextMediaCounterToDisplay);
+								// displayLayout(lyDisplay,true);
+								// if(mediaTimeObj != null){
+								// mediaTimeObj.setLongitude(LogUtility.getTimeStamp());
+								// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveMediaTimeData(mediaTimeObj);
+								// sendMediaTimeRequest(mediaTimeObj);
+								// }
+								// refresh(lyDisplay,nextmediaCounterToDisplay);
+								refreshRegionLayout(lyDisplay, true);
+								// sendRequest(AppMain.getAppMainContext());
+							}
+						}
+					};
+					handler = new Handler();
+					handler.postDelayed(runnable, callBackTime);
+
+				} catch (Exception e) {
+				}
+
+			} else if (callBackTime == 0) {
+
+				try {
+					if (handler != null) {
+						handler.removeCallbacks(runnable);
+						handler = null;
+					}
+					runnable = new Runnable() {
+						@Override
+						public void run() {
+							scheduleRefresh = true;
+							if (lyDisplay != null) {
+								showToastMessage("Refreshing Exception"
+										+ nextMediaCounterToDisplay);
+								// if(mediaTimeObj != null){
+								// mediaTimeObj.setLongitude(LogUtility.getTimeStamp());
+								// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveMediaTimeData(mediaTimeObj);
+								// sendMediaTimeRequest(mediaTimeObj);
+								// }
+								// displayLayout(lyDisplay,true);
+								// refresh(lyDisplay,nextmediaCounterToDisplay);
+								refreshRegionLayout(lyDisplay, true);
+							}
+						}
+					};
+					handler = new Handler();
+					handler.post(runnable);
+
+				} catch (Exception e) {
+				}
+
+			}
+
+		} catch (Exception e) {
+			// Toast.makeText(this, "error == "+e.getMessage(), 3000).show();
+		}
+	}
+
+	void showToastMessage(final String message) {
+		// runOnUiThread(new Runnable() {
+		// public void run() {
+		// Toast.makeText(SignageDisplay.this,message ,
+		// Toast.LENGTH_SHORT).show();
+		// }
+		// });
+	}
+
+	void refresh(DisplayLayout ly, int mediaCount) {
+		try {
+
+			Log.d("refresh refresh", "mediaCount " + mediaCount);
+			// / CALCULATE SCREEN SIZE
+			float prodWidth = ly.getWidth();// .floatValue();
+			float prodHeight = ly.getHeight();// .floatValue();
+			// if(!refreshFlag){
+			// if(prodWidth<prodHeight){
+			// if(LogData.getInstance().getOrientation(AppMain.getAppMainContext())==
+			// ORIENTATION_REVERSE_PORTRAIT){
+			// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+			// }else{
+			// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			// }
+			// }else{
+			// if(LogData.getInstance().getOrientation(AppMain.getAppMainContext())==
+			// ORIENTATION_REVERSE_LANSCAPE){
+			// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+			// }else{
+			// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+			// }
+			// }
+			// }
+			Display display = getWindowManager().getDefaultDisplay();
+			Point size = new Point();
+			display.getRealSize(size);
+			int layoutWidth = size.x;
+			int layoutHeight = size.y;
+
+			// float prodWidth = (float)ly.getWidth();//.floatValue();
+			// float prodHeight = (float)ly.getHeight();//.floatValue();
+			//
+			float widthMultiplierFactor = (float) layoutWidth / prodWidth;
+			float heightMultiplierFactor = (float) layoutHeight / prodHeight;
+
+			long callBackTime = 0;
+			long startTime, endTime;
+			// RelativeLayout layoutMain = (RelativeLayout)
+			// SignageDisplay.this.findViewById(R.id.displayClass);
+			// LayoutParams layoutParams=new
+			// LayoutParams(LayoutParams.WRAP_CONTENT,
+			// LayoutParams.WRAP_CONTENT);
+			// layoutMain.setLayoutParams(layoutParams);
+			RelativeLayout parentLayout = (RelativeLayout) SignageDisplay.this
+					.findViewById(R.id.relative_id);
+			// if(mediaCounterToDisplay == 0){
+			// layout.removeAllViews();
+			// }
+			if (ly.getBackground() != null) {
+				String PATH = "";
+				try {
+					PATH = Environment.getExternalStorageDirectory()
+							+ AppState.DISPLAY_FOLDER + ly.getBackground();
+					Bitmap bmImg = Utility.decodeScaledBitmapFromSdCard(PATH,
+							layoutWidth, layoutHeight);
+					Drawable background = new BitmapDrawable(getResources(),
+							bmImg);// Drawable.createFromPath(PATH);
+					// File imgFile = new File(PATH);
+					// if(imgFile.exists()){
+					if (background != null) {
+						parentLayout.setBackground(background);
+					}
+				} catch (OutOfMemoryError e) {
+					Log.i("Out of memmory error", "" + PATH);
+				} catch (Exception e) {
+
+				}
+			}
+			// }
+			int regionCount = 0, maxMediaCount = 0;
+			if (syncMediaList.size() == 0) {
+				displayLayout(ly, true);
+				return;
+			}
+			// int counnnntt= 0;
+			// for(DisplayLayout.Region region : ly.getRegion()){ //GET REGION
+			// if(maxMediaCount < syncMediaList.size()){
+			maxMediaCount = syncMediaList.size();
+			// }
+			// /////////////////////////////////////////////////////////////////
+			// mediaTimeObj.setId("");
+			// mediaTimeObj.setBoxId(ClientConnectionConfig._HARDWAREKEY);
+			// mediaTimeObj.setLayoutId(displayedLayout);
+			// /////////////////////////////////////////////////////////
+			int regionWidth = (int) Math.floor(prodWidth);
+			int regionHeight = (int) Math.floor(prodHeight);
+			int layoutMarginLeft = (int) Math.floor(0);
+			int layoutMarginTop = (int) Math.floor(0);
+			try {
+				float newRegionWidth = regionWidth * widthMultiplierFactor;
+				float newRegionHeight = regionHeight * heightMultiplierFactor;
+				float newlayoutMarginLeft = layoutMarginLeft
+						* widthMultiplierFactor;
+				float newlayoutMarginTop = layoutMarginTop
+						* heightMultiplierFactor;
+				regionWidth = (int) newRegionWidth;
+				regionHeight = (int) newRegionHeight;
+				layoutMarginLeft = (int) newlayoutMarginLeft;
+				layoutMarginTop = (int) newlayoutMarginTop;
+			} catch (NumberFormatException e) {
+
+			} catch (Exception e) {
+
+			}
+			// /GET MEDIA
+			int count = 0;
+			// int regionMediaCount = region.getMedia().size();
+			if (mediaCount < maxMediaCount) {
+				count = mediaCount;
+			}
+			SyncMediaData dataObject = syncMediaList.get(count);
+
+			if (mediaCount == 0) {
+				LayoutTimeData layoutTimeObj = new LayoutTimeData();
+				layoutTimeObj.setId("");
+				layoutTimeObj.setBoxId(ClientConnectionConfig._HARDWAREKEY);
+				layoutTimeObj.setLayoutId(displayedLayout);
+				layoutTimeObj.setStartTime(LogUtility.getTimeStamp());
+				layoutTimeObj.setEndTime("");
+				sendLayoutTimeRequest(layoutTimeObj);
+			}
+			// ////////////////
+
+			DisplayLayout.Media media = dataObject.getMedia();
+			startTime = dataObject.getStartTimeStamp();
+			endTime = dataObject.getEndTimeStamp();
+
+			String id = (_MEDIA + "_" + media.getId());
+			String type = media.getType();
+			// Log.d(getClass().getCanonicalName(),"regionCount before "+
+			// regionCount);
+			RelativeLayout v = (RelativeLayout) parentLayout
+					.findViewById(regionCount);
+			// Log.d(getClass().getCanonicalName(),"regionCount after "+
+			// regionCount);
+
+			// if(callBackTime<(Integer.parseInt(media.getDuration()))){
+			// callBackTime = (Integer.parseInt(media.getDuration()));
+			long delta = System.currentTimeMillis() - startTime;
+			Log.d("Time diff delta", "delta " + delta);
+			startTime = System.currentTimeMillis();
+			callBackTime = (endTime - startTime);
+			// }
+			// RawData data = null;
+			// if(backGroundFlag){
+			// data = SignageData.getOldInstance().getDataFromId(id);
+			// }else{
+			// data = SignageData.getInstance().getDataFromId(id);
+			// }
+
+			if (count == 0 && mediaCount > 0) {
+				// Log.e("mediaCounterToDisplay diff delta","delta "+
+				// mediaCount);
+			} else {
+				try {
+					boolean flagAction = true;
+					if (count == 0 && v != null && maxMediaCount == 1) {
+						// DO NOTHING
+						flagAction = false;
+					}
+
+					if (flagAction) {
+						if (v != null) {
+							try {
+								parentLayout.removeViewAt(regionCount);
+
+								// ((RelativeLayout)v.getParent()).removeView(v);
+							} catch (Exception e) {
+								// e.printStackTrace();
+							}
+						}
+						if (type.equalsIgnoreCase(_MEDIATYPE_IMAGE)) {
+							callBackTime = drawImageViewRegion(parentLayout,
+									regionWidth, regionHeight,
+									layoutMarginLeft, layoutMarginTop, media,
+									(int) callBackTime, regionCount, null);
+						} else if (type
+								.equalsIgnoreCase(_MEDIATYPE_EMBEDEDHTML)) {
+							drawEmbeddedHtmlRegion(parentLayout, regionWidth,
+									regionHeight, layoutMarginLeft,
+									layoutMarginTop, media, regionCount);
+						} else if (type.equalsIgnoreCase(_MEDIATYPE_TEXT)) {
+
+							drawTextRegion(parentLayout, regionWidth,
+									regionHeight, layoutMarginLeft,
+									layoutMarginTop, media, regionCount, null);
+						} else if (type.equalsIgnoreCase(_MEDIATYPE_TICKER)) {
+							drawWebViewTickerRegion(parentLayout, regionWidth,
+									regionHeight, layoutMarginLeft,
+									layoutMarginTop, media, regionCount, null);
+							//
+						} else if (type
+								.equalsIgnoreCase(_MEDIATYPE_URL_STREAM_VIDEO)) {
+							callBackTime = drawVideoViewStreamingRegion(
+									parentLayout, regionWidth, regionHeight,
+									layoutMarginLeft, layoutMarginTop, media,
+									(int) callBackTime, regionCount, null);
+							// }else
+							// if(type.equalsIgnoreCase(_MEDIATYPE_HDMI_STREAMING))
+							// {
+							// callBackTime = drawHDMIResetRegion(parentLayout,
+							// regionWidth, regionHeight, layoutMarginLeft,
+							// layoutMarginTop, media, (int) callBackTime,
+							// regionCount);
+						} else if (type.equalsIgnoreCase(_MEDIATYPE_VIDEO)) {
+							callBackTime = drawVideoViewRegion(parentLayout,
+									regionWidth, regionHeight,
+									layoutMarginLeft, layoutMarginTop, media,
+									(int) callBackTime, regionCount, null);
+						}
+					}
+					// layout.refreshDrawableState();
+				} catch (Exception e) {
+					failRefreshFlag = true;
+					showToastMessage("error in refresh Layout  "
+							+ e.getMessage());
+				}
+
+				// sendMediaTimeRequest(mediaTimeObj);
+			}
+			try {
+				if (timerTaskHandler != null) {
+					timerTaskHandler.removeCallbacks(runnableTimerTask);
+					timerTaskHandler = null;
+				}
+				runnableTimerTask = new Runnable() {
+					@Override
+					public void run() {
+						// if(mediaTimeObj !=null){
+						// mediaTimeObj.setLongitude(LogUtility.getTimeStamp());
+						// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveMediaTimeData(mediaTimeObj);
+						//
+						// }
+						// if(layoutTimeObj !=null){
+						// layoutTimeObj.setLongitude(LogUtility.getTimeStamp());
+						// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveLayoutTimeData(layoutTimeObj);
+						// sendLayoutTimeRequest(layoutTimeObj);
+						// }
+						if (timerTaskHandler != null
+								&& runnableTimerTask != null)
+							timerTaskHandler.postDelayed(runnableTimerTask,
+									1000);
+					}
+				};
+				timerTaskHandler = new Handler();
+				timerTaskHandler.postDelayed(runnableTimerTask, 1500);
+
+			} catch (Exception e) {
+			}
+			// }
+
+			backGroundRefresh = false;
+			scheduleRefresh = false;
+			final DisplayLayout lyDisplay = ly;
+			// Log.d("refresh refresh", "maxMediaCount " + maxMediaCount);
+			if (mediaCount == maxMediaCount - 1) {
+				// Log.d("refresh refresh", "maxMediaCount mediaCount" +
+				// mediaCount);
+				nextStartTime = syncMediaList.get(mediaCount).getEndTimeStamp()
+						+ delta;
+				new SynMediaDataListTask().executeOnExecutor(
+						AsyncTask.THREAD_POOL_EXECUTOR,
+						syncMediaList.get(maxMediaCount - 1).getRegion());
+
+			}
+			mediaCount++;
+			if (mediaCount == maxMediaCount) {
+				mediaCount = 0;
+				// if(layoutTimeObj != null){
+				// layoutTimeObj.setLongitude(LogUtility.getTimeStamp());
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveLayoutTimeData(layoutTimeObj);
+				// sendLayoutTimeRequest(layoutTimeObj);
+				// }
+			}
+
+			final int nextMediaCount = mediaCount;
+			if (failRefreshFlag) {
+				try {
+					if (handler != null) {
+						handler.removeCallbacks(runnable);
+						handler = null;
+					}
+					runnable = new Runnable() {
+						@Override
+						public void run() {
+							scheduleRefresh = true;
+							// if(lyDisplay !=null){
+							showToastMessage("RESTART ACTIVITY in refresh Layout  "
+									+ nextMediaCount);
+							failRefreshFlag = false;
+							Intent i = getIntent();
+							// i.putExtra("name", "displayLayout");
+							finish();
+							startActivity(i);
+							// displayLayout(lyDisplay,true);
+							// }
+						}
+					};
+					handler = new Handler();
+					handler.post(runnable);
+
+				} catch (Exception e) {
+				}
+			} else if (callBackTime > 0) {
+
+				try {
+					if (handler != null) {
+						handler.removeCallbacks(runnable);
+						handler = null;
+					}
+					runnable = new Runnable() {
+						@Override
+						public void run() {
+							scheduleRefresh = true;
+							if (lyDisplay != null) {
+
+								// if(mediaTimeObj != null){
+								// String time = LogUtility.getTimeStamp();
+								// mediaTimeObj.setLongitude(time);
+								// Log.i("getTimeStamp Time ",
+								// time+"\n"+mediaTimeObj.getLongitude());
+								// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveMediaTimeData(mediaTimeObj);
+								// sendMediaTimeRequest(mediaTimeObj);
+								// }
+								showToastMessage("REFRESHA  Layout  "
+										+ nextMediaCount);
+								refresh(lyDisplay, nextMediaCount);
+							}
+						}
+					};
+					handler = new Handler();
+					handler.postDelayed(runnable, callBackTime);
+
+				} catch (Exception e) {
+				}
+
+			} else if (callBackTime == 0) {
+
+				try {
+					if (handler != null) {
+						handler.removeCallbacks(runnable);
+						handler = null;
+					}
+					runnable = new Runnable() {
+						@Override
+						public void run() {
+							scheduleRefresh = true;
+							if (lyDisplay != null) {
+								// if(mediaTimeObj != null){
+								// String time = LogUtility.getTimeStamp();
+								// mediaTimeObj.setLongitude(time);
+								//
+								// Log.i("getTimeStamp 00000 ",
+								// time+"\n"+mediaTimeObj.getLongitude());
+								// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveMediaTimeData(mediaTimeObj);
+								// sendMediaTimeRequest(mediaTimeObj);
+								// }
+								showToastMessage("REFRESHA  Layout error "
+										+ nextMediaCount);
+								refresh(lyDisplay, nextMediaCount);
+							}
+
+						}
+					};
+					handler = new Handler();
+					handler.post(runnable);
+
+				} catch (Exception e) {
+				}
+
+			}
+
+		} catch (Exception e) {
+			// Toast.makeText(this, "error == "+e.getMessage(), 3000).show();
+		}
+	}
+
+	void refreshRegionLayout(DisplayLayout ly, boolean firstTime) {
+		try {
+
+			// / CALCULATE SCREEN SIZE
+			float prodWidth = (float) ly.getWidth();// .floatValue();
+			float prodHeight = (float) ly.getHeight();// .floatValue();
+			int maxMediaCount = 0;
+			Display display = getWindowManager().getDefaultDisplay();
+			Point size = new Point();
+			display.getRealSize(size);
+			int layoutWidth = size.x;
+			int layoutHeight = size.y;
+
+			// float prodWidth = (float)ly.getWidth();//.floatValue();
+			// float prodHeight = (float)ly.getHeight();//.floatValue();
+			//
+			float widthMultiplierFactor = (float) layoutWidth / prodWidth;
+			float heightMultiplierFactor = (float) layoutHeight / prodHeight;
+
+			long callBackTime = 0;
+			// RelativeLayout layoutMain = (RelativeLayout)
+			// SignageDisplay.this.findViewById(R.id.displayClass);
+			// LayoutParams layoutParams=new
+			// LayoutParams(LayoutParams.WRAP_CONTENT,
+			// LayoutParams.WRAP_CONTENT);
+			// layoutMain.setLayoutParams(layoutParams);
+			RelativeLayout parentLayout = (RelativeLayout) SignageDisplay.this
+					.findViewById(R.id.relative_id);
+
+			int regionCount = 0;
+			long timeDiff = 0;
+			int mediaCounterToDisplay = 0;
+			ArrayList<RefreshMediaData> tempRefreshMediaList = new ArrayList<RefreshMediaData>();
+			for (RefreshMediaData refreshMediaData : refreshMediaList) { // GET
+																			// REGION
+				// Date now = new Date();
+				long currentTime = System.currentTimeMillis();
+				long nextMediaTime = refreshMediaData.getTimestamp();
+				currentTime = currentTime + 500;
+				// Log.i("currentTime", "" + currentTime);
+				Log.i("nextMediaTime", "" + nextMediaTime);
+				if (nextMediaTime > currentTime) {
+					timeDiff = nextMediaTime - currentTime;
+					if (callBackTime == 0) {
+						callBackTime = timeDiff;
+					} else if (timeDiff < callBackTime) {
+						callBackTime = timeDiff;
+					}
+					Log.i("callBackTime ", "" + callBackTime);
+					// Log.i("mediaData ", "" + mediaData.getDuration());
+					tempRefreshMediaList.add(refreshMediaData);
+					regionCount++;
+					continue;
+				}
+				DisplayLayout.Region region = refreshMediaData.getRegion();
+				// if(maxMediaCount < (region.getMedia()).size()){
+				maxMediaCount = (region.getMedia()).size();
+				// }
+
+				// Log.i("getMediaCount ", "" + mediaData.getMediaCount());
+				mediaCounterToDisplay = refreshMediaData.getMediaCount() + 1;
+				if (mediaCounterToDisplay >= maxMediaCount) {
+					mediaCounterToDisplay = 0;
+				}
+				refreshMediaData.setMediaCount(mediaCounterToDisplay);
+				// //////////////////////Region height/width is scaled as per
+				// the display/layout ratio///////////////////////////////////
+				int regionWidth = (int) Math.floor(region.getWidth());
+				int regionHeight = (int) Math.floor(region.getHeight());
+				int layoutMarginLeft = (int) Math.floor(region.getLeft());
+				int layoutMarginTop = (int) Math.floor(region.getTop());
+				try {
+					float newRegionWidth = regionWidth * widthMultiplierFactor;
+					float newRegionHeight = regionHeight
+							* heightMultiplierFactor;
+					float newLayoutMarginLeft = layoutMarginLeft
+							* widthMultiplierFactor;
+					float newLayoutMarginTop = layoutMarginTop
+							* heightMultiplierFactor;
+					regionWidth = (int) newRegionWidth;
+					regionHeight = (int) newRegionHeight;
+					layoutMarginLeft = (int) newLayoutMarginLeft;
+					layoutMarginTop = (int) newLayoutMarginTop;
+				} catch (NumberFormatException e) {
+
+				} catch (Exception e) {
+
+				}
+				Log.i("regionWidth ", "" + regionWidth);
+				Log.i("regionHeight ", "" + regionHeight);
+				Log.i("layoutMarginLeft ", "" + layoutMarginLeft);
+				Log.i("layoutMarginTop ", "" + layoutMarginTop);
+				Log.i("regionCount ", "" + regionCount);
+
+				// /GET MEDIA
+				// int count = 0;
+				// // int regionMediaCount = region.getMedia().size();
+				// if( mediaCounterToDisplay < maxMediaCount){
+				// count = mediaCounterToDisplay;
+				// }
+
+				// //////
+
+				// if(mediaCounterToDisplay == 0){
+				// LayoutTimeData layoutTimeObj = new LayoutTimeData();
+				// layoutTimeObj.setId("");
+				// layoutTimeObj.setBoxId(ClientConnectionConfig._HARDWAREKEY);
+				// layoutTimeObj.setLayoutId(displayedLayout);
+				// layoutTimeObj.setLatitude(LogUtility.getTimeStamp());
+				// layoutTimeObj.setLongitude("");
+				// sendLayoutTimeRequest(layoutTimeObj);
+				// }
+				// ////////////////
+
+				MediaTimeData oldMedia = refreshMediaData.getMediaTimeData();
+				if (oldMedia != null && !oldMedia.getId().isEmpty()) {
+					oldMedia.setEndTime(LogUtility.getTimeStamp());
+
+					DataCacheManager.getInstance(AppMain.getAppMainContext())
+							.saveMediaTimeData(oldMedia);
+					sendMediaTimeRequest(oldMedia);
+				}
+				DisplayLayout.Media media = (region.getMedia())
+						.get(mediaCounterToDisplay);
+				String id = (_MEDIA + "_" + media.getId());
+				String type = media.getType();
+				// if(!firstTime &&
+				// type.equalsIgnoreCase(_MEDIATYPE_HDMI_STREAMING)){
+				// continue;
+				// }
+				// Log.d(getClass().getCanonicalName(),"regionCount before "+
+				// regionCount);
+				RelativeLayout v = (RelativeLayout) parentLayout
+						.findViewById(regionCount);
+				// Log.d(getClass().getCanonicalName(),"regionCount after "+
+				// regionCount);
+				// Date now = new Date();
+				long nextCallBack = System.currentTimeMillis();
+				currentTime = System.currentTimeMillis();
+				int duration = Integer.parseInt(media.getDuration());
+				if (!media.getDuration().isEmpty()) {
+					nextCallBack = nextCallBack + (duration * 1000) + 750;
+				}
+				refreshMediaData.setTimestamp(nextCallBack);
+				timeDiff = nextCallBack - currentTime;
+				if (timeDiff < callBackTime) {
+					callBackTime = timeDiff;
+				}
+				// RawData data = null;
+				// if(backGroundFlag){
+				// data = SignageData.getOldInstance().getDataFromId(id);
+				// }else{
+				// data = SignageData.getInstance().getDataFromId(id);
+				// }
+
+				// / IF SIZE MORE THAN READ DATA FROM DB///
+				// if (data != null) {
+				// if(data.dataSoredInDB){
+				// try{
+				// // data.dataBytes =
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).readResourceData(Integer.parseInt(data.id));
+				// data.dataBytes =
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).readResourceData(data.id);
+				// }catch(Exception e ){
+				// }
+				// }
+				// }
+				if (mediaCounterToDisplay >= maxMediaCount) {
+
+				} else {
+					try {
+						boolean flagAction = true;
+						if (mediaCounterToDisplay == 0 && v != null
+								&& maxMediaCount == 1) {
+							// DO NOTHING*** To be discussed
+							flagAction = false;
+						}
+
+						if (flagAction) {
+							if (v != null) {
+								try {
+									parentLayout.removeViewAt(regionCount);
+
+									// ((RelativeLayout)v.getParent()).removeView(v);
+								} catch (Exception e) {
+									// e.printStackTrace();
+								}
+							}
+							if (type.equalsIgnoreCase(_MEDIATYPE_IMAGE)) {
+								callBackTime = drawImageViewRegion(
+										parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media,
+										(int) callBackTime, regionCount,
+										refreshMediaData);
+							} else if (type
+									.equalsIgnoreCase(_MEDIATYPE_EMBEDEDHTML)) {
+								drawEmbeddedHtmlRegion(parentLayout,
+										regionWidth, regionHeight,
+										layoutMarginLeft, layoutMarginTop,
+										media, regionCount);
+							} else if (type.equalsIgnoreCase(_MEDIATYPE_TEXT)) {
+								drawTextRegion(parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media, regionCount,
+										refreshMediaData);
+							} else if (type.equalsIgnoreCase(_MEDIATYPE_TICKER)) {
+								drawWebViewTickerRegion(parentLayout,
+										regionWidth, regionHeight,
+										layoutMarginLeft, layoutMarginTop,
+										media, regionCount, refreshMediaData);
+							} else if (type
+									.equalsIgnoreCase(_MEDIATYPE_WEBPAGE)) {
+								drawWebViewRegion(parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media, regionCount,
+										refreshMediaData);
+							} else if (type
+									.equalsIgnoreCase(_MEDIATYPE_URL_STREAM_VIDEO)) {
+								callBackTime = drawVideoViewStreamingRegion(
+										parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media,
+										(int) callBackTime, regionCount,
+										refreshMediaData);
+								// }else
+								// if(type.equalsIgnoreCase(_MEDIATYPE_HDMI_STREAMING)){
+								// callBackTime =
+								// drawHDMIResetRegion(parentLayout,regionWidth,regionHeight,layoutMarginLeft,layoutMarginTop,media,
+								// (int)callBackTime, regionCount);
+							} else if (type.equalsIgnoreCase(_MEDIATYPE_VIDEO)) {
+								callBackTime = drawVideoViewRegion(
+										parentLayout, regionWidth,
+										regionHeight, layoutMarginLeft,
+										layoutMarginTop, media,
+										(int) callBackTime, regionCount,
+										refreshMediaData);
+							}
+						}
+						// layout.refreshDrawableState();
+					} catch (Exception e) {
+						failRefreshFlag = true;
+						showToastMessage("error in region Layout  "
+								+ e.getMessage());
+						// Toast.makeText(this,
+						// "error in refresh Layout  "+e.getMessage(),Toast.LENGTH_SHORT).show();
+
+					}
+
+					// sendMediaTimeRequest(mediaTimeObj);
+				}
+				// if(counnnntt== 1)
+				regionCount++;
+				// try {
+				// if(timerTaskHandler != null){
+				// timerTaskHandler.removeCallbacks(runnableTimerTask);
+				// timerTaskHandler = null;
+				// }
+				// runnableTimerTask = new Runnable() {
+				// @Override
+				// public void run() {
+				// if(mediaTimeObj !=null){
+				// mediaTimeObj.setLongitude(LogUtility.getTimeStamp());
+				// //
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveMediaTimeData(mediaTimeObj);
+				//
+				// }
+				// if(layoutTimeObj !=null){
+				// layoutTimeObj.setLongitude(LogUtility.getTimeStamp());
+				// //
+				// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveLayoutTimeData(layoutTimeObj);
+				// // sendLayoutTimeRequest(layoutTimeObj);
+				// }
+				// if(timerTaskHandler != null && runnableTimerTask != null)
+				// timerTaskHandler.postDelayed(runnableTimerTask, 1000);
+				// }
+				// };
+				// timerTaskHandler = new Handler();
+				// timerTaskHandler.postDelayed(runnableTimerTask, 1500);
+
+				// }catch (Exception e) {
+				// }
+				tempRefreshMediaList.add(refreshMediaData);
+			}
+			refreshMediaList = tempRefreshMediaList;
+			backGroundRefresh = false;
+			scheduleRefresh = false;
+			final DisplayLayout lyDisplay = ly;
+
+			// mediaCounterToDisplay++;
+			// if(mediaCounterToDisplay == maxMediaCount){
+			// mediaCounterToDisplay = 0;
+			// layoutTimeObj.setLongitude(LogUtility.getTimeStamp());
+			// //
+			// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveLayoutTimeData(layoutTimeObj);
+			// // sendLayoutTimeRequest(layoutTimeObj);
+			// }
+
+			if (failRefreshFlag) {
+				try {
+					if (handler != null) {
+						handler.removeCallbacks(runnable);
+						handler = null;
+					}
+					runnable = new Runnable() {
+						@Override
+						public void run() {
+							scheduleRefresh = true;
+							showToastMessage("RESTART ACTIVITY in region Layout  ");
+							failRefreshFlag = false;
+							Intent i = getIntent();
+							// i.putExtra("name", "displayLayout");
+							finish();
+							startActivity(i);
+							// displayLayout(lyDisplay,true);
+							// }
+						}
+					};
+					handler = new Handler();
+					handler.post(runnable);
+
+				} catch (Exception e) {
+				}
+			} else if (callBackTime > 0) {
+
+				try {
+					if (handler != null) {
+						handler.removeCallbacks(runnable);
+						handler = null;
+					}
+					runnable = new Runnable() {
+						@Override
+						public void run() {
+							// scheduleRefresh = true;
+							showToastMessage("refreshRegionLayout in Region Layout  ");
+							if (lyDisplay != null) {
+								// mediaTimeObj.setLongitude(LogUtility.getTimeStamp());
+								// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveMediaTimeData(mediaTimeObj);
+								// sendMediaTimeRequest(mediaTimeObj);
+								refreshRegionLayout(lyDisplay, false);
+							}
+						}
+					};
+					handler = new Handler();
+					handler.postDelayed(runnable, callBackTime);
+					showToastMessage("Region Layout callBackTime "
+							+ callBackTime);
+				} catch (Exception e) {
+					showToastMessage("Region Layout callBack error "
+							+ callBackTime);
+				}
+
+			} else if (callBackTime == 0) {
+
+				try {
+					if (handler != null) {
+						handler.removeCallbacks(runnable);
+						handler = null;
+					}
+					runnable = new Runnable() {
+						@Override
+						public void run() {
+							// scheduleRefresh = true;
+							if (lyDisplay != null) {
+								showToastMessage("Region Layout callBack zero ");
+								// mediaTimeObj.setLongitude(LogUtility.getTimeStamp());
+								// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveMediaTimeData(mediaTimeObj);
+								// sendMediaTimeRequest(mediaTimeObj);
+								// displayLayout(lyDisplay,true);
+								refreshRegionLayout(lyDisplay, false);
+							}
+						}
+					};
+					handler = new Handler();
+					handler.post(runnable);
+
+				} catch (Exception e) {
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			Toast.makeText(this,
+					"error == in refreshRegionLayout" + e.getMessage(),
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	/**
+	 * Adds WebView to the parent layout
+	 * 
+	 * @param parentLayout
+	 * @param regionWidth
+	 * @param regionHeight
+	 * @param layoutMarginLeft
+	 * @param layoutMarginTop
+	 * @param media
+	 * @param regionCount
+	 */
+	private void drawWebViewRegion(RelativeLayout parentLayout,
+			int regionWidth, int regionHeight, int layoutMarginLeft,
+			int layoutMarginTop, DisplayLayout.Media media, int regionCount,
+			RefreshMediaData refreshMediaData) {
+		List<MediaOptions> mediaOptionList = media.getMedia();
+		MediaOptions mediaOption = mediaOptionList.get(0);
+		String uri = mediaOption.getUri();
+		try {
+			uri = new java.net.URI(uri).getPath();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		// openLinkInChrome(uri);
+		RelativeLayout web_layout = (RelativeLayout) getLayoutInflater()
+				.inflate(R.layout.child_web_layout, parentLayout, false);
+		web_layout.setId(regionCount);
+		RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+				regionWidth, regionHeight);
+		param.setMargins(layoutMarginLeft, layoutMarginTop, 0, 0);
+		web_layout.setLayoutParams(param);
+		WebView web = (WebView) web_layout.findViewById(R.id.web_view);
+		web.loadUrl(uri);
+		web.setId(regionCount);
+		//web.refreshDrawableState();
+		parentLayout.addView(web_layout);
+		setAndSendMediaInfoToServer(uri, media.getDuration(), refreshMediaData);
+	}
+
+	/**
+	 * Adds webView to include Embedded html component to parent layout
+	 * 
+	 * @param parentLayout
+	 * @param regionWidth
+	 * @param regionHeight
+	 * @param layoutMarginLeft
+	 * @param layoutMarginTop
+	 * @param media
+	 * @param regionCount
+	 */
+	private void drawEmbeddedHtmlRegion(RelativeLayout parentLayout,
+			int regionWidth, int regionHeight, int layoutMarginLeft,
+			int layoutMarginTop, DisplayLayout.Media media, int regionCount) {
+		List<MediaOptions> mediaOptionList = media.getMedia();
+		MediaOptions mediaOption = mediaOptionList.get(0);
+
+		DisplayLayout.Raw raw = media.getRaw().get(0);
+		String embedHtml = raw.getEmbedHtml();
+		String embedScript = raw.getEmbedScript();
+		String embedStyle = raw.getEmbedStyle();
+		String htmlText = "<html><head>" + embedStyle + "</head><body>"
+				+ embedHtml + "</body>" + embedScript + "</html>";
+
+		RelativeLayout web_layout = (RelativeLayout) getLayoutInflater()
+				.inflate(R.layout.child_web_layout, parentLayout, false);
+		web_layout.setId(regionCount);
+		RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+				regionWidth, regionHeight);
+		param.setMargins(layoutMarginLeft, layoutMarginTop, 0, 0);
+		web_layout.setLayoutParams(param);
+		WebView web = (WebView) web_layout.findViewById(R.id.web_view);
+		web.setId(regionCount);
+		if (web != null) {
+			web.loadData(htmlText, "text/html; charset=UTF-8", null);
+		}
+		// web.refreshDrawableState();
+		parentLayout.addView(web_layout);
+	}
+
+	/**
+	 * Adds Ticker region to the parent layout
+	 * 
+	 * @param parentLayout
+	 * @param regionWidth
+	 * @param regionHeight
+	 * @param layoutMarginLeft
+	 * @param layoutMarginTop
+	 * @param media
+	 * @param regionCount
+	 */
+	private void drawWebViewTickerRegion(RelativeLayout parentLayout,
+			int regionWidth, int regionHeight, int layoutMarginLeft,
+			int layoutMarginTop, DisplayLayout.Media media, int regionCount,
+			RefreshMediaData refreshMediaData) {
+		List<MediaOptions> mediaOptionList = media.getMedia();
+		MediaOptions mediaOption = mediaOptionList.get(0);
+		String scrollSpeed = mediaOption.getScrollSpeed();
+		String direction = mediaOption.getDirection();
+		String speed = mediaOption.getSpeed();
+		String textDirection = mediaOption.getTextDirection();
+
+		String uri = mediaOption.getUri();
+		if (scrollSpeed == null || (Integer.parseInt(scrollSpeed) < 0)) {
+			if (speed != null && (Integer.parseInt(speed) > 0)) {
+				scrollSpeed = speed;
+			} else {
+				scrollSpeed = "0";
+			}
+		}
+
+		if (direction == null) {
+			if (textDirection != null) {
+				if (textDirection.equalsIgnoreCase("ltr")
+						|| textDirection.toLowerCase().contains("right")) {
+					direction = "RIGHT";
+				} else {
+					direction = "LEFT";
+				}
+			} else {
+				direction = "NONE";
+			}
+		}
+		DisplayLayout.Raw raw = media.getRaw().get(0);
+		String template = raw.getTemplate();
+		// String htmlText =
+		// "<html><body bgcolor='#00000'><marquee behavior='scroll' direction="+direction+" 
+		//scrollamount="+scrollSpeed+">"+template+"</MARQUEE></body></html>";
+		String htmlText = "<html><head><script type='text/javascript'>document.write(\\x3Cscript type=text/javascript "
+				+ "src='' + (https: == document.location.protocol ? https:// : http://)"
+				+ " + feed.mikle.com/js/rssmikle.js>\\x3C/script>\");</script><script type='text/javascript'>(function() "
+				+ "{var params = {rssmikle_url: 'http://indiatoday.intoday.in/rss/homepage-topstories.jsp',rssmikle_frame_width:"
+				+ " '300',rssmikle_frame_height: '400',frame_height_by_article: '0',rssmikle_target:"
+				+ " '_blank',rssmikle_font: 'Arial, Helvetica, sans-serif',rssmikle_font_size: '12',rssmikle_border:"
+				+ " 'off',responsive: 'off',rssmikle_css_url: ,text_align:'left',text_align2: 'left',corner:"
+				+ " 'off',scrollbar: 'on',autoscroll: 'on',scrolldirection: 'up',scrollstep: '3',mcspeed:"
+				+ " '20',sort: 'Off',rssmikle_title: 'on',rssmikle_title_sentence: '',rssmikle_title_link:"
+				+ " 'http://http%3A%2F%2Findiatoday.intoday.in%2Frss%2Fhomepage-topstories.jsp',rssmikle_title_bgcolor:"
+				+ " '#0066FF',rssmikle_title_color: '#FFFFFF',rssmikle_title_bgimage: '',rssmikle_item_bgcolor:"
+				+ " '#FFFFFF',rssmikle_item_bgimage: '',rssmikle_item_title_length:'55',rssmikle_item_title_color:"
+				+ " '#0066FF',rssmikle_item_border_bottom: 'on',rssmikle_item_description: 'on',item_link:'off',"
+				+ "rssmikle_item_description_length: '150',rssmikle_item_description_color: '#666666',rssmikle_item_date:"
+				+ " 'gl1',rssmikle_timezone: 'Etc/GMT',datetime_format: '%b %e, %Y %l:%M:%S %p',item_description_style:"
+				+ " 'text+tn',item_thumbnail: 'full',item_thumbnail_selection: 'auto',article_num: '15',rssmikle_item_podcast:"
+				+ " 'off',keyword_inc: '',keyword_exc: ''};feedwind_show_widget_iframe(params);})();</script><div"
+				+ " style='font-size:10px; text-align:center; width:300px;'><a href='http://feed.mikle.com/'"
+				+ " target='_blank' style='color:#CCCCCC;'>RSS Feed Widget</a></div></head><body bgcolor='#00000'>"
+				+ "<marquee behavior='scroll' direction=NONE scrollamount=0><p style='font-family: Arial, Verdana,"
+				+ " sans-serif;'><span style='font-size:48px;'><span style='color: #ffffff;'><strong>[Title]</strong>"
+				+ "</span></span></p></MARQUEE></body></html>";
+		RelativeLayout web_layout = (RelativeLayout) getLayoutInflater()
+				.inflate(R.layout.child_web_layout, parentLayout, false);
+		web_layout.setId(regionCount);
+		RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+				regionWidth, regionHeight);
+		param.setMargins(layoutMarginLeft, layoutMarginTop, 0, 0);
+		web_layout.setLayoutParams(param);
+		WebView web = (WebView) web_layout.findViewById(R.id.web_view);
+		web.setId(regionCount);
+		if (web != null && template != null) {
+			web.loadData(htmlText, "text/html; charset=UTF-8", null);
+		}
+		setAndSendMediaInfoToServer("Ticker", media.getDuration(),
+				refreshMediaData);
+		// web.refreshDrawableState();
+		parentLayout.addView(web_layout);
+	}
+
+	/**
+	 * Add Text ticker region to parent layout
+	 * 
+	 * @param parentLayout
+	 * @param regionWidth
+	 * @param regionHeight
+	 * @param layoutMarginLeft
+	 * @param layoutMarginTop
+	 * @param media
+	 * @param regionCount
+	 */
+	private void drawTextRegion(RelativeLayout parentLayout, int regionWidth,
+			int regionHeight, int layoutMarginLeft, int layoutMarginTop,
+			DisplayLayout.Media media, int regionCount,
+			RefreshMediaData refreshMediaData) {
+		List<MediaOptions> mediaOptionList = media.getMedia();
+		MediaOptions mediaOption = mediaOptionList.get(0);
+		String scrollSpeed = mediaOption.getScrollSpeed();
+		String direction = mediaOption.getDirection();
+		String speed = mediaOption.getSpeed();
+		String effect = mediaOption.getEffect();
+		String textDirection = mediaOption.getTextDirection();
+		if (scrollSpeed == null || (Integer.parseInt(scrollSpeed) < 0)) {
+			if (speed != null && (Integer.parseInt(speed) > 0)) {
+				scrollSpeed = speed;
+			} else {
+				scrollSpeed = "0";
+			}
+		}
+
+		if (direction == null) {
+			if (textDirection != null) {
+				if (textDirection.equalsIgnoreCase("ltr")
+						|| textDirection.toLowerCase(Locale.ENGLISH).contains(
+								"right")) {
+					direction = "right";
+				} else {
+					direction = "left";
+				}
+			} else if (effect != null) {
+				if (effect.toLowerCase(Locale.ENGLISH).contains("right")) {
+					direction = "RIGHT";
+				} else if (effect.toLowerCase(Locale.ENGLISH).contains("left")) {
+					direction = "left";
+				} else if (effect.toLowerCase(Locale.ENGLISH).contains("up")) {
+					direction = "up";
+				} else if (effect.toLowerCase(Locale.ENGLISH).contains("down")) {
+					direction = "down";
+				}
+			}
+		}
+		// if(scrollSpeed==null || (Integer.parseInt(scrollSpeed) <0)){
+		// scrollSpeed = "0";
+		// }
+		//
+		// if(direction==null){
+		// direction = "NONE";
+		// }
+		DisplayLayout.Raw raw = media.getRaw().get(0);
+		String text = raw.getText();
+		String htmlText = "<html><body bgcolor='#000000'><marquee behavior='scroll' direction="
+				+ direction
+				+ " scrollamount="
+				+ scrollSpeed
+				+ " height=100% width=100%>"
+				+ text
+				+ "</MARQUEE></body></html>";
+
+		RelativeLayout web_layout = (RelativeLayout) getLayoutInflater()
+				.inflate(R.layout.child_web_layout, parentLayout, false);
+		web_layout.setId(regionCount);
+		RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+				regionWidth, regionHeight);
+		param.setMargins(layoutMarginLeft, layoutMarginTop, 0, 0);
+		web_layout.setLayoutParams(param);
+		WebView web = (WebView) web_layout.findViewById(R.id.web_view);
+		web.setId(regionCount);
+		if (web != null && text != null) {
+			web.loadData(htmlText, "text/html; charset=UTF-8", null);
+		}
+		// web.refreshDrawableState();
+		parentLayout.addView(web_layout);
+		setAndSendMediaInfoToServer("TEXT", media.getDuration(),
+				refreshMediaData);
+	}
+
+	/**
+	 * Adds ImageView Region to the parent layout
+	 * 
+	 * @param parentLayout
+	 * @param regionWidth
+	 * @param regionHeight
+	 * @param layoutMarginLeft
+	 * @param layoutMarginTop
+	 * @param media
+	 * @param callBackTime
+	 * @param regionCount
+	 * @return
+	 */
+	private int drawImageViewRegion(RelativeLayout parentLayout,
+			int regionWidth, int regionHeight, int layoutMarginLeft,
+			int layoutMarginTop, DisplayLayout.Media media, int callBackTime,
+			int regionCount, RefreshMediaData refreshMediaData) {
+		ImageView img = null;
+		RelativeLayout img_layout = null;
+		try {
+			Bitmap bmp = null;
+
+			img_layout = (RelativeLayout) getLayoutInflater().inflate(
+					R.layout.child_image_layout, parentLayout, false);
+			RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+					regionWidth, regionHeight);
+			param.setMargins(layoutMarginLeft, layoutMarginTop, 0, 0);
+
+			List<MediaOptions> mediaOptionList = media.getMedia();
+			MediaOptions mediaOption = mediaOptionList.get(0);
+
+			String scaletype = mediaOption.getScaleType();
+			// String align = mediaOption.getAlign();
+			// String vAlign = mediaOption.getValign();
+			String transIn = mediaOption.getTransIn();
+			String transInDuration = mediaOption.getTransInDuration();
+			String name = mediaOption.getUri();
+			img_layout.setLayoutParams(param);
+			img_layout.setId(regionCount);
+			img = (ImageView) img_layout.findViewById(R.id.img_view);
+			if (scaletype != null && scaletype.equalsIgnoreCase("center")) {
+				img.setScaleType(ScaleType.FIT_CENTER);
+			} else {
+				img.setScaleType(ScaleType.FIT_XY);
+			}
+			if (img != null) {
+				img.setImageBitmap(null);
+				if (bmp != null) {
+					img.setImageBitmap(bmp);
+				} else {
+					if (name == null || name.length() == 0) {
+
+						failRefreshFlag = true;
+						callBackTime = 0;
+					}
+				}
+				String PATH = Environment.getExternalStorageDirectory()
+						+ AppState.DISPLAY_FOLDER + name;
+				File imgFile = new File(PATH);
+				if (imgFile.exists()) {
+					bmp = Utility.decodeScaledBitmapFromSdCard(PATH,
+							regionWidth, regionHeight);
+					try {
+						if (bmp != null) {
+							if (transIn != null && !transIn.isEmpty()
+									&& transIn.equalsIgnoreCase("fadeIn")) {
+								long transDuration = 1000;
+								if (transInDuration != null
+										&& !transInDuration.isEmpty()) {
+									transDuration = Long
+											.parseLong(transInDuration);
+								}
+								setImageFadeInFadeOutAnimation(img, bmp,
+										transDuration, 3000);
+							} else {
+								img.setImageBitmap(bmp);
+							}
+							previousBitmap = bmp;
+							// bmp.recycle();
+						}
+						// h = bmp.getHeight();
+						// w = bmp.getWidth();
+						// img.setImageURI(Uri.fromFile(imgFile));
+					} catch (OutOfMemoryError e) {
+						// Log.i("Out of memmory error", "" + PATH);
+						showToastMessage("error in Image Out of memmory" + PATH);
+					} catch (Exception e) {
+
+					}
+				} else {
+					failRefreshFlag = false;
+					callBackTime = 0;
+					showToastMessage("error in Image file not found" + PATH);
+					LogData.getInstance().setDownloadPending(
+							AppMain.getAppMainContext(), true);
+					// Toast.makeText(this, "error in Image ",1000).show();
+					// img.setImageBitmap(previousBitmap);
+				}
+			}
+
+			// }
+			// img.refreshDrawableState();
+			img_layout.setId(regionCount);
+			parentLayout.addView(img_layout);
+			img.requestFocus();
+			setAndSendMediaInfoToServer(name, media.getDuration(),
+					refreshMediaData);
+		} catch (Exception e) {
+			failRefreshFlag = true;
+			callBackTime = 0;
+			showToastMessage("error in Image " + e.getMessage());
+			// Toast.makeText(this, "error in Image ",1000).show();
+			img.setImageBitmap(previousBitmap);
+			img_layout.setId(regionCount);
+			parentLayout.addView(img_layout);
+			img.requestFocus();
+		}
+
+		return callBackTime;
+	}
+
+	/**
+	 * Adds VideoView streaming Region to parent layout
+	 * 
+	 * @param parentLayout
+	 * @param regionWidth
+	 * @param regionHeight
+	 * @param layoutMarginLeft
+	 * @param layoutMarginTop
+	 * @param media
+	 * @param callBackTime
+	 * @param regionCount
+	 * @return
+	 */
+	private int drawVideoViewStreamingRegion(RelativeLayout parentLayout,
+			int regionWidth, int regionHeight, int layoutMarginLeft,
+			int layoutMarginTop, DisplayLayout.Media media, int callBackTime,
+			int regionCount, RefreshMediaData refreshMediaData) {
+		RelativeLayout video_layout = null;
+		VideoView videoHolder = null;
+		String name = mediaUri;
+		String mute = "0";
+		try {
+			video_layout = (RelativeLayout) getLayoutInflater().inflate(
+					R.layout.child_video_layout, parentLayout, false);
+			video_layout.setId(regionCount);
+			RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+					regionWidth, regionHeight);
+			param.setMargins(layoutMarginLeft, layoutMarginTop, 0, 0);
+			video_layout.setLayoutParams(param);
+			videoHolder = (VideoView) video_layout
+					.findViewById(R.id.video_view);
+			try {
+				List<MediaOptions> mediaOptionList = media.getMedia();
+				MediaOptions mediaOption = mediaOptionList.get(0);
+				mute = mediaOption.getMute();
+				name = mediaOption.getUri();
+				name = new java.net.URI(name).getPath();
+				// name =
+				// "rtsp://admin:orange@axislajpatnagar.selfip.com:554/cam/realmonitor?channel=1&subtype=1";
+			} catch (Exception e) {
+				showToastMessage("error in Video mediaOptionList "
+						+ e.getMessage());
+			}
+			try {
+				final String muteFlag = mute;
+				if (name == null || name.length() == 0) {
+					failRefreshFlag = true;
+					callBackTime = 0;
+					showToastMessage("error in Video data ");
+				} else {
+					mediaUri = name;
+					showToastMessage("mediaUri Video " + mediaUri);
+				}
+
+				// MediaController mediaController = new
+				// MediaController(SignageDisplay.this);
+				// mediaController.setVisibility(View.GONE);
+				// mediaController.setAnchorView(videoHolder);
+				// videoHolder.setMediaController(mediaController);
+				videoHolder.setMediaController(null);
+				final Uri video = Uri.parse(name);
+				videoHolder.setVideoURI(video);
+				videoHolder.requestFocus();
+				final VideoView vv = videoHolder;
+				videoHolder.setOnInfoListener(new OnInfoListener() {
+
+					@Override
+					public boolean onInfo(MediaPlayer mp, int what, int extra) {
+						//
+						// Log.i("VIDEO on onInfo", "what "+what
+						// +" extra "+extra);
+						return true;
+					}
+				});
+				videoHolder
+						.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+							@Override
+							public void onPrepared(MediaPlayer mp) {
+								// Log.i("VIDEO", "onPrepared "+video);
+								// preview.setVisibility(View.GONE);
+								// mp.setLooping(true);
+								if (muteFlag != null
+										&& muteFlag.equalsIgnoreCase("1")) {
+									mp.setVolume(0, 0);
+								}
+								vv.setVisibility(View.VISIBLE);
+								vv.setZOrderOnTop(true);
+								vv.requestFocus();
+								vv.start();
+								// vv.start();
+							}
+						});
+				videoHolder.setOnErrorListener(new OnErrorListener() {
+
+					@Override
+					public boolean onError(MediaPlayer mp, int what, int extra) {
+						// Log.i("VIDEO on Error", "what "+what
+						// +" extra "+extra);
+
+						showToastMessage("VIDEO on Error what " + what
+								+ " extra " + extra);
+						if (what == 1 && extra == -38) {
+
+						}
+						return true;
+					}
+				});
+				parentLayout.addView(video_layout);
+				// mediaTimeObj = new MediaTimeData();
+				// mediaTimeObj.setId("");
+				// mediaTimeObj.setBoxId(ClientConnectionConfig._HARDWAREKEY);
+				// mediaTimeObj.setLayoutId(displayedLayout);
+				// mediaTimeObj.setLatitude(LogUtility.getTimeStamp());
+				// mediaTimeObj.setMediaId(name);
+				// mediaTimeObj.setDuration(media.getDuration());
+				videoHolder.setZOrderOnTop(true);
+				videoHolder.requestFocus();
+				videoHolder.start();
+				setAndSendMediaInfoToServer(name, media.getDuration(),
+						refreshMediaData);
+			} catch (Exception e) {
+				failRefreshFlag = true;
+				callBackTime = 0;
+				showToastMessage("Vide oerror1 region " + name);
+				// Toast.makeText(this,
+				// "error in Video  "+e.getMessage(),2000).show();
+
+			}
+		} catch (Exception e) {
+			failRefreshFlag = true;
+			callBackTime = 0;
+
+			showToastMessage("Vide oerror 2 region " + name);
+			// Toast.makeText(this,
+			// "error in Video  "+e.getMessage(),2000).show();
+
+		}
+		return callBackTime;
+	}
+
+	/**
+	 * Adds VideoView streaming Region to parent layout
+	 * 
+	 * @param parentLayout
+	 * @param regionWidth
+	 * @param regionHeight
+	 * @param layoutMarginLeft
+	 * @param layoutMarginTop
+	 * @param media
+	 * @param callBackTime
+	 * @param regionCount
+	 * @return
+	 */
+	// private int drawHDMIRegion(RelativeLayout parentLayout, int regionWidth,
+	// int regionHeight, int layoutMarginLeft, int layoutMarginTop,
+	// DisplayLayout.Media media, int callBackTime, int regionCount){
+	// RelativeLayout hdmi_layout = null;
+	//
+	// try {
+	// hdmi_layout = (RelativeLayout)
+	// getLayoutInflater().inflate(R.layout.child_hdmi_layout, parentLayout,
+	// false);
+	// hdmi_layout.setId(regionCount);
+	// RelativeLayout.LayoutParams param = new
+	// RelativeLayout.LayoutParams(regionWidth, regionHeight);
+	// param.setMargins(layoutMarginLeft, layoutMarginTop, 0, 0);
+	// hdmi_layout.setLayoutParams(param);
+	//
+	// window = (SurfaceView) hdmi_layout.findViewById(R.id.window);
+	// mEventHandler.sendMessage(mEventHandler
+	// .obtainMessage(HDMI_IN_MESSAGE_CREATE));
+	// hdmi_layout.setId(regionCount);
+	// parentLayout.addView(hdmi_layout);
+	// } catch (Exception e) {
+	// failRefreshFlag = true;
+	// callBackTime = 0;
+	// // Toast.makeText(this, "error in Video  "+e.getMessage(),2000).show();
+	//
+	// }
+	// return callBackTime;
+	// }
+
+	/**
+	 * Adds HDMI RESET streaming Region to parent layout
+	 * 
+	 * @param parentLayout
+	 * @param regionWidth
+	 * @param regionHeight
+	 * @param layoutMarginLeft
+	 * @param layoutMarginTop
+	 * @param media
+	 * @param callBackTime
+	 * @param regionCount
+	 * @return
+	 */
+	/*
+	 * private int drawHDMIResetRegion(RelativeLayout parentLayout, int
+	 * regionWidth, int regionHeight, int layoutMarginLeft, int layoutMarginTop,
+	 * DisplayLayout.Media media, int callBackTime, int regionCount){
+	 * RelativeLayout hdmi_layout = null;
+	 * 
+	 * try { hdmi_layout = (RelativeLayout)
+	 * getLayoutInflater().inflate(R.layout.child_hdmi_layout, parentLayout,
+	 * false); hdmi_layout.setId(regionCount); RelativeLayout.LayoutParams param
+	 * = new RelativeLayout.LayoutParams(regionWidth, regionHeight);
+	 * param.setMargins(layoutMarginLeft, layoutMarginTop, 0, 0);
+	 * hdmi_layout.setLayoutParams(param);
+	 * 
+	 * window = (SurfaceView) hdmi_layout.findViewById(R.id.window);
+	 * mEventHandler.sendMessage(mEventHandler
+	 * .obtainMessage(HDMI_IN_MESSAGE_PLUGON)); hdmi_layout.setId(regionCount);
+	 * parentLayout.addView(hdmi_layout); } catch (Exception e) {
+	 * failRefreshFlag = true; callBackTime = 0; // Toast.makeText(this,
+	 * "error in Video  "+e.getMessage(),2000).show();
+	 * 
+	 * } return callBackTime; }
+	 */
+	/**
+	 * Adds VideoView Region to the parent layout
+	 * 
+	 * @param parentLayout
+	 * @param regionWidth
+	 * @param regionHeight
+	 * @param layoutMarginLeft
+	 * @param layoutMarginTop
+	 * @param media
+	 * @param callBackTime
+	 * @param regionCount
+	 * @return callbacktime
+	 */
+	private int drawVideoViewRegion(RelativeLayout parentLayout,
+			int regionWidth, int regionHeight, int layoutMarginLeft,
+			int layoutMarginTop, DisplayLayout.Media media, int callBackTime,
+			int regionCount, RefreshMediaData refreshMediaData) {
+
+		RelativeLayout video_layout = null;
+		VideoView videoHolder = null;
+		String name = mediaUri;
+
+		String mute = "0";
+		try {
+			video_layout = (RelativeLayout) getLayoutInflater().inflate(
+					R.layout.child_video_layout, parentLayout, false);
+			video_layout.setId(regionCount);
+			RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+					regionWidth, regionHeight);
+			param.setMargins(layoutMarginLeft, layoutMarginTop, 0, 0);
+			video_layout.setLayoutParams(param);
+
+			// final ImageView preview =
+			// (ImageView)video_layout.findViewById(R.id.video_preview);
+			videoHolder = (VideoView) video_layout
+					.findViewById(R.id.video_view);
+			try {
+				List<MediaOptions> mediaOptionList = media.getMedia();
+				MediaOptions mediaOption = mediaOptionList.get(0);
+				mute = mediaOption.getMute();
+				// String loop = mediaOption.getLoop();
+				name = mediaOption.getUri();
+			} catch (Exception e) {
+
+				showToastMessage("error in Video mediaOptionList "
+						+ e.getMessage());
+			}
+			try {
+				final String muteFlag = mute;
+				if (name == null || name.length() == 0) {
+					failRefreshFlag = true;
+					callBackTime = 0;
+					showToastMessage("error in Video data ");
+					// }
+				} else {
+					mediaUri = name;
+				}
+				String PATH = Environment.getExternalStorageDirectory()
+						+ AppState.DISPLAY_FOLDER + mediaUri;
+				final File file = new File(PATH);
+				// if(file.isDirectory()){
+				if (file.exists()) {
+					// MediaController mediaController = new
+					// MediaController(SignageDisplay.this);
+					// mediaController.setVisibility(View.GONE);
+					// mediaController.setAnchorView(videoHolder);
+					videoHolder.setVideoURI(null);
+					videoHolder.setMediaController(null);
+					final Uri video = Uri.parse(PATH);
+					videoHolder.setVideoURI(video);
+					videoHolder.requestFocus();
+					final VideoView vv = videoHolder;
+					videoHolder.setOnInfoListener(new OnInfoListener() {
+
+						@Override
+						public boolean onInfo(MediaPlayer mp, int what,
+								int extra) {
+
+							// Log.i("VIDEO on onInfo", "what "+what
+							// +" extra "+extra);
+							return true;
+						}
+					});
+					videoHolder
+							.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+								@Override
+								public void onPrepared(MediaPlayer mp) {
+									// Log.i("VIDEO", "onPrepared "+video);
+									// preview.setVisibility(View.GONE);
+									mp.setLooping(false);
+									if (muteFlag != null
+											&& muteFlag.equalsIgnoreCase("1")) {
+										mp.setVolume(0, 0);
+									}
+									vv.setVisibility(View.VISIBLE);
+									vv.setZOrderOnTop(true);
+									vv.requestFocus();
+									vv.start();
+									// vv.start();
+								}
+							});
+					videoHolder.setOnErrorListener(new OnErrorListener() {
+
+						@Override
+						public boolean onError(MediaPlayer mp, int what,
+								int extra) {
+							showToastMessage("VIDEO on Error what " + what
+									+ " extra " + extra);
+							// Log.i("VIDEO on Error", "what "+what
+							// +" extra "+extra);
+							if (what == 1 && extra == -38) {
+								try {
+
+									showToastMessage("Video file deleting");
+									file.delete();
+									LogData.getInstance().setDownloadPending(
+											AppMain.getAppMainContext(), true);
+								} catch (Exception e) {
+									showToastMessage("Error    Video file deleting");
+								}
+							}
+							return true;
+						}
+					});
+					parentLayout.addView(video_layout);
+					videoHolder.setZOrderOnTop(true);
+					videoHolder.requestFocus();
+					videoHolder.start();
+					setAndSendMediaInfoToServer(name, media.getDuration(),
+							refreshMediaData);
+				} else {
+					failRefreshFlag = false;
+					callBackTime = 0;
+					showToastMessage("Video file does not exist");
+					LogData.getInstance().setDownloadPending(
+							AppMain.getAppMainContext(), true);
+				}
+			} catch (Exception e) {
+				failRefreshFlag = false;
+				callBackTime = 0;
+				showToastMessage("error in Video1  " + e.getMessage());
+				// Toast.makeText(this,
+				// "error in Video  "+e.getMessage(),2000).show();
+			}
+		} catch (Exception e) {
+			failRefreshFlag = false;
+			callBackTime = 0;
+			showToastMessage("error in Video2  " + e.getMessage());
+			// Toast.makeText(this,
+			// "error in Video  "+e.getMessage(),2000).show();
+		}
+		return callBackTime;
+	}
+
+	/**
+	 * Fade in fade out Animation effect on Image
+	 * 
+	 * @param imgView
+	 * @param image
+	 * @param fadeInDuration
+	 * @param fadeOutDuration
+	 */
+	void setImageFadeInFadeOutAnimation(final ImageView imgView,
+			final Bitmap image, long fadeInDuration, long fadeOutDuration) {
+		final Animation animationFadeIn = AnimationUtils.loadAnimation(this,
+				R.anim.fadein);
+		animationFadeIn.setDuration(fadeInDuration);
+		final Animation animationFadeOut = AnimationUtils.loadAnimation(this,
+				R.anim.fadeout);
+		animationFadeOut.setDuration(fadeOutDuration);
+
+		Animation.AnimationListener animListener = new Animation.AnimationListener() {
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				imgView.setImageBitmap(image);
+				// imgView.startAnimation(animationFadeIn);
+			}
+		};
+		imgView.setImageBitmap(image);
+		imgView.startAnimation(animationFadeIn);
+		// imgView.startAnimation(animationFadeOut);
+		// animationFadeOut.setAnimationListener(animListener);
+	}
+
+	void openLinkInChrome(String urlToOpen) {
+		try {
+			final String appPackageName = "com.android.chrome";
+			Intent intent = new Intent("android.intent.action.VIEW",
+					Uri.parse(urlToOpen));
+			// Intent intent =
+			// getPackageManager().getLaunchIntentForPackage(appPackageName);
+			if (intent != null) {
+				startActivity(intent);
+
+			}
+		} catch (ActivityNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			// Chrome is probably not installed
+		}
+	}
+
+	/**
+	 * Sends current media information to server
+	 * 
+	 * @param mediaName
+	 * @param duration
+	 */
+	private void setAndSendMediaInfoToServer(String mediaName, String duration,
+			RefreshMediaData refreshMediaDataObj) {
+		MediaTimeData mediaTimeObj = new MediaTimeData();
+		mediaTimeObj.setId("");
+		mediaTimeObj.setBoxId(ClientConnectionConfig._HARDWAREKEY);
+		mediaTimeObj.setLayoutId(displayedLayout);
+		mediaTimeObj.setStartTime(LogUtility.getTimeStamp());
+		mediaTimeObj.setMediaId(mediaName);
+		mediaTimeObj.setDuration(duration);
+		String id = generateId(mediaTimeObj.getMediaId(),
+				mediaTimeObj.getBoxId(), mediaTimeObj.getLayoutId());
+		mediaTimeObj.setId(id);
+		refreshMediaDataObj.setMediaTimeData(mediaTimeObj);
+		DataCacheManager.getInstance(AppMain.getAppMainContext())
+				.saveMediaTimeData(mediaTimeObj);
+		sendMediaTimeRequest(mediaTimeObj);
+	}
+
+	private void sendMediaUpdate() {
+		try {
+			if (timerTaskMediaUpdate != null) {
+				timerTaskMediaUpdate.removeCallbacks(runnableMediaUpdate);
+				timerTaskMediaUpdate = null;
+			}
+			runnableMediaUpdate = new Runnable() {
+				@Override
+				public void run() {
+					if (LogUtility.checkNetwrk(AppMain.getAppMainContext())) {
+						try {
+							syncSavedListMediaLayoutData();
+							// } catch (Exception e) {
+							// e.printStackTrace();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					if (timerTaskMediaUpdate != null
+							&& runnableMediaUpdate != null)
+						timerTaskMediaUpdate.postDelayed(runnableMediaUpdate,
+								120000);
+				}
+			};
+			timerTaskMediaUpdate = new Handler();
+			timerTaskMediaUpdate.postDelayed(runnableMediaUpdate, 5000);
+
+		} catch (Exception e) {
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		AppState.BACKPRESSED_SIGNAGE_SCREEN = true;
+		ClientConnectionConfig.LAST_REQUEST_DATA = "";
+		try {
+			if (objXXiboServerGetFiles != null)
+				objXXiboServerGetFiles.cancel(false);
+		} catch (Exception e) {
+		}
+		removeAllHandlers();
+		super.onBackPressed();
+		// finish();
+		Intent i = new Intent(SignageDisplay.this, AppMain.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+				| Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(i);
+		finish();
+	}
+
+	void removeAllHandlers() {
+		try {
+			if (handler != null) {
+				handler.removeCallbacks(runnable);
+			}
+			if (timerTaskHandler != null) {
+				timerTaskHandler.removeCallbacks(runnableTimerTask);
+			}
+			if (timerTaskMediaUpdate != null) {
+				timerTaskMediaUpdate.removeCallbacks(runnableMediaUpdate);
+			}
+			if (refreshHandler != null) {
+				refreshHandler.removeCallbacks(refreshRunnable);
+			}
+			if (refreshHandler != null) {
+				refreshHandler.removeCallbacks(nextLayoutRunnable);
+			}
+			if (currentFileHandler != null) {
+				currentFileHandler.removeCallbacks(currentFileRunnble);
+			}
+		} catch (Exception e) {
+
+		}
+	}
+
+	@Deprecated
+	protected void onPause() {
+		try {
+			// if(!cancelPopup){
+			// initiatePopupWindow();
+			// }
+			LogData.getInstance().setAppStatus(AppMain.getAppMainContext(),
+					LogData.STB_ON);
+			// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveSettingData(_KEY_XVIDIA_APP_STATE,
+			// LogData.STB_ON);
+			AppState.ACTION_ON_PAUSE = true;
+			super.onPause();
+		} catch (Exception ex) {
+		}
+	}
+
+	@Deprecated
+	protected void onResume() {
+		try {
+			// if(!cancelPopup){
+			// initiatePopupWindow();
+			// }
+			LogData.getInstance().setAppStatus(AppMain.getAppMainContext(),
+					LogData.APP_ON);
+			// DataCacheManager.getInstance(AppMain.getAppMainContext()).saveSettingData(_KEY_XVIDIA_APP_STATE,
+			// LogData.APP_ON);
+			super.onResume();
+		} catch (Exception ex) {
+		}
+	}
+
+	@Deprecated
+	protected void onRestart() {
+		try {
+			// if(!cancelPopup){
+			// initiatePopupWindow();
+			// }
+			LogData.getInstance().setAppStatus(AppMain.getAppMainContext(),
+					LogData.APP_ON);
+			super.onRestart();
+		} catch (Exception ex) {
+		}
+	}
+
+	private void sendMediaTimeRequest(MediaTimeData mediaTimeObj) {
+		if (AppState.BACKPRESSED_SIGNAGE_SCREEN)
+			return;
+		String id = "";
+		if (mediaTimeObj != null) {
+			id = mediaTimeObj.getId();
+			if (id.isEmpty()) {
+				id = generateId(mediaTimeObj.getMediaId(),
+						mediaTimeObj.getBoxId(), mediaTimeObj.getLayoutId());
+				mediaTimeObj.setId(id);
+			}
+
+			if (checkNetwrk()) {
+				final String url = new ServiceURLManager()
+						.getUrl(IAPIConstants.API_KEY_MEDIA_TIME);
+				JSONObject jsonRequest = null;
+				ObjectMapper mapper = new ObjectMapper();
+				String jsonRequestString = null;
+				try {
+					jsonRequestString = mapper.writeValueAsString(mediaTimeObj);
+					Log.i("Vo MediaTimeData ", jsonRequestString + "\n"
+							+ mediaTimeObj.getEndTime());
+				} catch (IOException e) {
+					// e.printStackTrace();
+				}
+				try {
+					jsonRequest = new JSONObject(jsonRequestString);
+
+					Log.i("MediaTimeDataRequest ", jsonRequest.toString());
+				} catch (JSONException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+				}
+				JsonObjectRequest request = new JsonObjectRequest(
+						Request.Method.POST, url, jsonRequest,
+						new Response.Listener<JSONObject>() {
+
+							@Override
+							public void onResponse(JSONObject response) {
+								Log.i("Volley response ", response.toString());
+								// if (url.equalsIgnoreCase(new
+								// ServiceURLManager().getUrl(IAPIConstants.API_KEY_MEDIA_TIME)))
+								// {
+								ObjectMapper mapper = new ObjectMapper();
+								MediaTimeData obj = null;
+								try {
+									obj = mapper.readValue(response.toString(),
+											MediaTimeData.class);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+								// ModelManager.getInstance().setLayoutTimeModel(responseJSON);
+								String deviceId = obj.getId();
+								String endTime = obj.getEndTime();
+								if (!endTime.isEmpty()) {
+									DataCacheManager.getInstance(
+											AppMain.getAppMainContext())
+											.removeMediaTimeById(deviceId);
+								}
+
+								// }
+							}
+						}, new Response.ErrorListener() {
+
+							@Override
+							public void onErrorResponse(VolleyError error) {
+
+								// Log.e("VolleyError ", error.getMessage());
+							}
+						});
+				VolleySingleton.getInstance(MyApplication.getAppContext())
+						.addToRequestQueue(request);
+			}
+		}
+	}
+
+	private void sendLayoutTimeRequest(LayoutTimeData mediaTimeObj) {
+		if (AppState.BACKPRESSED_SIGNAGE_SCREEN)
+			return;
+		String id = "";
+		if (mediaTimeObj != null) {
+			id = mediaTimeObj.getId();
+			if (id.isEmpty()) {
+				id = generateId("", mediaTimeObj.getBoxId(),
+						mediaTimeObj.getLayoutId());
+				mediaTimeObj.setId(id);
+			}
+			if (checkNetwrk()) {
+				final String url = new ServiceURLManager()
+						.getUrl(IAPIConstants.API_KEY_LAYOUT_TIME);
+				JSONObject jsonRequest = null;
+				ObjectMapper mapper = new ObjectMapper();
+				String jsonRequestString = null;
+				try {
+					jsonRequestString = mapper.writeValueAsString(mediaTimeObj);
+					Log.i("VolleyLayoutTimeData ", jsonRequestString.toString()
+							+ "\n" + mediaTimeObj.getEndTime());
+				} catch (IOException e) {
+					// e.printStackTrace();
+				}
+				try {
+					jsonRequest = new JSONObject(jsonRequestString);
+					Log.i("V LayoutTimeData ", jsonRequest.toString());
+				} catch (JSONException e) {
+					// // TODO Auto-generated catch block
+					// e.printStackTrace();
+				}
+				JsonObjectRequest request = new JsonObjectRequest(
+						Request.Method.POST, url, jsonRequest,
+						new Response.Listener<JSONObject>() {
+
+							@Override
+							public void onResponse(JSONObject response) {
+
+								Log.i("Volley JSONObject ", response.toString());
+								if (url.equalsIgnoreCase(new ServiceURLManager()
+										.getUrl(IAPIConstants.API_KEY_LAYOUT_TIME))) {
+									ObjectMapper mapper = new ObjectMapper();
+									LayoutTimeData obj = null;
+									try {
+										obj = mapper.readValue(
+												response.toString(),
+												LayoutTimeData.class);
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+									String deviceId = obj.getId();
+									String endTime = obj.getEndTime();
+									if (!endTime.isEmpty()) {
+										DataCacheManager.getInstance(
+												AppMain.getAppMainContext())
+												.removeLayoutTimeById(deviceId);
+									}
+
+								}
+							}
+						}, new Response.ErrorListener() {
+
+							@Override
+							public void onErrorResponse(VolleyError error) {
+
+								// Log.e("VolleyError ", error.getMessage());
+							}
+						});
+				VolleySingleton.getInstance(MyApplication.getAppContext())
+						.addToRequestQueue(request);
+			}
+		}
+	}
+
+	private String generateId(String media_Id, String box_Id, String layout_Id) {
+
+		Date date = new Date();
+		String id = "";
+		id = media_Id + "_" + box_Id + "_" + layout_Id + "_" + date.getTime();
+		if (media_Id.isEmpty()) {
+			id = box_Id + "_" + layout_Id + "_" + date.getTime();
+		}
+		return id;
+	}
+
+	/**
+	 * This function sends the log request to server
+	 * 
+	 * @param ctx
+	 */
+	private void sendLocationRequest(Context ctx) {
+		try {
+			String location = LogData.getInstance().getLocation(
+					AppMain.getAppMainContext());
+			if (!location.equalsIgnoreCase(LogData.STR_UNKNOWN)) {
+				String[] locationCoordinate = location.split(",");
+				if (locationCoordinate != null
+						&& locationCoordinate.length == 2) {
+					LocationData locationData = new LocationData();
+					locationData.setId(LogData.getInstance().getAppID(
+							AppMain.getAppMainContext()));
+					locationData.setLatitude(locationCoordinate[0]);
+					locationData.setLongitude(locationCoordinate[1]);
+					if (LogUtility.checkNetwrk(ctx)) {
+						ObjectMapper mapper = new ObjectMapper();
+						String jsonRequestString = null;
+						try {
+							jsonRequestString = mapper
+									.writeValueAsString(locationData);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						JSONObject jsonRequest = null;
+						try {
+							jsonRequest = new JSONObject(jsonRequestString);
+						} catch (JSONException e) {
+							// e.printStackTrace();
+						}
+						final String url = new ServiceURLManager()
+								.getUrl(IAPIConstants.API_KEY_BOX_LOCATION);
+						JsonObjectRequest request = new JsonObjectRequest(
+								Request.Method.POST, url, jsonRequest,
+								new Response.Listener<JSONObject>() {
+
+									@Override
+									public void onResponse(JSONObject response) {
+										ObjectMapper mapper = new ObjectMapper();
+										LocationData obj = null;
+										try {
+											obj = mapper.readValue(
+													response.toString(),
+													LocationData.class);
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+										String deviceId = obj.getId();
+										if (!deviceId.isEmpty()) {
+											LogData.getInstance()
+													.setLocation(
+															AppMain.getAppMainContext(),
+															LogData.STR_UNKNOWN);
+										}
+									}
+								}, new Response.ErrorListener() {
+
+									@Override
+									public void onErrorResponse(
+											VolleyError error) {
+
+										// Log.e("VolleyError ",
+										// error.getMessage());
+									}
+								});
+						VolleySingleton.getInstance(
+								MyApplication.getAppContext())
+								.addToRequestQueue(request);
+					}
+				}
+			}
+		} catch (Exception e) {
+
+		}
+	}
+
+	private void syncSavedListMediaLayoutData() {
+		sendLocationRequest(AppMain.getAppMainContext());
+		DataBaseBackground dataBaseBackground = new DataBaseBackground();
+		dataBaseBackground.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+				(Void) null);
+	}
+
+	private void sendSyncRequest(final String url, String arrayJson) {
+		if (checkNetwrk()) {
+			JSONArray jsonRequest = null;
+
+			try {
+				jsonRequest = new JSONArray(arrayJson);
+				Log.i("jsonRequest Sync ", jsonRequest.toString());
+			} catch (JSONException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+			}
+			JsonArrayRequest request = new JsonArrayRequest(
+					Request.Method.POST, url, jsonRequest,
+					new Response.Listener<JSONArray>() {
+
+						@Override
+						public void onResponse(JSONArray response) {
+
+							Log.i("Volley Sync ", response.toString());
+							if (url.equalsIgnoreCase(new ServiceURLManager()
+									.getUrl(IAPIConstants.API_KEY_ONOFF_SCREEN_OFFLINE))) {
+
+								DataCacheManager
+										.getInstance(
+												AppMain.getAppMainContext())
+										.removeOnOffTimeData(
+												MySqliteHelper.TABLE_NAME_ONOFF_TIME_SCREEN_TABLE);
+
+							} else if (url.equalsIgnoreCase(new ServiceURLManager()
+									.getUrl(IAPIConstants.API_KEY_ONOFF_APP_OFFLINE))) {
+
+								DataCacheManager
+										.getInstance(
+												AppMain.getAppMainContext())
+										.removeOnOffTimeData(
+												MySqliteHelper.TABLE_NAME_ONOFF_TIME_APP_TABLE);
+
+							} else if (url.equalsIgnoreCase(new ServiceURLManager()
+									.getUrl(IAPIConstants.API_KEY_ONOFF_BOX_OFFLINE))) {
+
+								DataCacheManager
+										.getInstance(
+												AppMain.getAppMainContext())
+										.removeOnOffTimeData(
+												MySqliteHelper.TABLE_NAME_ONOFF_TIME_BOX_TABLE);
+
+							} else if (url.equalsIgnoreCase(new ServiceURLManager()
+									.getUrl(IAPIConstants.API_KEY_LAYOUT_TIME_OFFLINE))) {
+
+								DataCacheManager.getInstance(
+										AppMain.getAppMainContext())
+										.removeLayoutTimeData();
+
+							} else if (url.equalsIgnoreCase(new ServiceURLManager()
+									.getUrl(IAPIConstants.API_KEY_MEDIA_TIME_OFFLINE))) {
+
+								DataCacheManager.getInstance(
+										AppMain.getAppMainContext())
+										.removeMediaTimeData();
+							}
+
+						}
+					}, new Response.ErrorListener() {
+
+						@Override
+						public void onErrorResponse(VolleyError error) {
+
+							// Log.e("VolleyError ", error.getMessage());
+						}
+					});
+			VolleySingleton.getInstance(MyApplication.getAppContext())
+					.addToRequestQueue(request);
+			// sendPostRequestToServer(new
+			// ServiceURLManager().getAPIGetLayoutTimeRequest(jsonObject));
+		}
+	}
+
+	private class DataBaseBackground extends AsyncTask<Void, Void, String> {
+
+		public DataBaseBackground() {
+
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			try {
+
+				mList = new Vector<MediaTimeData>();
+				mListLayout = new Vector<LayoutTimeData>();
+				onOffListBox = new Vector<OnOffTimeData>();
+				onOffListAPP = new Vector<OnOffTimeData>();
+				onOffListScreen = new Vector<OnOffTimeData>();
+
+				onOffListBox = DataCacheManager.getInstance(
+						AppMain.getAppMainContext()).getAllOnOffTimeData(
+						MySqliteHelper.TABLE_NAME_ONOFF_TIME_BOX_TABLE);
+				onOffListAPP = DataCacheManager.getInstance(
+						AppMain.getAppMainContext()).getAllOnOffTimeData(
+						MySqliteHelper.TABLE_NAME_ONOFF_TIME_APP_TABLE);
+				onOffListScreen = DataCacheManager.getInstance(
+						AppMain.getAppMainContext()).getAllOnOffTimeData(
+						MySqliteHelper.TABLE_NAME_ONOFF_TIME_SCREEN_TABLE);
+				mListLayout = DataCacheManager.getInstance(
+						AppMain.getAppMainContext()).getAllLayoutTimeData();
+				mList = DataCacheManager.getInstance(
+						AppMain.getAppMainContext()).getAllMediaTimeData();
+
+				return null;
+			} catch (Exception e) {
+				return "";
+				// e.printStackTrace();
+			}
+
+		}
+
+		@Override
+		protected void onPostExecute(final String data) {
+			try {
+
+				if (data == null) {
+					if (onOffListScreen != null && onOffListScreen.size() > 0) {
+						ObjectMapper mapper = new ObjectMapper();
+						String arrayJson = null;
+						try {
+							arrayJson = mapper
+									.writeValueAsString(onOffListScreen);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						sendSyncRequest(
+								new ServiceURLManager()
+										.getURL(IAPIConstants.API_KEY_ONOFF_SCREEN_OFFLINE),
+								arrayJson);
+					} else if (onOffListAPP != null && onOffListAPP.size() > 0) {
+						ObjectMapper mapper = new ObjectMapper();
+						String arrayJson = null;
+						try {
+							arrayJson = mapper.writeValueAsString(onOffListAPP);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						sendSyncRequest(
+								new ServiceURLManager()
+										.getURL(IAPIConstants.API_KEY_ONOFF_APP_OFFLINE),
+								arrayJson);
+					} else if (onOffListBox != null && onOffListBox.size() > 0) {
+						ObjectMapper mapper = new ObjectMapper();
+						String arrayJson = null;
+						try {
+							arrayJson = mapper.writeValueAsString(onOffListBox);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						sendSyncRequest(
+								new ServiceURLManager()
+										.getURL(IAPIConstants.API_KEY_ONOFF_BOX_OFFLINE),
+								arrayJson);
+					} else if (mListLayout != null && mListLayout.size() > 0) {
+						ObjectMapper mapper = new ObjectMapper();
+						String arrayJson = null;
+						try {
+							arrayJson = mapper.writeValueAsString(mListLayout);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						sendSyncRequest(
+								new ServiceURLManager()
+										.getURL(IAPIConstants.API_KEY_LAYOUT_TIME_OFFLINE),
+								arrayJson);
+					} else if (mList != null && mList.size() > 0) {
+						ObjectMapper mapper = new ObjectMapper();
+						String arrayJson = null;
+						try {
+							arrayJson = mapper.writeValueAsString(mList);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						sendSyncRequest(
+								new ServiceURLManager()
+										.getURL(IAPIConstants.API_KEY_MEDIA_TIME_OFFLINE),
+								arrayJson);
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+
+	}
+
+}

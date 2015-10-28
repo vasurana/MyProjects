@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% include 'carousal.html' %}
+{% load staticfiles %}
+{% block jumbotron %}
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+
+        <h1>ONLINE FIR PORTAL</h1>
+        <p>OFP is an web portal that allows the user to report an FIR . Hence, this avoids the need to physically go to a police station to do the same. </p>
+      </div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+        <div class="col-md-4">
+          <h2>How it works ? </h2>
+          <p>Click on the 'Submit FIR' button after logging in. Fill in the necessary details in the FIR form and submit!</p>
+        </div>
+        <div class="col-md-4">
+       <a href="#"> <img class='img-responsive' src="{% static 'img/law1.jpg' %}"/> </a>
+       </div>
+        <div class="col-md-4">
+        	{% if request.user.is_authenticated %}
+        	<h3>Hello {{ request.user }}</h3>
+          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" href="#myModal" id="submitFIRBtn">
+  Submit FIR
+</button>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">FIR Form</h4>
+      </div>
+      <div class="modal-body">
+        <span class="success" id='done'> FIR submitted successfully! We will contact you soon </span>
+        <form id="firForm">
+          <div class="form-group">
+            <input type="text" class="form-control"  name="name" id="name" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control"  name="uid" id="uid" placeholder="Unique Identification Number">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control"  name="phone" id="phone" placeholder="Contact Number">
+          </div>
+          <div class="form-group">
+            <textarea class="form-control"  name="address" id="address" placeholder="Address"></textarea>
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control"  name="accused" id="accused" placeholder="Accused Name">
+          </div>
+          <div class="form-group">
+            <textarea class="form-control"  name="desc" id="desc" placeholder="Description"></textarea>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitBtn" >Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+        {% else %}
+        	<form class="login" method="POST" action="{% url 'account_login' %}" >
+  <input name="csrfmiddlewaretoken" value="i85iibxW19QFBQM5NlYGWCWkfui0aqKb" type="hidden"> {% csrf_token %}
+  
+
+<div id="div_id_login" class="form-group"><label for="id_login" class="control-label  requiredField">
+				Login<span class="asteriskField">*</span></label><div class="controls "><input autofocus="autofocus" class="textinput textInput form-control" id="id_login" name="login" placeholder="Username or e-mail" type="text"> </div></div><div id="div_id_password" class="form-group"><label for="id_password" class="control-label  requiredField">
+				Password<span class="asteriskField">*</span></label><div class="controls "><input class="textinput textInput form-control" id="id_password" name="password" placeholder="Password" type="password"> </div></div><div class="form-group"><div id="div_id_remember" class="checkbox"><label for="id_remember" class=""><input class="checkboxinput checkbox" id="id_remember" name="remember" type="checkbox">
+                    Remember Me
+
+				</label></div></div>
+
+  
+  <a class="btn btn-link button secondaryAction" href="{% url 'account_reset_password' %}">Forgot Password?</a>
+  <a class="btn btn-link button secondaryAction" href="{% url 'account_signup' %}">Sign Up</a>
+  <button class="primaryAction btn btn-default" type="submit">Sign In</button>
+</form>
+{% endif %}
+
+        </div>
+      </div>
+{% endblock %}

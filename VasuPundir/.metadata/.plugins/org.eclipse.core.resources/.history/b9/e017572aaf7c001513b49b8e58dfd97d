@@ -1,0 +1,5 @@
+package com.example.beacon1;
+
+public class SQLiteHandler {
+
+}

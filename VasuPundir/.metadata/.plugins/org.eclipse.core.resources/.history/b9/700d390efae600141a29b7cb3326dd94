@@ -1,0 +1,12 @@
+package bucky;
+
+
+class apples {
+	
+	public static void main(String[] args){
+		
+		vasu vObj = new vasu(4,5,6);
+	}
+	
+}
+

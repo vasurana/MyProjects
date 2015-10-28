@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)http://www.javatpoint.com/example-of-deleting-email-using-java-mail-api -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><title>Example of deleting email using JavaMail API - javatpoint</title><link rel="SHORTCUT ICON" href="http://www.javatpoint.com/images/logo/icon.png"><link rel="stylesheet" type="text/css" href="./Example of deleting email using JavaMail API - javatpoint_files/link.css"><meta name="keywords" content="Example of deleting with email"><meta name="description" content=""><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="canonical" href="./Example of deleting email using JavaMail API - javatpoint_files/Example of deleting email using JavaMail API - javatpoint.html"><meta property="og:locale" content="en_US"><meta property="og:type" content="article"><meta name="twitter:title" property="og:title" content="Example of deleting email using JavaMail API - javatpoint"><meta name="twitter:description" property="og:description" content=""><meta property="og:url" content="http://www.javatpoint.com/example-of-deleting-email-using-java-mail-api"><meta property="og:site_name" content="www.javatpoint.com"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@pagejavatpoint"><meta name="twitter:domain" content="www.javatpoint.com"><meta name="twitter:creator" content="@pagejavatpoint"><style type="text/css"></style><style type="text/css">.dp-j .annotation { color: #646464; }.dp-j .number { color: #C00000; }</style></head> <body onload="highlightlink()"> <div id="page" style="margin:-9px;background-color:#f5f5f4;"><div id="container"> <div class="header"><!--<p style="font-weight:bold;padding:7px;color:white;background-color:gray;margin:0px"><marquee>Please delete cookie and cache of your browser once because many links of javatpoint are changed. You may face problem if you don't delete cookie and cache of the browser.</marquee></p>
+-->
+<table style="width:100%"><tbody><tr><td><div id="headerlink" style="padding:0px;margin:0px"><span style="margin-right:20px;width:45%px"></span><span style="float:right;margin-right:5px;width:45%"><a href="http://www.javatpoint.com/contribute-us" style="text-decoration:none;color:#6666CC">Contribute Us</a> | <a href="http://www.javatpoint.com/asknewquestion.jsp" style="text-decoration:none;color:#6666CC">Ask Question</a> | <a href="http://www.javatpoint.com/login.jsp" style="text-decoration:none;color:#6666CC">login</a> <a target="_blank" href="http://feeds.feedburner.com/javatpointsonoo"><img src="./Example of deleting email using JavaMail API - javatpoint_files/r.png" alt="RSS Feed"></a><a target="_blank" href="http://feedburner.google.com/fb/a/mailverify?uri=javatpointsonoo"><img src="./Example of deleting email using JavaMail API - javatpoint_files/m.png" alt="Subscribe to Get Email Alerts"></a><a target="_blank" href="https://www.facebook.com/javatpoint"><img src="./Example of deleting email using JavaMail API - javatpoint_files/f.png" alt="Facebook Page"></a><a target="_blank" href="https://plus.google.com/u/0/113973042385691981314/posts"><img src="./Example of deleting email using JavaMail API - javatpoint_files/g.png" alt="Google Page"></a><a target="_blank" href="https://twitter.com/pagejavatpoint"><img src="./Example of deleting email using JavaMail API - javatpoint_files/t.png" alt="Twitter Page"></a></span><hr class="upperhr"></div> </td></tr><tr><td><!--<div style="float:left;width:230px;"><img src="http://www.javatpoint.com/images/logo/log2.png" alt="javatpoint.com"/></div>--><div style="margin:0px;padding:0px;float:left;width:23%;margin-left:10px;margin-bottom:0px"><a href="http://www.javatpoint.com/" style="text-decoration:none;"><span style="color:orange;font-size:28px;font-weight:bold;">Java</span><span style="color:#666600;font-size:40px;font-weight:bold;">T</span><span style="color:red;font-size:28px;font-weight:bold;">point</span></a></div><div style="float:left;width:50%;"><form class="navbar-search" method="get" action="http://www.google.com/search" target="_blank"> <input type="text" name="q" class="search-query span2" placeholder="Search on javatpoint..." title="Search on Javatpoint"><input type="hidden" name="sitesearch" value="www.javatpoint.com"></form><!--<span style="margin-left:100px;color:orange;font-size:20px;font-weight:bold;">Happy </span><span style="color:red;font-size:20px;font-weight:bold;">New </span><span style="color:#666600;font-size:20px;font-weight:bold;">Year</span><span style="color:#666600;font-size:30px;font-weight:bold;"> 2015</span>--></div><div style="width:25%;float:right"><div style="padding:0px;margin:0px;margin-right:10px;margin-top:10px;float:right"><a target="_blank" style="background-color:#6699CC;text-decoration:none;color:white;border-radius:5px;font-weight:bold;padding:6px 10px 6px 10px;" href="http://www.javatpoint.com/subscribe.jsp">Subscribe Us</a></div><div style="padding:0px;margin:0px;margin-right:10px;float:right"><p style="padding:0px;margin:0px;margin-top:5px;color:#983688;font-weight:bold;">91-9990449935</p><p style="padding:0px;margin:0px;color:#983688;font-weight:bold;">&nbsp;0120-4256464</p></div></div></td></tr></tbody></table> </div><div class="headermobile"><div style="margin:0px;padding:0px;text-align:left;margin-left:10px;"><a href="http://www.javatpoint.com/" style="text-decoration:none;"><span style="color:orange;font-size:25px;font-weight:bold;">Java</span><span style="color:#666600;font-size:35px;font-weight:bold;">T</span><span style="color:red;font-size:25px;font-weight:bold;">point</span></a></div><div style="margin:0px;padding:0px;clear:both"><form class="navbar-search-m" method="get" action="http://www.google.com/search" target="_blank"> <input type="text" name="q" class="search-query span2-m" placeholder="Search on javatpoint..." title="Search on Javatpoint"><input type="hidden" name="sitesearch" value="www.javatpoint.com"></form></div></div><div id="link" style="clear:both"> <div id="smoothmenu1" class="ddsmoothmenu">
+<ul>
+<li><a href="http://www.javatpoint.com/">Home</a></li>
+<li><a href="http://www.javatpoint.com/java-tutorial">Core Java</a></li>
+<li><a href="http://www.javatpoint.com/servlet-tutorial">Servlet</a></li>
+<li><a href="http://www.javatpoint.com/jsp-tutorial">JSP</a></li>
+<li><a href="http://www.javatpoint.com/struts-2-tutorial">Struts2</a></li>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial" class="selected">Mail API</a></li>
+<li><a href="http://www.javatpoint.com/hibernate-tutorial">Hibernate</a></li>
+<li><a href="http://www.javatpoint.com/spring-tutorial">Spring</a></li>
+<li><a href="http://www.javatpoint.com/android-tutorial">Android</a></li>
+<li><a href="http://www.javatpoint.com/design-patterns-in-java">Design Pattern</a></li>
+<li><a href="http://www.javatpoint.com/examaccess">Quiz</a></li>
+
+<li><a href="http://www.javatpoint.com/free-java-projects">Projects</a></li>
+<li><a href="http://www.javatpoint.com/corejava-interview-questions">Interview Q</a>
+</li><li><a href="http://www.javatpoint.com/comment.jsp">Comment</a>
+</li><li><a href="http://www.javatpoint.com/forum">Forum</a>
+</li>
+</ul>
+<br style="clear: left">
+</div>
+
+</div><div id="mobilemenu" style="clear:both"> <button onmouseover="style.color=&#39;khaki&#39; " onmouseout="style.color=&#39;white&#39;" onclick="showmenu()">Content Menu ▼</button></div><div id="mobilemenu" style="clear:both"><script type="text/javascript" async="" src="./Example of deleting email using JavaMail API - javatpoint_files/ga.js"></script><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- responsivemobile --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4699858549023382" data-ad-slot="1236815518" data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div><div id="menu"><div class="leftmenu2">
+<h2 class="spanh2"><span class="spanh2">Java Mail Tutorial</span></h2>
+</div>
+<div class="leftmenu">
+<a href="http://www.javatpoint.com/java-mail-api-tutorial" class="l1">Java Mail Introduction</a>
+<a href="http://www.javatpoint.com/example-of-sending-email-using-java-mail-api" class="l1">Sending Email</a>
+<a href="http://www.javatpoint.com/example-of-sending-email-using-java-mail-api-through-gmail-server" class="l1">Sending email by Gmail</a>
+<a href="http://www.javatpoint.com/example-of-receiving-email-using-java-mail-api" class="l1">Receiving Email</a>
+<a href="http://www.javatpoint.com/example-of-sending-attachment-with-email-using-java-mail-api" class="l1">Sending attachment</a>
+<a href="http://www.javatpoint.com/example-of-receiving-attachment-with-email-using-java-mail-api" class="l1">Receiving attachment</a>
+<a href="http://www.javatpoint.com/example-of-sending-html-content-with-email-using-java-mail-api" class="l1">Sending HTML</a>
+<a href="http://www.javatpoint.com/example-of-forwarding-email-using-java-mail-api" class="l1">Forwarding email</a>
+<a href="./Example of deleting email using JavaMail API - javatpoint_files/Example of deleting email using JavaMail API - javatpoint.html" class="l1" style="color: black;"><strong>Deleting email</strong></a>
+</div>
+<table id="leftad"><tbody><tr><td><img src="./Example of deleting email using JavaMail API - javatpoint_files/wh.JPG" alt="space"></td></tr><tr><td><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="4476401222"></ins> <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></td></tr></tbody></table></div><div class="onlycontent" style="margin-left:10px;margin-top:15px;width:65%;margin-auto;float:left;"><div id="right1024" style=""><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- javatpointheader --><ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="1219987637"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div><div style="margin-left:0px;"><div id="city">
+<table>
+<tbody><tr><td>
+<div id="bottomnextup">
+<!--
+<a classs="next" href="example-of-deleting-email-using-java-mail-api">next&gt;&gt;</a>
+-->
+
+<a class="next" href="http://www.javatpoint.com/example-of-forwarding-email-using-java-mail-api">&lt;&lt;prev</a>
+
+</div>
+
+<h1 class="h1">Deleting email using java mail api</h1>
+<p>As we send, forward and receive the emails, we can delete it too. The setFlag method of Message class is used to delete a particular message.</p>
+<table>
+<tbody><tr><td>For better understanding of this example, learn the steps of sending email using JavaMail API first.</td></tr>
+<tr><td>For receiving or sending the email using JavaMail API, you need to load the two jar files:
+<ul>
+<li><strong>mail.jar</strong></li>
+<li><strong>activation.jar</strong></li>
+</ul>
+<a href="http://www.javatpoint.com/src/mail/mailactivation.zip">download these jar files</a> (or) go to the Oracle site to download the latest version.
+</td></tr>
+</tbody></table>
+
+<h3 class="h3">Steps for deleting the email using JavaMail API</h3>
+<p>There are total 5 steps for deleting the email. They are:</p>
+<ol>
+<li><strong>Get the session object</strong></li>
+<li><strong>create the store object and connect to the current host </strong></li>
+<li><strong>create the folder object and open it</strong></li>
+<li><strong>Get the message to delete</strong></li>
+<li><strong>delete the message using setFlag method</strong></li>
+</ol>
+
+<h3 class="h3">Example of deleting email using JavaMail API</h3>
+<div class="codeblock"><div class="dp-highlighter"><div class="bar"><div class="tools"><a href="http://www.javatpoint.com/example-of-deleting-email-using-java-mail-api#" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;"></a><a href="http://www.javatpoint.com/example-of-deleting-email-using-java-mail-api#" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;"></a><a href="http://www.javatpoint.com/example-of-deleting-email-using-java-mail-api#" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;"></a></div></div><ol start="1" class="dp-j"><li class="alt"><span><span class="keyword">import</span><span>&nbsp;com.sun.mail.imap.protocol.FLAGS;&nbsp;&nbsp;</span></span></li><li class=""><span><span class="keyword">import</span><span>&nbsp;java.io.*;&nbsp;&nbsp;</span></span></li><li class="alt"><span><span class="keyword">import</span><span>&nbsp;java.util.*;&nbsp;&nbsp;</span></span></li><li class=""><span><span class="keyword">import</span><span>&nbsp;javax.mail.*;&nbsp;&nbsp;</span></span></li><li class="alt"><span><span class="keyword">import</span><span>&nbsp;javax.mail.internet.*;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">class</span><span>&nbsp;DeleteMail&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;main(String&nbsp;args[])&nbsp;</span><span class="keyword">throws</span><span>&nbsp;Exception&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;String&nbsp;user=&nbsp;<span class="string">"sonoojaiswal@javatpoint.com"</span><span>;</span><span class="comment">//change&nbsp;accordingly</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;String&nbsp;password=<span class="string">"xxxxx"</span><span>;</span><span class="comment">//change&nbsp;accordingly</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;<span class="comment">//1)&nbsp;get&nbsp;the&nbsp;session&nbsp;object</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;Properties&nbsp;properties&nbsp;=&nbsp;System.getProperties();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;Session&nbsp;session&nbsp;=&nbsp;Session.getDefaultInstance(properties);&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;<span class="comment">//2)&nbsp;create&nbsp;the&nbsp;store&nbsp;object&nbsp;and&nbsp;connect&nbsp;to&nbsp;the&nbsp;current&nbsp;host&nbsp;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;Store&nbsp;store&nbsp;=&nbsp;session.getStore(<span class="string">"pop3"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;store.connect(<span class="string">"mail.javatpoint.com"</span><span>,user,password);&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;<span class="comment">//3)&nbsp;create&nbsp;the&nbsp;folder&nbsp;object&nbsp;and&nbsp;open&nbsp;it</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;Folder&nbsp;folder&nbsp;=&nbsp;store.getFolder(<span class="string">"inbox"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;<span class="keyword">if</span><span>&nbsp;(!folder.exists())&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;System.out.println(<span class="string">"inbox&nbsp;not&nbsp;found"</span><span>);&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;System.exit(<span class="number">0</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;folder.open(Folder.READ_WRITE);&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;<span class="comment">//4)&nbsp;Get&nbsp;the&nbsp;message&nbsp;to&nbsp;delete</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;Message[]&nbsp;msg&nbsp;=&nbsp;folder.getMessages();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;<span class="comment">//System.out.println((messages.length+1)+"&nbsp;message&nbsp;found");</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;<span class="keyword">for</span><span>&nbsp;(</span><span class="keyword">int</span><span>&nbsp;i&nbsp;=&nbsp;</span><span class="number">0</span><span>;&nbsp;i&nbsp;&lt;&nbsp;msg.length;&nbsp;i++)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"---------&nbsp;"</span><span>&nbsp;+&nbsp;(i&nbsp;+&nbsp;</span><span class="number">1</span><span>)&nbsp;+&nbsp;</span><span class="string">"------------"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;String&nbsp;from&nbsp;=&nbsp;InternetAddress.toString(msg[i].getFrom());&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(from&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"From:&nbsp;"</span><span>&nbsp;+&nbsp;from);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;String&nbsp;replyTo&nbsp;=&nbsp;InternetAddress.toString(&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;msg[i].getReplyTo());&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(replyTo&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Reply-to:&nbsp;"</span><span>&nbsp;+&nbsp;replyTo);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;String&nbsp;to&nbsp;=&nbsp;InternetAddress.toString(&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;msg[i].getRecipients(Message.RecipientType.TO));&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(to&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"To:&nbsp;"</span><span>&nbsp;+&nbsp;to);&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;String&nbsp;subject&nbsp;=&nbsp;msg[i].getSubject();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(subject&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Subject:&nbsp;"</span><span>&nbsp;+&nbsp;subject);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;Date&nbsp;sent&nbsp;=&nbsp;msg[i].getSentDate();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(sent&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Sent:&nbsp;"</span><span>&nbsp;+&nbsp;sent);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Message&nbsp;:&nbsp;"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;System.out.println(msg[i].getContent());&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;}<span class="comment">//end&nbsp;of&nbsp;for&nbsp;loop</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;<span class="comment">//&nbsp;get&nbsp;the&nbsp;message&nbsp;number&nbsp;to&nbsp;delete&nbsp;(optional)</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;System.out.println(<span class="string">"Enter&nbsp;message&nbsp;number&nbsp;to&nbsp;delete&nbsp;:"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;BufferedReader&nbsp;br&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;BufferedReader(</span><span class="keyword">new</span><span>&nbsp;InputStreamReader(System.in));&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;String&nbsp;no&nbsp;=&nbsp;br.readLine();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;<span class="comment">//5)&nbsp;delete&nbsp;the&nbsp;message&nbsp;using&nbsp;setFlag&nbsp;method</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;msg[Integer.parseInt(no)&nbsp;-&nbsp;<span class="number">1</span><span>].setFlag(FLAGS.Flag.DELETED,&nbsp;</span><span class="keyword">true</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;System.out.println(<span class="string">"Message&nbsp;Deleted&nbsp;....."</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;folder.close(<span class="keyword">true</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;store.close();&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li></ol></div><textarea name="code" class="java" style="display: none;">
+import com.sun.mail.imap.protocol.FLAGS;
+import java.io.*;
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+
+public class DeleteMail {
+
+ public static void main(String args[]) throws Exception {
+
+ String user= "sonoojaiswal@javatpoint.com";//change accordingly
+ String password="xxxxx";//change accordingly
+
+ //1) get the session object
+ Properties properties = System.getProperties();
+ Session session = Session.getDefaultInstance(properties);
+
+ //2) create the store object and connect to the current host 
+ Store store = session.getStore("pop3");
+ store.connect("mail.javatpoint.com",user,password);
+
+ //3) create the folder object and open it
+ Folder folder = store.getFolder("inbox");
+
+ if (!folder.exists()) {
+ System.out.println("inbox not found");
+ System.exit(0);
+ }
+
+ folder.open(Folder.READ_WRITE);
+
+ //4) Get the message to delete
+ Message[] msg = folder.getMessages();
+
+ //System.out.println((messages.length+1)+" message found");
+ for (int i = 0; i &lt; msg.length; i++) {
+   System.out.println("--------- " + (i + 1) + "------------");
+   String from = InternetAddress.toString(msg[i].getFrom());
+ 
+   if (from != null) {
+     System.out.println("From: " + from);
+   }
+
+   String replyTo = InternetAddress.toString(
+   msg[i].getReplyTo());
+   if (replyTo != null) {
+    System.out.println("Reply-to: " + replyTo);
+   }
+
+   String to = InternetAddress.toString(
+   msg[i].getRecipients(Message.RecipientType.TO));
+  
+   if (to != null) {
+    System.out.println("To: " + to);
+   }
+
+   String subject = msg[i].getSubject();
+   if (subject != null) {
+    System.out.println("Subject: " + subject);
+   }
+   Date sent = msg[i].getSentDate();
+   if (sent != null) {
+    System.out.println("Sent: " + sent);
+   }
+   System.out.println("Message : ");
+   System.out.println(msg[i].getContent());
+
+ }//end of for loop
+
+  // get the message number to delete (optional)
+  System.out.println("Enter message number to delete :");
+  BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+  String no = br.readLine();
+  //5) delete the message using setFlag method
+  msg[Integer.parseInt(no) - 1].setFlag(FLAGS.Flag.DELETED, true);
+  
+  System.out.println("Message Deleted .....");
+
+  folder.close(true);
+  store.close();
+  }
+} 	
+
+</textarea></div>
+<div id="download">
+<a href="http://www.javatpoint.com/src/mail/deletemail.zip">download this example to delete the email</a>
+</div>
+
+<p>As you can see in the above example, we are able to delete the email from the user mailbox. Now run this program by : 
+</p>
+
+<table>
+<tbody><tr><td>Load the jar file </td><td> c:\&gt; <strong>set classpath=mail.jar;activation.jar;.;</strong></td></tr>
+<tr><td>compile the source file </td><td> c:\&gt; <strong>javac DeleteMail.java</strong></td></tr>
+<tr><td>run by </td><td> c:\&gt; <strong>java DeleteMail</strong></td></tr>
+</tbody></table>
+
+<!--
+<div class="nexttopicdiv">
+<span class="nexttopictext">Next Topic</span><span class="nexttopiclink"><a href="swing">swing</a></span>
+</div>
+-->
+
+<!-- link -->
+<br><br>
+
+<div id="bottomnext">
+<a style="float:left" class="next" href="http://www.javatpoint.com/example-of-forwarding-email-using-java-mail-api">&lt;&lt;prev</a>
+
+<!--
+
+<a style="float:right" class="next" href="example-of-deleting-email-using-java-mail-api">next&gt;&gt;</a>
+-->
+</div>
+
+<br><br>
+
+<br><br><br>
+</td></tr></tbody></table>
+</div></div><br><div id="mobilemenu" style="clear:both"><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- responsivemobile --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4699858549023382" data-ad-slot="1236815518" data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div><div id="right" style="width:15%;float:left;margin-left:10px;margin-top:10px;"><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="4476401222"></ins> <script> (adsbygoogle = window.adsbygoogle || []).push({});</script><br><br><br><br><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="4476401222"></ins> <script> (adsbygoogle = window.adsbygoogle || []).push({});</script><br><br><br><br>
+<!--<script id="mNCC" language="javascript"> medianet_width='160'; medianet_height= '600'; medianet_crid='694759290'; </script> <script id="mNSC" src="http://contextual.media.net/nmedianet.js?cid=8CU74TD10" language="javascript"></script> -->
+</div><div id="right1024" style="float:left;margin-left:10px;margin-top:120px;"><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- right1024only --><ins class="adsbygoogle" style="display:inline-block;width:120px;height:600px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="2180118716"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+<div id="footer" style="clear:both;width:100%">
+
+<script type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-24880427-1']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();</script><hr><div style="padding:0px;margin:0px;text-align:center"><sup style="font:16px arial;">Like/Subscribe us for latest updates or newsletter </sup><a target="_blank" href="http://feeds.feedburner.com/javatpointsonoo"><img src="./Example of deleting email using JavaMail API - javatpoint_files/rss1.png" alt="RSS Feed"></a><a target="_blank" href="http://feedburner.google.com/fb/a/mailverify?uri=javatpointsonoo"><img src="./Example of deleting email using JavaMail API - javatpoint_files/mail1.png" alt="Subscribe to Get Email Alerts"></a><a target="_blank" href="https://www.facebook.com/javatpoint"><img src="./Example of deleting email using JavaMail API - javatpoint_files/facebook1.jpg" alt="Facebook Page"></a><a target="_blank" rel="author" href="https://plus.google.com/u/0/113973042385691981314/posts"><img src="./Example of deleting email using JavaMail API - javatpoint_files/google1.png" alt="Google Page"></a><a target="_blank" href="https://twitter.com/pagejavatpoint"><img src="./Example of deleting email using JavaMail API - javatpoint_files/twitter1.png" alt="Twitter Page"></a><a target="_blank" href="http://javatpoint.blogspot.com/"><img src="./Example of deleting email using JavaMail API - javatpoint_files/blog.png" alt="Blog Page"></a><a href="http://www.javatpoint.com/example-of-deleting-email-using-java-mail-api#" style="font:bold 18px arial;text-decoration:none;"><sup>↑Top</sup></a></div><div style="margin:auto 0px;line-height:20px;padding:0px 40px;font-size:12px;height:390px;background:#6699CC;color: white; font-family:serif; border-bottom: solid 1px #A3AE7E;"> <div id="innerfooter"> <div><span style="text-decoration:none;font-size:larger;font-family:serif;color:white;font-weight:bolder;">Tutorials</span> <hr><ul class="footer-list"> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/java-tutorial">» Core Java Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/servlet-tutorial">» Servlet Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/jsp-tutorial">» JSP Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/java-mail-api-tutorial">» Mail API Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/design-patterns-in-java">» Design Pattern Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/struts-2-tutorial">» Struts Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/spring-tutorial">» Spring Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/hibernate-tutorial">» Hibernate Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/android-tutorial">» Android Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/javascript-tutorial">» JavaScript Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/sql-tutorial">» SQL Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/c-programming-language-tutorial">» C Tutorial</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/ajax-tutorial">» AJAX Tutorial</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/junit-tutorial">» JUnit Tutorial</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/jaxb-tutorial">» JAXB Tutorial</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/maven-tutorial">» Maven Tutorial</a></li></ul> </div> <div><span style="text-decoration:none;font-size:larger;font-family:serif;color:white;font-weight:bolder;">Interview Questions</span> <hr><ul class="footer-list"> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/corejava-interview-questions">» Java Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/servletinterview">» Servlet Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/jspinterview">» JSP Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/hibernate-interview-questions">» Hibernate Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/spring-interview-questions">» Spring Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/android-interview-questions">» Android Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/sql-interview-questions">» SQL Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/pl-sql-interview-questions">» PL/SQL Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/oracle-interview-questions">» Oracle Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/mysql-interview-questions">» MySQL Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/sql-server-interview-questions">» SQL Server Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/mongodb-interview-questions">» MongoDB Interview</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/cloud-computing-interview-questions">» Cloud Interview</a></li> </ul> </div><div><a style="font-weight:bolder;text-decoration: none;text-align:center;font-size:larger;font-family:serif;color:white;" target="_blank" href="http://www.javatpoint.com/examaccess">Quizzes</a><hr><ul class="footer-list"><li><a target="_blank" href="http://www.javatpoint.com/core-java-quiz" style="text-decoration: none;font-family:serif;color:white;">» Core Java quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/servlet-quiz" style="text-decoration: none;font-family:serif;color:white;">» Servlet quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/jsp-quiz" style="text-decoration: none;font-family:serif;color:white;">» JSP quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/struts-quiz" style="text-decoration: none;font-family:serif;color:white;">» Struts2 quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/android-quiz" style="text-decoration: none;font-family:serif;color:white;">» Android quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/scjp-quiz" style="text-decoration: none;font-family:serif;color:white;">» OCJP quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/scwcd-quiz" style="text-decoration: none;font-family:serif;color:white;">» OCWCD quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/hibernate-quiz" style="text-decoration: none;font-family:serif;color:white;">» Hibernate quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/spring-quiz" style="text-decoration: none;font-family:serif;color:white;">» Spring quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/c-quiz" style="text-decoration: none;font-family:serif;color:white;">» C quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/cloud-computing-quiz" style="text-decoration: none;font-family:serif;color:white;">» Cloud Computing quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/javascript-quiz" style="text-decoration: none;font-family:serif;color:white;">» JavaScript quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/sql-quiz" style="text-decoration: none;font-family:serif;color:white;">» SQL quiz</a></li></ul></div><div><a style="font-weight:bolder;text-decoration: none;font-size:larger;font-family:serif;color:white;text-align:center;" target="_blank" href="http://www.javatpoint.com/forum">Forum</a><hr><ul class="footer-list"><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=corejava">» Core Java Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=servlet">» Servlet Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=jsp">» JSP Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=struts">» Struts Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=spring">» Spring Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=hibernate">» Hibernate Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=android">» Android Ques.</a></li></ul><hr><a style="font-weight:bolder;text-decoration: none;text-align:center;font-size:larger;font-family:serif;color:white;" href="http://www.javatpoint.com/free-java-projects">Projects</a><hr><a style="font-weight:bolder;text-decoration: none;font-size:larger;font-family:serif;text-align:center;color:white;" href="http://www.sssit.org/" rel="nofollow">SSS IT PVT LTD</a><hr><ul class="footer-list"><li><a rel="nofollow" href="http://www.sssit.org/development" style="text-decoration: none;font-family:serif;color:white;">» Development</a></li><li><a href="http://www.javatpoint.com/training" style="text-decoration: none;font-family:serif;color:white;">» Training</a></li><li><a rel="nofollow" href="http://www.sssit.org/seo" style="text-decoration: none;font-family:serif;color:white;">» SEO</a></li><li><a rel="nofollow" href="http://www.sssit.org/consultancy" style="text-decoration: none;font-family:serif;color:white;">» Consultancy</a></li></ul></div><div style="border-right:2px solid white;"><span style="font-weight:bolder;text-decoration: none;font-size:larger;font-family:serif;color:white;float:right;padding-right:16px;">CONTACT US</span><br><hr><p style="text-align:center;border-bottom:1px solid white;padding-bottom:30px;">Tel. : 0120-4256464<br>Mob. : +91 9990449935<br>Email : enquiry@sssit.org<br>Address: Plot - 6, GT Road,<br>Near MMX Mall, <br>Mohan Nagar, Ghaziabad,<br>201007, UP, India<br><a href="http://www.javatpoint.com/contact-us" style="text-decoration: none;font-family:serif;color:white;">» Contact Us</a><br><a href="http://www.javatpoint.com/privacy-policy" style="text-decoration: none;font-family:serif;color:white;">» Privacy Policy</a></p><p style="text-align:center;border-bottom:1px solid white;padding-bottom:30px;padding-left:none;"><br>© 2011-2014 Javatpoint.<br> All Rights Reserved.<br><a href="http://www.dmca.com/Protection/Status.aspx?ID=e8b533d5-7356-47f5-820b-72c890f03a4e" rel="nofollow" title="DMCA"> <img src="./Example of deleting email using JavaMail API - javatpoint_files/dmca_protected_sml_120c.png" alt="DMCA.com"></a></p></div></div></div>
+</div></div></div><script src="./Example of deleting email using JavaMail API - javatpoint_files/shcoreandbrush.js"></script><script type="text/javascript"> dp.SyntaxHighlighter.HighlightAll('code'); </script>  </body></html>

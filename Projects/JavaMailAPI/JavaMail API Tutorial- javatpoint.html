@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)http://www.javatpoint.com/java-mail-api-tutorial -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><title>JavaMail API Tutorial- javatpoint</title><link rel="SHORTCUT ICON" href="http://www.javatpoint.com/images/logo/icon.png"><link rel="stylesheet" type="text/css" href="./JavaMail API Tutorial- javatpoint_files/link.css"><meta name="keywords" content="java, mail, api,tutorial"><meta name="description" content="JavaMail API Tutorial provides examples of sending, receiving, forwarding and deleting emails."><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="canonical" href="./JavaMail API Tutorial- javatpoint_files/JavaMail API Tutorial- javatpoint.html"><meta property="og:locale" content="en_US"><meta property="og:type" content="article"><meta name="twitter:title" property="og:title" content="JavaMail API Tutorial- javatpoint"><meta name="twitter:description" property="og:description" content="JavaMail API Tutorial provides examples of sending, receiving, forwarding and deleting emails."><meta property="og:url" content="http://www.javatpoint.com/java-mail-api-tutorial"><meta property="og:site_name" content="www.javatpoint.com"><meta name="twitter:card" content="summary"><meta name="twitter:site" content="@pagejavatpoint"><meta name="twitter:domain" content="www.javatpoint.com"><meta name="twitter:creator" content="@pagejavatpoint"><style type="text/css"></style></head> <body onload="highlightlink()"> <div id="page" style="margin:-9px;background-color:#f5f5f4;"><div id="container"> <div class="header"><!--<p style="font-weight:bold;padding:7px;color:white;background-color:gray;margin:0px"><marquee>Please delete cookie and cache of your browser once because many links of javatpoint are changed. You may face problem if you don't delete cookie and cache of the browser.</marquee></p>
+-->
+<table style="width:100%"><tbody><tr><td><div id="headerlink" style="padding:0px;margin:0px"><span style="margin-right:20px;width:45%px"></span><span style="float:right;margin-right:5px;width:45%"><a href="http://www.javatpoint.com/contribute-us" style="text-decoration:none;color:#6666CC">Contribute Us</a> | <a href="http://www.javatpoint.com/asknewquestion.jsp" style="text-decoration:none;color:#6666CC">Ask Question</a> | <a href="http://www.javatpoint.com/login.jsp" style="text-decoration:none;color:#6666CC">login</a> <a target="_blank" href="http://feeds.feedburner.com/javatpointsonoo"><img src="./JavaMail API Tutorial- javatpoint_files/r.png" alt="RSS Feed"></a><a target="_blank" href="http://feedburner.google.com/fb/a/mailverify?uri=javatpointsonoo"><img src="./JavaMail API Tutorial- javatpoint_files/m.png" alt="Subscribe to Get Email Alerts"></a><a target="_blank" href="https://www.facebook.com/javatpoint"><img src="./JavaMail API Tutorial- javatpoint_files/f.png" alt="Facebook Page"></a><a target="_blank" href="https://plus.google.com/u/0/113973042385691981314/posts"><img src="./JavaMail API Tutorial- javatpoint_files/g.png" alt="Google Page"></a><a target="_blank" href="https://twitter.com/pagejavatpoint"><img src="./JavaMail API Tutorial- javatpoint_files/t.png" alt="Twitter Page"></a></span><hr class="upperhr"></div> </td></tr><tr><td><!--<div style="float:left;width:230px;"><img src="http://www.javatpoint.com/images/logo/log2.png" alt="javatpoint.com"/></div>--><div style="margin:0px;padding:0px;float:left;width:23%;margin-left:10px;margin-bottom:0px"><a href="http://www.javatpoint.com/" style="text-decoration:none;"><span style="color:orange;font-size:28px;font-weight:bold;">Java</span><span style="color:#666600;font-size:40px;font-weight:bold;">T</span><span style="color:red;font-size:28px;font-weight:bold;">point</span></a></div><div style="float:left;width:50%;"><form class="navbar-search" method="get" action="http://www.google.com/search" target="_blank"> <input type="text" name="q" class="search-query span2" placeholder="Search on javatpoint..." title="Search on Javatpoint"><input type="hidden" name="sitesearch" value="www.javatpoint.com"></form><!--<span style="margin-left:100px;color:orange;font-size:20px;font-weight:bold;">Happy </span><span style="color:red;font-size:20px;font-weight:bold;">New </span><span style="color:#666600;font-size:20px;font-weight:bold;">Year</span><span style="color:#666600;font-size:30px;font-weight:bold;"> 2015</span>--></div><div style="width:25%;float:right"><div style="padding:0px;margin:0px;margin-right:10px;margin-top:10px;float:right"><a target="_blank" style="background-color:#6699CC;text-decoration:none;color:white;border-radius:5px;font-weight:bold;padding:6px 10px 6px 10px;" href="http://www.javatpoint.com/subscribe.jsp">Subscribe Us</a></div><div style="padding:0px;margin:0px;margin-right:10px;float:right"><p style="padding:0px;margin:0px;margin-top:5px;color:#983688;font-weight:bold;">91-9990449935</p><p style="padding:0px;margin:0px;color:#983688;font-weight:bold;">&nbsp;0120-4256464</p></div></div></td></tr></tbody></table> </div><div class="headermobile"><div style="margin:0px;padding:0px;text-align:left;margin-left:10px;"><a href="http://www.javatpoint.com/" style="text-decoration:none;"><span style="color:orange;font-size:25px;font-weight:bold;">Java</span><span style="color:#666600;font-size:35px;font-weight:bold;">T</span><span style="color:red;font-size:25px;font-weight:bold;">point</span></a></div><div style="margin:0px;padding:0px;clear:both"><form class="navbar-search-m" method="get" action="http://www.google.com/search" target="_blank"> <input type="text" name="q" class="search-query span2-m" placeholder="Search on javatpoint..." title="Search on Javatpoint"><input type="hidden" name="sitesearch" value="www.javatpoint.com"></form></div></div><div id="link" style="clear:both"> <div id="smoothmenu1" class="ddsmoothmenu">
+<ul>
+<li><a href="http://www.javatpoint.com/">Home</a></li>
+<li><a href="http://www.javatpoint.com/java-tutorial">Core Java</a></li>
+<li><a href="http://www.javatpoint.com/servlet-tutorial">Servlet</a></li>
+<li><a href="http://www.javatpoint.com/jsp-tutorial">JSP</a></li>
+<li><a href="http://www.javatpoint.com/struts-2-tutorial">Struts2</a></li>
+<li><a href="./JavaMail API Tutorial- javatpoint_files/JavaMail API Tutorial- javatpoint.html" class="selected">Mail API</a></li>
+<li><a href="http://www.javatpoint.com/hibernate-tutorial">Hibernate</a></li>
+<li><a href="http://www.javatpoint.com/spring-tutorial">Spring</a></li>
+<li><a href="http://www.javatpoint.com/android-tutorial">Android</a></li>
+<li><a href="http://www.javatpoint.com/design-patterns-in-java">Design Pattern</a></li>
+<li><a href="http://www.javatpoint.com/examaccess">Quiz</a></li>
+
+<li><a href="http://www.javatpoint.com/free-java-projects">Projects</a></li>
+<li><a href="http://www.javatpoint.com/corejava-interview-questions">Interview Q</a>
+</li><li><a href="http://www.javatpoint.com/comment.jsp">Comment</a>
+</li><li><a href="http://www.javatpoint.com/forum">Forum</a>
+</li>
+</ul>
+<br style="clear: left">
+</div>
+
+</div><div id="mobilemenu" style="clear:both"> <button onmouseover="style.color=&#39;khaki&#39; " onmouseout="style.color=&#39;white&#39;" onclick="showmenu()">Content Menu ▼</button></div><div id="mobilemenu" style="clear:both"><script type="text/javascript" async="" src="./JavaMail API Tutorial- javatpoint_files/ga.js"></script><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- responsivemobile --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4699858549023382" data-ad-slot="1236815518" data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div><div id="menu"><div class="leftmenu2">
+<h2 class="spanh2"><span class="spanh2">Java Mail Tutorial</span></h2>
+</div>
+<div class="leftmenu">
+<a href="./JavaMail API Tutorial- javatpoint_files/JavaMail API Tutorial- javatpoint.html" class="l1" style="color: black;"><strong>Java Mail Introduction</strong></a>
+<a href="http://www.javatpoint.com/example-of-sending-email-using-java-mail-api" class="l1">Sending Email</a>
+<a href="http://www.javatpoint.com/example-of-sending-email-using-java-mail-api-through-gmail-server" class="l1">Sending email by Gmail</a>
+<a href="http://www.javatpoint.com/example-of-receiving-email-using-java-mail-api" class="l1">Receiving Email</a>
+<a href="http://www.javatpoint.com/example-of-sending-attachment-with-email-using-java-mail-api" class="l1">Sending attachment</a>
+<a href="http://www.javatpoint.com/example-of-receiving-attachment-with-email-using-java-mail-api" class="l1">Receiving attachment</a>
+<a href="http://www.javatpoint.com/example-of-sending-html-content-with-email-using-java-mail-api" class="l1">Sending HTML</a>
+<a href="http://www.javatpoint.com/example-of-forwarding-email-using-java-mail-api" class="l1">Forwarding email</a>
+<a href="http://www.javatpoint.com/example-of-deleting-email-using-java-mail-api" class="l1">Deleting email</a>
+</div>
+<table id="leftad"><tbody><tr><td><img src="./JavaMail API Tutorial- javatpoint_files/wh.JPG" alt="space"></td></tr><tr><td><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="4476401222"></ins> <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script></td></tr></tbody></table></div><div class="onlycontent" style="margin-left:10px;margin-top:15px;width:65%;margin-auto;float:left;"><div id="right1024" style=""><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- javatpointheader --><ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="1219987637"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div><div style="margin-left:0px;"><div id="city">
+<table>
+<tbody><tr><td>
+<div id="bottomnextup">
+
+<a class="next" href="http://www.javatpoint.com/example-of-sending-email-using-java-mail-api">next&gt;&gt;</a>
+<!--
+<a class="next" href="request-implicit-object">&lt;&lt;prev</a></td></tr>
+</table>
+-->
+
+</div>
+
+<h1 class="h1">Java Mail API Tutorial</h1>
+<div id="upr">
+<ol>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial#">Java Mail API</a></li>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial#mailprotocols">Protocols used in JavaMail API</a></li>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial#mailsmtp">SMTP</a></li>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial#mailpop">POP</a></li>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial#mailimap">IMAP</a></li>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial#mailmime">MIME</a></li>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial#mailnntp">NNTP and Others</a></li>
+
+</ol>
+<ol>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial#mailarch">Java Mail Architecture</a></li>
+<li><a href="http://www.javatpoint.com/java-mail-api-tutorial#mailclasses">Java Mail API Core Classes</a></li>
+</ol>
+</div>
+
+<p>The <b>JavaMail</b> is an API that is used to compose, write and read electronic messages (emails).</p>
+<p> The JavaMail API provides  protocol-independent and plateform-independent framework for sending and receiving mails.</p>
+<p> The <b>javax.mail</b> and <b>javax.mail.activation</b> packages contains the core classes of JavaMail API.
+</p>
+<p>The JavaMail facility can be applied to many events. It can be used at the time of registering the user (sending notification such as thanks for your interest to my site), forgot password (sending password to the users email id), sending notifications for important updates etc. So there can be various usage of java mail api. </p>
+
+<br><br>
+<fieldset>
+<legend class="legendfont">Do You Know ? </legend>
+<div id="youknow">
+<table>
+<tbody><tr><td>
+<ul>
+<li>How to send and receive email using JavaMail API  ?</li>
+<li>How to send email through gmail server ?</li>
+<li>How to send and receive email with attachment ?</li>
+<li>How to send email with html content including images?</li>
+<li>How to forward and delete the email ?</li>
+</ul>
+</td></tr>
+</tbody></table>
+</div>
+</fieldset>
+
+<a id="mailprotocols"></a>
+<h3 class="h3">Protocols used in JavaMail API</h3>
+<table>
+<tbody><tr><td>There are some protocols that are used in JavaMail API. 
+<ul>
+<li>SMTP</li>
+<li>POP</li>
+<li>IMAP</li>
+<li>MIME</li>
+<li>NNTP and others</li>
+</ul>
+</td></tr>
+</tbody></table>
+<a id="mailsmtp"></a>
+
+<h3 class="h3">SMTP</h3>
+<p>SMTP is an acronym for Simple Mail Transfer Protocol. It provides a mechanism to deliver the email. We can use Apache James server, Postcast server, cmail server etc. as an SMTP server. But if we purchase the host space, an SMTP server is bydefault provided by the host provider. For example, my smtp server is mail.javatpoint.com. If we use the SMTP server provided by the host provider, authentication is required for sending and receiving emails.
+</p>
+<a id="mailpop"></a>
+
+<h3 class="h3">POP</h3>
+<p>POP is an acronym for Post Office Protocol, also known as POP3. It provides a mechanism to receive the email. It provides support for single mail box for each user. We can use Apache James server, cmail server etc. as an POP server. But if we purchase the host space, an POP server is bydefault provided by the host provider. For example, the pop server provided by the host provider for my site is mail.javatpoint.com. This protocol is defined in RFC 1939.
+</p>
+<a id="mailimap"></a>
+
+<h3 class="h3">IMAP</h3>
+<p>IMAP is an acronym for Internet Message Access Protocol. IMAP is an advanced protocol for receiving messages. It provides support for multiple mail box for each user ,in addition to, mailbox can be shared by multiple users. It is defined in RFC 2060.
+</p>
+<a id="mailmime"></a>
+
+<h3 class="h3">MIME</h3>
+<table>
+<tbody><tr><td>Multiple Internet Mail Extension (MIME) tells the browser what is being sent e.g. attachment, format of the messages etc. It is not known as mail transfer protocol but it is used by your mail program.
+</td></tr>
+</tbody></table>
+<a id="mailnntp"></a>
+
+<h3 class="h3">NNTP and Others</h3>
+<p>There are many protocols that are provided by third-party providers. Some of them are Network News Transfer Protocol (NNTP), Secure Multipurpose Internet Mail Extensions (S/MIME) etc.
+</p>
+<hr>
+
+<a id="mailarch"></a>
+<h3 class="h3">JavaMail Architecture</h3>
+<p>The java application uses JavaMail API to compose, send and receive emails. The JavaMail API uses SPI (Service Provider Interfaces) that provides the intermediatory services to the java application to deal with the different protocols. Let's understand it with the figure given below:
+</p>
+<img src="./JavaMail API Tutorial- javatpoint_files/Javamail1.jpg" alt="JavaMail API Architecture">
+
+<hr>
+<a id="mailclasses"></a>
+<h3 class="h3">JavaMail API Core Classes</h3>
+<p>There are two packages that are used in Java Mail API: javax.mail and javax.mail.internet package. These packages contains many classes for Java Mail API. They are:</p>
+<ul>
+<li>javax.mail.Session class</li>
+<li>javax.mail.Message class</li>
+<li>javax.mail.internet.MimeMessage class</li>
+<li>javax.mail.Address class</li>
+<li>javax.mail.internet.InternetAddress class</li>
+<li>javax.mail.Authenticator class</li>
+<li>javax.mail.PasswordAuthentication class</li>
+<li>javax.mail.Transport class</li>
+<li>javax.mail.Store class</li>
+<li>javax.mail.Folder class etc.</li>
+
+</ul>
+<p>
+We will know about these class one by one when it is getting used.
+</p>
+
+
+
+<div class="nexttopicdiv">
+<span class="nexttopictext">Next Topic</span><span class="nexttopiclink"><a href="http://www.javatpoint.com/example-of-sending-email-using-java-mail-api">Example Of Sending Email Using Java Mail Api</a></span>
+</div>
+
+
+<!-- link -->
+<br><br>
+
+<div id="bottomnext">
+<!--
+<a style="float:left" class="next" href="request-implicit-object">&lt;&lt;prev</a>
+-->
+
+<a style="float:right" class="next" href="http://www.javatpoint.com/example-of-sending-email-using-java-mail-api">next&gt;&gt;</a>
+</div>
+
+<br><br>
+
+<br><br><br>
+</td></tr></tbody></table>
+</div></div><br><div id="mobilemenu" style="clear:both"><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- responsivemobile --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4699858549023382" data-ad-slot="1236815518" data-ad-format="auto"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div><div id="right" style="width:15%;float:left;margin-left:10px;margin-top:10px;"><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="4476401222"></ins> <script> (adsbygoogle = window.adsbygoogle || []).push({});</script><br><br><br><br><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="4476401222"></ins> <script> (adsbygoogle = window.adsbygoogle || []).push({});</script><br><br><br><br>
+<!--<script id="mNCC" language="javascript"> medianet_width='160'; medianet_height= '600'; medianet_crid='694759290'; </script> <script id="mNSC" src="http://contextual.media.net/nmedianet.js?cid=8CU74TD10" language="javascript"></script> -->
+</div><div id="right1024" style="float:left;margin-left:10px;margin-top:120px;"><script async="" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- right1024only --><ins class="adsbygoogle" style="display:inline-block;width:120px;height:600px" data-ad-client="ca-pub-4699858549023382" data-ad-slot="2180118716"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+<div id="footer" style="clear:both;width:100%">
+
+<script type="text/javascript"> var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-24880427-1']); _gaq.push(['_trackPageview']); (function() { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();</script><hr><div style="padding:0px;margin:0px;text-align:center"><sup style="font:16px arial;">Like/Subscribe us for latest updates or newsletter </sup><a target="_blank" href="http://feeds.feedburner.com/javatpointsonoo"><img src="./JavaMail API Tutorial- javatpoint_files/rss1.png" alt="RSS Feed"></a><a target="_blank" href="http://feedburner.google.com/fb/a/mailverify?uri=javatpointsonoo"><img src="./JavaMail API Tutorial- javatpoint_files/mail1.png" alt="Subscribe to Get Email Alerts"></a><a target="_blank" href="https://www.facebook.com/javatpoint"><img src="./JavaMail API Tutorial- javatpoint_files/facebook1.jpg" alt="Facebook Page"></a><a target="_blank" rel="author" href="https://plus.google.com/u/0/113973042385691981314/posts"><img src="./JavaMail API Tutorial- javatpoint_files/google1.png" alt="Google Page"></a><a target="_blank" href="https://twitter.com/pagejavatpoint"><img src="./JavaMail API Tutorial- javatpoint_files/twitter1.png" alt="Twitter Page"></a><a target="_blank" href="http://javatpoint.blogspot.com/"><img src="./JavaMail API Tutorial- javatpoint_files/blog.png" alt="Blog Page"></a><a href="http://www.javatpoint.com/java-mail-api-tutorial#" style="font:bold 18px arial;text-decoration:none;"><sup>↑Top</sup></a></div><div style="margin:auto 0px;line-height:20px;padding:0px 40px;font-size:12px;height:390px;background:#6699CC;color: white; font-family:serif; border-bottom: solid 1px #A3AE7E;"> <div id="innerfooter"> <div><span style="text-decoration:none;font-size:larger;font-family:serif;color:white;font-weight:bolder;">Tutorials</span> <hr><ul class="footer-list"> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/java-tutorial">» Core Java Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/servlet-tutorial">» Servlet Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/jsp-tutorial">» JSP Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="./JavaMail API Tutorial- javatpoint_files/JavaMail API Tutorial- javatpoint.html">» Mail API Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/design-patterns-in-java">» Design Pattern Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/struts-2-tutorial">» Struts Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/spring-tutorial">» Spring Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/hibernate-tutorial">» Hibernate Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/android-tutorial">» Android Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/javascript-tutorial">» JavaScript Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/sql-tutorial">» SQL Tutorial</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/c-programming-language-tutorial">» C Tutorial</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/ajax-tutorial">» AJAX Tutorial</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/junit-tutorial">» JUnit Tutorial</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/jaxb-tutorial">» JAXB Tutorial</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/maven-tutorial">» Maven Tutorial</a></li></ul> </div> <div><span style="text-decoration:none;font-size:larger;font-family:serif;color:white;font-weight:bolder;">Interview Questions</span> <hr><ul class="footer-list"> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/corejava-interview-questions">» Java Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/servletinterview">» Servlet Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/jspinterview">» JSP Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/hibernate-interview-questions">» Hibernate Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/spring-interview-questions">» Spring Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/android-interview-questions">» Android Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/sql-interview-questions">» SQL Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/pl-sql-interview-questions">» PL/SQL Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/oracle-interview-questions">» Oracle Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/mysql-interview-questions">» MySQL Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/sql-server-interview-questions">» SQL Server Interview</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/mongodb-interview-questions">» MongoDB Interview</a></li> <li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/cloud-computing-interview-questions">» Cloud Interview</a></li> </ul> </div><div><a style="font-weight:bolder;text-decoration: none;text-align:center;font-size:larger;font-family:serif;color:white;" target="_blank" href="http://www.javatpoint.com/examaccess">Quizzes</a><hr><ul class="footer-list"><li><a target="_blank" href="http://www.javatpoint.com/core-java-quiz" style="text-decoration: none;font-family:serif;color:white;">» Core Java quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/servlet-quiz" style="text-decoration: none;font-family:serif;color:white;">» Servlet quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/jsp-quiz" style="text-decoration: none;font-family:serif;color:white;">» JSP quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/struts-quiz" style="text-decoration: none;font-family:serif;color:white;">» Struts2 quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/android-quiz" style="text-decoration: none;font-family:serif;color:white;">» Android quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/scjp-quiz" style="text-decoration: none;font-family:serif;color:white;">» OCJP quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/scwcd-quiz" style="text-decoration: none;font-family:serif;color:white;">» OCWCD quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/hibernate-quiz" style="text-decoration: none;font-family:serif;color:white;">» Hibernate quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/spring-quiz" style="text-decoration: none;font-family:serif;color:white;">» Spring quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/c-quiz" style="text-decoration: none;font-family:serif;color:white;">» C quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/cloud-computing-quiz" style="text-decoration: none;font-family:serif;color:white;">» Cloud Computing quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/javascript-quiz" style="text-decoration: none;font-family:serif;color:white;">» JavaScript quiz</a></li><li><a target="_blank" href="http://www.javatpoint.com/sql-quiz" style="text-decoration: none;font-family:serif;color:white;">» SQL quiz</a></li></ul></div><div><a style="font-weight:bolder;text-decoration: none;font-size:larger;font-family:serif;color:white;text-align:center;" target="_blank" href="http://www.javatpoint.com/forum">Forum</a><hr><ul class="footer-list"><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=corejava">» Core Java Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=servlet">» Servlet Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=jsp">» JSP Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=struts">» Struts Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=spring">» Spring Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=hibernate">» Hibernate Ques.</a></li><li><a style="text-decoration: none;font-family:serif;color:white;" href="http://www.javatpoint.com/forum.jsp?category=android">» Android Ques.</a></li></ul><hr><a style="font-weight:bolder;text-decoration: none;text-align:center;font-size:larger;font-family:serif;color:white;" href="http://www.javatpoint.com/free-java-projects">Projects</a><hr><a style="font-weight:bolder;text-decoration: none;font-size:larger;font-family:serif;text-align:center;color:white;" href="http://www.sssit.org/" rel="nofollow">SSS IT PVT LTD</a><hr><ul class="footer-list"><li><a rel="nofollow" href="http://www.sssit.org/development" style="text-decoration: none;font-family:serif;color:white;">» Development</a></li><li><a href="http://www.javatpoint.com/training" style="text-decoration: none;font-family:serif;color:white;">» Training</a></li><li><a rel="nofollow" href="http://www.sssit.org/seo" style="text-decoration: none;font-family:serif;color:white;">» SEO</a></li><li><a rel="nofollow" href="http://www.sssit.org/consultancy" style="text-decoration: none;font-family:serif;color:white;">» Consultancy</a></li></ul></div><div style="border-right:2px solid white;"><span style="font-weight:bolder;text-decoration: none;font-size:larger;font-family:serif;color:white;float:right;padding-right:16px;">CONTACT US</span><br><hr><p style="text-align:center;border-bottom:1px solid white;padding-bottom:30px;">Tel. : 0120-4256464<br>Mob. : +91 9990449935<br>Email : enquiry@sssit.org<br>Address: Plot - 6, GT Road,<br>Near MMX Mall, <br>Mohan Nagar, Ghaziabad,<br>201007, UP, India<br><a href="http://www.javatpoint.com/contact-us" style="text-decoration: none;font-family:serif;color:white;">» Contact Us</a><br><a href="http://www.javatpoint.com/privacy-policy" style="text-decoration: none;font-family:serif;color:white;">» Privacy Policy</a></p><p style="text-align:center;border-bottom:1px solid white;padding-bottom:30px;padding-left:none;"><br>© 2011-2014 Javatpoint.<br> All Rights Reserved.<br><a href="http://www.dmca.com/Protection/Status.aspx?ID=e8b533d5-7356-47f5-820b-72c890f03a4e" rel="nofollow" title="DMCA"> <img src="./JavaMail API Tutorial- javatpoint_files/dmca_protected_sml_120c.png" alt="DMCA.com"></a></p></div></div></div>
+</div></div></div><script src="./JavaMail API Tutorial- javatpoint_files/shcoreandbrush.js"></script><script type="text/javascript"> dp.SyntaxHighlighter.HighlightAll('code'); </script>  </body></html>

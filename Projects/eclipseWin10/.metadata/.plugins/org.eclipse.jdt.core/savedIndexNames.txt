@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+E:\Projects\eclipseWin10\.metadata\.plugins\org.eclipse.jdt.core
+363579169.index
+119542274.index
+3801822959.index

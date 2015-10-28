@@ -1,0 +1,225 @@
+package com.xvidia.olaDemoETA;
+
+import java.io.IOException;
+import java.util.HashMap;
+
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.TextView.BufferType;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.xvidia.network.ServiceURL;
+import com.xvidia.network.VolleySingleton;
+
+public class MainActivity extends ActionBarActivity implements LocationListener {
+	Button result;
+	TextView tv;
+	RequestQueue requestQueue;
+	private String provider; 
+	private Criteria criteria;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		tv = (TextView) findViewById(R.id.tvResult);
+		result = (Button) findViewById(R.id.bResult);
+		requestQueue = Volley.newRequestQueue(this);
+		result.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				getBoxNameAndAssetIdData(getApplicationContext());
+				
+				
+			}
+		});
+		
+		
+}		
+	private void getBoxNameAndAssetIdData(Context ctx){
+		try {
+				String lat = "28.4602882";
+				String lng = "77.0530689";
+				
+				String url = ServiceURL.getCabStatusURL(lat,lng); //(IAPIConstants.API_KEY_BOX_GET_INVENTORY_DATA);
+				Log.i("url", url);
+				JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.i("Response", response.toString());
+////						ObjectMapper mapper = new ObjectMapper();
+//						Root obj = null;
+//						try {
+////							obj = mapper.readValue(response.toString(), Root.class);
+//						} catch (IOException e) {
+//							e.printStackTrace();
+//						}
+						
+						
+						
+						}
+					
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+
+//                        Log.e("VolleyError ", error.getMessage());
+					}
+				}){
+					 @Override
+					    public HashMap<String, String> getParams() {
+					        HashMap<String, String> params = new HashMap<String, String>();
+					        params.put("X-APP-TOKEN", "7b9cd445494f408a8d3e2ec9fb304bbc");
+
+					        return params;
+					    }
+				
+				
+				};
+				
+				VolleySingleton.getInstance(this.getBaseContext()).addToRequestQueue(request);
+//			}
+		}catch(Exception e){
+
+		}
+}
+	private void initializeLocationManager(){
+		// Get the location manager
+//		mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//		  // Define the criteria how to select the location provider
+		criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_COARSE);	//default
+
+		criteria.setCostAllowed(false);
+//		  // get the best provider depending on the criteria
+//
+//		  // the last known location of this provider
+//		  Location location = mLocationManager.getLastKnownLocation(provider);
+//
+//		  mylistener = new MyLocationListener();
+//
+//		  if (location != null) {
+//			  mylistener.onLocationChanged(location);
+//			  mLocationManager.requestLocationUpdates(provider, 60000, 1, mylistener);
+//		  } else {
+//			  // leads to the settings because there is no last known location
+////			  Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+////			  startActivity(intent);
+//		  }
+		try {
+			LocationManager mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			//mylistener = new MyLocationListener();
+			provider = mLocationManager.getBestProvider(criteria, false);
+			Location location = mLocationManager.getLastKnownLocation(provider);
+			// getting GPS status
+			boolean isGPSEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+			// getting network status
+			boolean isNetworkEnabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+			if (!isGPSEnabled && !isNetworkEnabled) {
+              
+			} else {
+				// First get location from Network Provider
+				if (isNetworkEnabled) {
+					if (mLocationManager != null) {
+					mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 1, this);
+//					Toast.makeText(this, "Location service Network", Toast.LENGTH_LONG).show();
+//					Log.d("Network", "Network");
+//					if (mLocationManager != null) {
+						location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+						if (location != null) {
+//							Toast.makeText(this, "Location service", Toast.LENGTH_LONG).show();
+//							mylistener.onLocationChanged(location);
+							String lat =String.valueOf(location.getLatitude());
+							String longitude = String.valueOf(location.getLongitude());
+							/*textViewLocation.setText(lat+", " +longitude,BufferType.NORMAL);
+                            locationlayout.setVisibility(View.VISIBLE);
+							LocationData locationData = new LocationData();
+							locationData.setId(LogData.getInstance().getAppID(AppMain.getAppMainContext()));
+							locationData.setLat(lat);
+							locationData.setLongitude(longitude);
+							sendLocationRequest(AppMain.getAppMainContext(), locationData);*/
+//							lat = location.getLat();
+//							lng = location.getLongitude();
+						}else{
+                           // locationlayout.setVisibility(View.GONE);
+                        }
+					}
+//				}else{
+//					Toast.makeText(this, "No Location service Network", Toast.LENGTH_LONG).show();
+				}
+				//get the location by gps
+				if (isGPSEnabled) {
+					if (location == null) {
+                        if (mLocationManager != null) {
+                            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, this);
+//						Log.d("GPS Enabled", "GPS Enabled");
+//						if (mLocationManager != null) {
+//                            Toast.makeText(this, "Location service GPS", Toast.LENGTH_LONG).show();
+//							mylistener.onLocationChanged(location);
+                            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            if (location != null) {
+//								Toast.makeText(this, "Location service GPS LOCATION", Toast.LENGTH_LONG).show();
+                                String lat = String.valueOf(location.getLatitude());
+                                String longitude = String.valueOf(location.getLongitude());
+                              
+                            }
+                        }
+                    }
+				}else{
+//					Toast.makeText(this, "no Location service GPS", Toast.LENGTH_LONG).show();
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+}
+			
+			
+	
+

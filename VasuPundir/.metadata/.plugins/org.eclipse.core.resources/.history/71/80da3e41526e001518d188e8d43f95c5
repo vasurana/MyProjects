@@ -1,0 +1,304 @@
+package com.example.navigationdrawer;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
+import com.google.android.gms.maps.StreetViewPanorama;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.xvidia.xonecast.R;
+
+
+public class Map extends FragmentActivity implements
+		LocationListener, OnMarkerClickListener {
+
+	GoogleMap googleMap;
+	Marker myMarker;
+	MarkerOptions markerOptions;
+	LatLng latLng;
+	TextView locationTv;
+	ArrayList<LatLng> coordList;
+	//Context ctx = getBaseContext();
+	public static Geocoder geocoder;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		coordList = new ArrayList<LatLng>();
+		
+
+		// Adding Location points to ArrayList
+		coordList.add(new LatLng(42.5000,1.5000));
+		coordList.add(new LatLng(17.2500,-88.7500));
+		coordList.add(new LatLng(20.0000,77.0000));
+		coordList.add(new LatLng(-14.3333,-170.0000));
+		coordList.add(new LatLng(36.0000,138.0000));
+		coordList.add(new LatLng(26.0000,50.5500));
+		
+		if (!isGooglePlayServicesAvailable()) {
+			finish();
+		}
+		setContentView(R.layout.map);
+		SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.mapFragment);
+		googleMap = supportMapFragment.getMap();
+		googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+		googleMap.getUiSettings().setZoomControlsEnabled(true);
+		geocoder = new Geocoder(getBaseContext());
+		
+         List<Address> addresses = null;
+		for(int i =0;i<coordList.size();i++){
+			Double lat = coordList.get(i).latitude;
+			Double lng = coordList.get(i).longitude;
+			
+			Address address = getAddressFromGeo(lat, lng);
+			String string = String.valueOf(address);
+			
+			MarkerOptions marker = new MarkerOptions().position(new LatLng(lat, lng));
+            // Changing marker icon
+			marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.custom_marker));
+			marker.snippet(string);
+            googleMap.addMarker(marker);
+  
+            /* try {
+                 
+                 addresses = geocoder.getFromLocation(coordList.get(i).latitude, coordList
+                            .get(i).longitude, 1);
+                
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+             Address address = (Address) addresses.get(i);
+
+             String addressText = String.format("%s, %s",
+             address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+             address.getCountryName());
+             String address = addresses.get(0).getAddressLine(0);
+             String city = addresses.get(0).getLocality();
+             String state = addresses.get(0).getAdminArea();
+             String country = addresses.get(0).getCountryName();
+             String postalCode = addresses.get(0).getPostalCode();
+             String knownName = addresses.get(0).getFeatureName();
+			
+			MarkerOptions marker = new MarkerOptions().position(
+                    new LatLng(coordList.get(i).latitude, coordList
+                            .get(i).longitude));
+            // Changing marker icon
+			marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.custom_marker));
+			marker.snippet(address + city + state + country + postalCode);
+            googleMap.addMarker(marker);*/
+		}
+		
+		// TO DRAW LINES ON MAP USING POLYLINE
+		
+		/*PolylineOptions polylineOptions = new PolylineOptions();
+
+		// Create polyline options with existing LatLng ArrayList
+		polylineOptions.addAll(coordList);
+		polylineOptions
+		 .width(5)
+		 .color(Color.RED);
+
+		// Adding multiple points in map using polyline and arraylist
+		googleMap.addPolyline(polylineOptions);*/
+
+		// Getting reference to btn_find
+		Button btn_find = (Button) findViewById(R.id.btn_find);
+ 
+        // Defining button click event listener for the find button
+        OnClickListener findClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText etLocation = (EditText) findViewById(R.id.et_location);
+                String location = etLocation.getText().toString();
+ 
+                if(location!=null && !location.equals("")){
+                    new GeocoderTask().execute(location);
+                }
+            }
+        };
+
+        btn_find.setOnClickListener(findClickListener);
+
+		/*googleMap.setMyLocationEnabled(true);
+		LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		String bestProvider = locationManager.getBestProvider(criteria, true);
+		Location location = locationManager.getLastKnownLocation(bestProvider);
+		if (location != null) {
+			onLocationChanged(location);
+		}
+		locationManager.requestLocationUpdates(bestProvider, 200000, 1000, this);*/
+	}
+	
+	private static Address getAddressFromGeo(double latitude,double longitude){
+		  List<Address> addresses=null;
+		  Address address=null;
+		  //Geocoder geocoder = new Geocoder(c, Locale.getDefault());
+		  try {
+		    addresses=geocoder.getFromLocation(latitude,longitude,1);
+		    if (addresses == null) {
+		      Log.i("getAddressFromGeo(): getFromLocation() returned null", null);
+		      return null;
+		    }
+		    if (addresses.size() > 0) {
+		      address=addresses.get(0);
+		    }
+		  }
+		 catch (  IOException e) {
+		    e.printStackTrace();
+		  }
+		  return address;
+		}
+	
+
+	@Override
+	public void onLocationChanged(Location location) {
+		/*TextView locationTv = (TextView) findViewById(R.id.latlongLocation);
+		double latitude = location.getLatitude();
+		double longitude = location.getLongitude();
+		LatLng latLng = new LatLng(latitude, longitude);
+
+		googleMap.setOnMarkerClickListener(this);
+
+		myMarker = googleMap.addMarker(new MarkerOptions().position(latLng)
+				.title("My Spot").snippet("This is my spot!"));
+		googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+		googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+		locationTv
+				.setText("Latitude:" + latitude + ", Longitude:" + longitude);*/
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+	}
+
+	private boolean isGooglePlayServicesAvailable() {
+		int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+		if (ConnectionResult.SUCCESS == status) {
+			return true;
+		} else {
+			GooglePlayServicesUtil.getErrorDialog(status, this, 0).show();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+
+		if (marker.equals(myMarker)) {
+			Toast.makeText(this, marker.getTitle(), Toast.LENGTH_LONG).show();
+		}
+
+		return false;
+		// TODO Auto-generated method stub
+
+	}
+
+	// An AsyncTask class for accessing the GeoCoding Web Service
+    private class GeocoderTask extends AsyncTask<String, Void, List<Address>>{
+ 
+    	 @Override
+         protected List<Address> doInBackground(String... locationName) {
+             // Creating an instance of Geocoder class
+             Geocoder geocoder = new Geocoder(getBaseContext());
+             List<Address> addresses = null;
+  
+             try {
+                 // Getting a maximum of 3 Address that matches the input text
+                 addresses = geocoder.getFromLocationName(locationName[0], 3);
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+             return addresses;
+         }
+ 
+        @Override
+        protected void onPostExecute(List<Address> addresses) {
+ 
+            if(addresses==null || addresses.size()==0){
+                Toast.makeText(getBaseContext(), "No Location found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+ 
+            // Clears all the existing markers on the map
+            googleMap.clear();
+ 
+            // Adding Markers on Google Map for each matching address
+            for(int i=0;i<addresses.size();i++){
+ 
+                Address address = (Address) addresses.get(i);
+ 
+                // Creating an instance of GeoPoint, to display in Google Map
+                latLng = new LatLng(address.getLatitude(), address.getLongitude());
+ 
+                String addressText = String.format("%s, %s",
+                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                address.getCountryName());
+ 
+                markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(addressText);
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.custom_marker_searched));
+                googleMap.addMarker(markerOptions);   
+ 
+                // Locate the first location
+                if(i==0)
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                //	googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                
+               
+            }
+        }
+    }
+
+    }

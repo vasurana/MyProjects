@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:paddingLeft="32dip"
+    android:orientation="vertical"
+    android:paddingTop="32dip"
+    android:weightSum="1">
+
+    <SurfaceView android:id="@+id/CameraView" android:layout_width="640px" android:layout_height="480px"></SurfaceView>
+
+    <Button
+        android:layout_width="100dip"
+        android:layout_height="99dp"
+        android:text="Back"
+        android:onClick="onClick"
+        android:id="@+id/button_back"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

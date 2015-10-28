@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+  <color name="buttonPressedBackground">#6c9323</color>
+  <color name="buttonBackground">#97c640</color>
+    <color name="red_color">#ffdf0418</color>
+  <color name="orange_color">#ffa500</color>
+    <color name="greenStart">#ff33dd44</color>
+    <color name="greenMid">#ff0A8815</color>
+    <color name="greenEnd">#ff1da130</color>
+  <color name="lightGrey">#bebebe</color>
+  <color name="darkGrey">#aaaaaa</color>
+  <color name="darkerGrey">#888888</color>
+  <color name="light_grey_transparent">#d52f2f2f</color>
+  <color name="background_dark_grey">#000000</color>
+
+</resources>

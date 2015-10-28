@@ -1,0 +1,28 @@
+package com.example.beacon1;
+
+import com.xvidia.xonecast.R;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class Login extends Activity {
+	private Button btnRegister;
+	private EditText inputEmail;
+	private EditText inputPhoneNumber;
+	private EditText inputName;
+	
+	  @Override
+	    public void onCreate(Bundle savedInstanceState) {
+	        super.onCreate(savedInstanceState);
+	        
+	        setContentView(R.layout.activity_login);
+
+	        inputID = (EditText) findViewById(R.id.userID);
+	        inputPassword = (EditText) findViewById(R.id.password);
+	        btnLogin = (Button) findViewById(R.id.btnLogin);
+	        
+	  }
+
+}

@@ -1,0 +1,587 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"p",
+				"profile"
+			],
+			[
+				"d",
+				"django"
+			],
+			[
+				"con",
+				"confirm_message"
+			],
+			[
+				"pr",
+				"previous"
+			],
+			[
+				"print",
+				"printlist"
+			],
+			[
+				"de",
+				"deletehelpernode"
+			],
+			[
+				"h",
+				"head"
+			],
+			[
+				"pri",
+				"print"
+			],
+			[
+				"a",
+				"addItem_middle"
+			],
+			[
+				"cre",
+				"createLinkedList_Beginning"
+			],
+			[
+				"c",
+				"createLinkedListEnd"
+			],
+			[
+				"in",
+				"input"
+			],
+			[
+				"pi",
+				"printlinked"
+			],
+			[
+				"str",
+				"storedata"
+			],
+			[
+				"b",
+				"bubble_sort"
+			],
+			[
+				"s",
+				"size"
+			],
+			[
+				"ene",
+				"energyLevel"
+			],
+			[
+				"en",
+				"energyLevel"
+			],
+			[
+				"e",
+				"energyLevel"
+			],
+			[
+				"v",
+				"vobj"
+			],
+			[
+				"ve",
+				"vehicle"
+			],
+			[
+				"re",
+				"rectangle"
+			],
+			[
+				"prin",
+				"printthis"
+			],
+			[
+				"m",
+				"main	main()"
+			],
+			[
+				"max",
+				"max_occ"
+			],
+			[
+				"co",
+				"cout"
+			],
+			[
+				"cout",
+				"count"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"In",
+				"Insert"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/home/vasu/Documents/quickSort.cpp",
+			"settings":
+			{
+				"buffer_size": 120,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/contact/admin.py",
+			"settings":
+			{
+				"buffer_size": 63,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/contact/forms.py",
+			"settings":
+			{
+				"buffer_size": 250,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/contact/models.py",
+			"settings":
+			{
+				"buffer_size": 57,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/contact/tests.py",
+			"settings":
+			{
+				"buffer_size": 60,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/contact/views.py",
+			"settings":
+			{
+				"buffer_size": 826,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/C++/C++.sublime-build",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"html",
+				"Set Syntax: HTML"
+			],
+			[
+				"javasc",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"syntax c",
+				"Set Syntax: C"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/vasu/java/recursion.java",
+		"/media/vasu/datazzzz/Projects/tryDjango/tryDjango.sublime-project",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/tryDjango/urls.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/profiles/views.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/profiles/tests.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/contact/admin.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/contact/tests.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/contact/models.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/contact/forms.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/static/templates/navbar.html",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/profiles/forms.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/contact/views.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/static/templates/home.html",
+		"/media/vasu/datazzzz/Projects/tryDjango/static/templates/contact.html",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/profiles/admin.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/profiles/models.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/manage.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/static/static/css/main.css",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/tryDjango/local/urls.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/tryDjango/local/settings.py",
+		"/media/vasu/datazzzz/Projects/tryDjango/src/contact/migrations/__init__.py",
+		"/home/vasu/Desktop/tryDjango/src/contact/forms.py",
+		"/home/vasu/Desktop/tryDjango/src/profiles/views.py",
+		"/home/vasu/Desktop/tryDjango/src/profiles/forms.py",
+		"/home/vasu/Desktop/tryDjango/static/templates/fir.html",
+		"/home/vasu/Desktop/tryDjango/src/contact/admin.py",
+		"/home/vasu/Desktop/tryDjango/src/contact/models.py",
+		"/home/vasu/Desktop/tryDjango/static/static/js/main.js",
+		"/home/vasu/Desktop/tryDjango/src/contact/views.py",
+		"/home/vasu/Desktop/tryDjango/static/templates/contact.html",
+		"/home/vasu/Desktop/tryDjango/static/templates/about.html",
+		"/home/vasu/Desktop/tryDjango/static/templates/account/login.html",
+		"/home/vasu/Desktop/tryDjango/static/templates/base.html",
+		"/home/vasu/Desktop/tryDjango/static/templates/navbar.html",
+		"/home/vasu/Desktop/tryDjango/static/templates/home.html",
+		"/home/vasu/Desktop/tryDjango/static/templates/account/carousal.html",
+		"/home/vasu/Desktop/tryDjango/static/templates/account/signup.html",
+		"/home/vasu/Desktop/tryDjango/src/tryDjango/local/urls.py",
+		"/home/vasu/Desktop/tryDjango/static/templates/profile.html",
+		"/home/vasu/Desktop/tryDjango/static/templates/account/forgot.html",
+		"/home/vasu/Desktop/tryDjango/src/tryDjango/urls.py",
+		"/home/vasu/Desktop/tryDjango/src/tryDjango/settings.py",
+		"/home/vasu/Desktop/tryDjango/static/templates/account/logout.html",
+		"/home/vasu/Desktop/tryDjango/src/tryDjango/__init__.py",
+		"/home/vasu/Desktop/tryDjango/src/manage.py",
+		"/home/vasu/Desktop/tryDjango/static/static/css/bootstrap.min.css",
+		"/home/vasu/Desktop/tryDjango/src/contact/tests.py",
+		"/home/vasu/Desktop/tryDjango/src/forms.py",
+		"/home/vasu/Desktop/tryDjango/src/ContactUs/views.py",
+		"/home/vasu/Desktop/tryDjango/static/templates/ContactUs.html",
+		"/home/vasu/Desktop/tryDjango/src/contatact/views.py",
+		"/home/vasu/Desktop/tryDjango/static/static/css/main.css",
+		"/home/vasu/Desktop/tryDjango/src/profiles/admin.py",
+		"/home/vasu/Desktop/tryDjango/src/profiles/models.py",
+		"/home/vasu/Desktop/tryDjango/tryDjango.sublime-project",
+		"/home/vasu/Desktop/django/src/manage.py",
+		"/home/vasu/Desktop/django/src/profiles/admin.py",
+		"/home/vasu/Desktop/django/src/project1/urls.py",
+		"/home/vasu/Desktop/django/src/project1/settings.py",
+		"/home/vasu/Desktop/django/src/profiles/models.py",
+		"/home/vasu/Documents/practiceLinked.cpp",
+		"/home/vasu/Documents/practiceLinkedL2.cpp",
+		"/home/vasu/Documents/linked3.cpp",
+		"/home/vasu/currency.cpp",
+		"/home/vasu/new.c",
+		"/home/vasu/Documents/tree.cpp",
+		"/home/vasu/Documents/linked2.cpp",
+		"/home/vasu/Documents/linkhelp.cpp",
+		"/home/vasu/Documents/linked.cpp",
+		"/home/vasu/Documents/linked4.cpp",
+		"/home/vasu/Documents/insertion.cpp",
+		"/home/vasu/Documents/selection_sort.cpp",
+		"/home/vasu/Documents/bubble_sort.cpp",
+		"/home/vasu/Documents/virtual.cpp",
+		"/home/vasu/Documents/first.java",
+		"/home/vasu/Documents/prac2.cpp",
+		"/home/vasu/Documents/practice.cpp",
+		"/home/vasu/Documents/characterDeletion.cpp",
+		"/home/vasu/Documents/doubt_string.cpp",
+		"/home/vasu/Documents/delete_string.cpp",
+		"/home/vasu/Documents/string_mix.cpp",
+		"/home/vasu/Documents/delete_string.c",
+		"/home/vasu/Documents/output.cpp",
+		"/home/vasu/Documents/backward_string.cpp",
+		"/home/vasu/Documents/mid_string.cpp",
+		"/home/vasu/Documents/len_string.cpp",
+		"/home/vasu/Documents/sum.c",
+		"/home/vasu/Documents/oddnumelement.cpp",
+		"/home/vasu/Documents/majority_element.cpp",
+		"/home/vasu/Documents/array_sumcheck.cpp",
+		"/home/vasu/Documents/linked_list.cpp",
+		"/home/vasu/Documents/array_change.cpp",
+		"/home/vasu/Documents/heap.cpp",
+		"/home/vasu/Documents/swap.cpp",
+		"/home/vasu/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/vasu/Documents/pointer.cpp",
+		"/home/vasu/Documents/test.cpp",
+		"/home/vasu/Documents/qwe.c"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"done",
+			"SU",
+			"Accused",
+			"jquery",
+			"button",
+			"btn",
+			"div",
+			"{;\n",
+			"};\n",
+			"}",
+			"\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/vasu/Documents/quickSort.cpp",
+					"settings":
+					{
+						"buffer_size": 120,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								91,
+								91
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/contact/admin.py",
+					"settings":
+					{
+						"buffer_size": 63,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/contact/forms.py",
+					"settings":
+					{
+						"buffer_size": 250,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/contact/models.py",
+					"settings":
+					{
+						"buffer_size": 57,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/contact/tests.py",
+					"settings":
+					{
+						"buffer_size": 60,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/contact/views.py",
+					"settings":
+					{
+						"buffer_size": 826,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/home/vasu/Documents/mid_string.cpp"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 180.0,
+	"status_bar_visible": true
+}

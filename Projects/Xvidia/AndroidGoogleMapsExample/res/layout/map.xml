@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.javacodegeeks.androidgooglemapsexample.AndroidGoogleMapsActivity" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+        
+         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+             <EditText
+                 android:id="@+id/et_location"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1"
+                 android:ems="10" >
+
+                 <requestFocus />
+             </EditText>
+
+            <Button
+                android:id="@+id/btn_find"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                
+               
+                android:text="Find" />
+        </LinearLayout>
+
+       <fragment
+           android:id="@+id/mapFragment"
+           android:layout_width="match_parent"
+           android:layout_height="500dip"
+           android:layout_above="@+id/latlongLocation"
+           class="com.google.android.gms.maps.SupportMapFragment" />
+
+        <TextView
+            android:id="@+id/latlongLocation"
+            android:layout_width="fill_parent"
+            android:layout_height="25dp"
+            android:background="#ff058fff"
+            android:gravity="bottom"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:textColor="#ffffffff" />
+       
+    </LinearLayout>
+
+</RelativeLayout>

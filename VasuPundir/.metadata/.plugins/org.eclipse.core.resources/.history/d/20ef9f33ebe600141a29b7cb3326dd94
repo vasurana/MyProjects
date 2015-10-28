@@ -1,0 +1,21 @@
+package bucky;
+
+import java.util.Scanner;
+
+public class test {
+	
+	public static void main(String args[]){
+	
+		System.out.println("hey whatsup!! Lets start: ");
+		Scanner var = new Scanner (System.in);
+		
+		int x,y,z;
+		x = var.nextInt();
+		System.out.println("enter the new number");
+		y = var.nextInt();
+		System.out.println("yourr result is: ");
+		z = x+y;
+		System.out.println(z);
+	}
+
+}

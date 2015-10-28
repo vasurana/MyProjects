@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NavigationDrawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string-array name="itemsName">
+        <item>A-Z Movie Songs</item>
+        <item>Yuvan Shankar Raja Songs</item>
+        <item>Harris Jayaraj Songs</item>
+        <item>AR Rahman Songs</item>
+        <item>Ilayaraja Songs</item>
+    </string-array>
+
+    <string name="title_activity_pet_clinic">PetClinicActivity</string>
+
+</resources>

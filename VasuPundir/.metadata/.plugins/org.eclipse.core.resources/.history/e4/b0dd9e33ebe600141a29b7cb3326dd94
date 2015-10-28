@@ -1,0 +1,8 @@
+package bucky;
+
+public class vasu{
+	private int hr,min,sec;
+	public void set_time(){
+		
+	}
+}

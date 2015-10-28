@@ -1,0 +1,205 @@
+package com.example.androidhive;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.MessageDigest;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+public class AndroidDownloadFileByProgressBarActivity extends Activity {
+
+	// button to show progress dialog
+	Button btnShowProgress;
+	
+	
+	// Progress Dialog
+	private ProgressDialog pDialog;
+	ImageView my_image;
+	// Progress dialog type (0 - for Horizontal progress bar)
+	public static final int progress_bar_type = 0; 
+	
+	// File url to download
+	private static String file_url = "http://192.168.10.103:8081/update?file=ten.mp4";
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
+		// show progress bar button
+		btnShowProgress = (Button) findViewById(R.id.btnProgressBar);
+		// Image view to show image after downloading
+		my_image = (ImageView) findViewById(R.id.my_image);
+		/**
+		 * Show Progress bar click event
+		 * */
+		btnShowProgress.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// starting new Async Task
+				new DownloadFileFromURL().execute(file_url);
+			}
+		});
+	}
+
+	/**
+	 * Showing Dialog
+	 * */
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case progress_bar_type:
+			pDialog = new ProgressDialog(this);
+			pDialog.setMessage("Downloading file. Please wait...");
+			pDialog.setIndeterminate(false);
+			pDialog.setMax(100);
+			pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			pDialog.setCancelable(true);
+			pDialog.show();
+			return pDialog;
+		default:
+			return null;
+		}
+	}
+
+	/**
+	 * Background Async Task to download file
+	 * */
+	class DownloadFileFromURL extends AsyncTask<String, String, String> {
+
+		/**
+		 * Before starting background thread
+		 * Show Progress Bar Dialog
+		 * */
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showDialog(progress_bar_type);
+		}
+
+		/**
+		 * Downloading file in background thread
+		 * */
+		@Override
+		protected String doInBackground(String... f_url) {
+			String filename = "ten.mp4";   //file name to download
+			int range = 1024;   // buffer size to be copied at a time
+			DataOutputStream out = null;
+			int fileLength = 0;
+			
+	        try {
+	        	int total = 0;
+	        	HttpURLConnection con = (HttpURLConnection) new URL("http://192.168.10.140:8081/update?file="+filename).openConnection();
+				System.out.println("opening connection... ");
+				con.setRequestMethod("GET");
+				con.setRequestProperty("Buffer_Range", String.valueOf(range));
+				con.setRequestProperty("Content-Disposition","inline; filename=" + filename);
+				con.setRequestProperty("Last-Modified", String.valueOf(new File("/sdcard/"+filename).lastModified()));
+				con.setRequestProperty("Downloaded", String.valueOf(new File("/sdcard/"+filename).length()));
+				String content = con.getRequestProperty("Downloaded");
+					Log.i("Headers set...Sending Request...",content);
+if(con.getResponseCode() == 200)
+					 fileLength = con.getContentLength();
+			    DataInputStream in = new DataInputStream(new BufferedInputStream(con.getInputStream()));
+				out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("/sdcard/"+filename,true)));
+				int ByteRead = 0;
+				
+				byte[] buf = new byte[range];
+				while ((ByteRead = in.read(buf)) != -1){
+					total =+ ByteRead;
+					publishProgress(""+(int)((total*100)/fileLength));
+				}
+					out.write(buf, 0, ByteRead);
+				in.close();
+				out.close();
+				 System.out.println(con.getHeaderField("HashValue"));
+					//System.out.println(filename + " updated");
+				    System.out.println("Hash Value after Downloaded "+hashFile(filename));
+					if(con.getHeaderField("HashValue").equals(hashFile(filename))){
+							System.out.println(filename + " updated successfully");
+							}
+			   
+			} catch (Exception e) {
+	        	Log.e("Error: ", e.getMessage());
+	        }
+	        
+	        return null;
+		}
+		private String hashFile(String file){
+		    try {
+		    	File fileName =new File("/sdcard/"+file);
+		        MessageDigest digest = MessageDigest.getInstance("MD5");
+		        FileInputStream inputStream= new FileInputStream(fileName);
+		        byte[] bytesBuffer = new byte[1024];
+		        int bytesRead = -1;
+		 
+		        while ((bytesRead = inputStream.read(bytesBuffer)) != -1) {
+		            digest.update(bytesBuffer, 0, bytesRead);
+		        }
+		 
+		        byte[] hashedBytes = digest.digest();
+		 
+		        return convertByteArrayToHexString(hashedBytes);
+		    } catch (Exception e) {
+		        
+		                System.out.println("Could not generate hash from file");
+		                return null;
+		    }
+		}
+		private String convertByteArrayToHexString(byte[] arrayBytes) {
+	        StringBuffer stringBuffer = new StringBuffer();
+	        for (int i = 0; i < arrayBytes.length; i++) {
+	            stringBuffer.append(Integer.toString((arrayBytes[i] & 0xff) + 0x100, 16)
+	                    .substring(1));
+	        }
+	        return stringBuffer.toString();
+	    }
+		
+		/**
+		 * Updating progress bar
+		 * */
+		protected void onProgressUpdate(String... progress) {
+			// setting progress percentage
+            pDialog.setProgress(Integer.parseInt(progress[0]));
+       }
+
+		/**
+		 * After completing background task
+		 * Dismiss the progress dialog
+		 * **/
+		@Override
+		protected void onPostExecute(String file_url) {
+			// dismiss the dialog after the file was downloaded
+			dismissDialog(progress_bar_type);
+			
+			// Displaying downloaded image into image view
+			// Reading image path from sdcard
+		//	String imagePath = Environment.getExternalStorageDirectory().toString() + "/downloadedfile.mp4";
+			// setting downloaded into image view
+			//my_image.setImageDrawable(Drawable.createFromPath(imagePath));
+		}
+
+	}
+	
+}

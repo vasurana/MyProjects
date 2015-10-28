@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/etSharedPrefs"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:ems="10" >
+    </EditText>
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save" />
+
+    <Button
+        android:id="@+id/buttonLoad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Load" />
+
+    <TextView
+        android:id="@+id/tvLoadSharedPrefs"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:text="Load your data" />
+
+</LinearLayout>

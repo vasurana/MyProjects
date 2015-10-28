@@ -1,0 +1,11 @@
+com.android.ide.eclipse.ddms.timeOut=10000
+ddms.logcat.auotmonitor.level=error
+ddms.logcat.automonitor.userprompt=true
+eclipse.preferences.version=1
+logcat.view.colsize.Application=41
+logcat.view.colsize.Level=24
+logcat.view.colsize.PID=35
+logcat.view.colsize.TID=56
+logcat.view.colsize.Tag=110
+logcat.view.colsize.Text=669
+logcat.view.colsize.Time=160

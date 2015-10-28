@@ -1,0 +1,6 @@
+1) All the log requests are enabled
+2) update apk service is enabled
+3) Media reports is enabled
+4) HDMI is disabled
+5) Display name/ assetid change api integrated
+6) location api integrated.

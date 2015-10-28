@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;Multiple Locations on Map&apos;" deleteContents="true" description="Delete resource &apos;Multiple Locations on Map&apos;" element1="/Multiple Locations on Map" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1444041568326"/>&#x0A;<refactoring comment="Delete resource &apos;LocationMarkerPreferences&apos;" deleteContents="true" description="Delete resource &apos;LocationMarkerPreferences&apos;" element1="/LocationMarkerPreferences" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1444307523713"/>
+</session>

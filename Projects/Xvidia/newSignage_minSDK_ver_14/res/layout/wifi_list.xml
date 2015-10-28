@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:background="@android:color/black">
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="left|center_vertical"
+        android:background="@color/buttonBackground">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text ="@string/wifi_settings"
+            android:layout_marginTop="@dimen/activity__margin_small"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/text_size"
+            android:textColor="@android:color/white"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical">
+        <ToggleButton
+            android:id="@+id/wifi_on_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity__margin_small"
+            android:layout_marginRight="@dimen/activity_top_margin_large"
+            android:textOff="Wifi Off"
+            android:textOn="Wifi On"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_state"/>
+        <Button
+            android:id="@+id/wifi_scan_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity__margin_small"
+            android:layout_marginRight="@dimen/activity_top_margin_large"
+            android:layout_toRightOf="@id/wifi_on_off"
+            android:text="@string/btnScan"
+            android:textStyle="normal"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_state"/>
+            </RelativeLayout>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:orientation="vertical" >
+        <TextView
+
+            android:id="@+id/wifi_scanning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text ="Scanning..."
+            android:layout_marginTop="@dimen/activity__margin_small"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/text_size"
+            android:textColor="@android:color/white"/>
+
+            <ListView
+                android:id="@+id/wifiList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="10dp"
+                android:drawSelectorOnTop="true"
+                android:listSelector="#8aebecee"
+                android:dividerHeight="2dp"
+                android:fastScrollEnabled="true"
+                android:longClickable="true"
+                android:smoothScrollbar="true" />
+    </LinearLayout>
+</RelativeLayout>

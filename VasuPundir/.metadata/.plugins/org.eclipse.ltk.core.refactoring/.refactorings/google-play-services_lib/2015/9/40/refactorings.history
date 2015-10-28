@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;google-play-services.jar&apos; to &apos;libs&apos;&#x0A;- Original project: &apos;google-play-services_lib&apos;&#x0A;- Destination element: &apos;libs&apos;&#x0A;- Original element: &apos;google-play-services.jar&apos;" description="Copy file" element1="libs/google-play-services.jar" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1443426184782" target="/GoogleMaps/libs" units="0" version="1.0"/>
+</session>

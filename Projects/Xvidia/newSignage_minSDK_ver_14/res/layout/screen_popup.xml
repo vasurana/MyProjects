@@ -1,0 +1,101 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_element"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/background_dark"
+    android:orientation="vertical"
+    android:keepScreenOn="true"
+    android:padding="@dimen/activity_horizontal_margin" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/str_authentication"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="10dp"
+        android:text="@string/str_username"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        android:textStyle="normal" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:hint="@string/str_hint_username"
+        android:inputType="text"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="20dp"
+        android:text="@string/str_password"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        android:textStyle="normal" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:hint="@string/str_hint_password"
+        android:inputType="textPassword"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:textStyle="normal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="50"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+            android:background="@android:color/holo_green_light"
+                        android:text="@string/btnCancel"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:background="#000000" />
+
+        <Button
+            android:id="@+id/button_submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="50"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+            android:background="@android:color/background_light"
+            android:text="@string/btnSubmit"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</LinearLayout>

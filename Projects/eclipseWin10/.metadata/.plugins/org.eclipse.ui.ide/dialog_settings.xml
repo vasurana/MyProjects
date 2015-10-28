@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<list key="installedFeatures">
+		<item value="com.android.ide.eclipse.adt.package.feature:23.0.2.1259578"/>
+		<item value="com.objectaid.uml.cls:1.1.7"/>
+		<item value="fr.obeo.dsl.feature.designer.architect:6.2.1.201401162033"/>
+		<item value="fr.obeo.dsl.viewpoint.runtime:6.8.1.201401161815"/>
+		<item value="fr.obeo.mda.license:1.0.0.201104040800"/>
+		<item value="org.eclipse.acceleo.source:3.4.1.201309031307"/>
+		<item value="org.eclipse.acceleo:3.4.1.201309031307"/>
+		<item value="org.eclipse.cdt.gdb:7.0.0.201202111925"/>
+		<item value="org.eclipse.cdt:8.0.2.201202111925"/>
+		<item value="org.eclipse.draw2d:3.9.1.201308190730"/>
+		<item value="org.eclipse.egit.import:2.2.0.201212191850-r"/>
+		<item value="org.eclipse.egit:2.2.0.201212191850-r"/>
+		<item value="org.eclipse.emf.codegen.ecore.ui:2.9.1.v20130902-0605"/>
+		<item value="org.eclipse.emf.codegen.ecore:2.9.1.v20130902-0605"/>
+		<item value="org.eclipse.emf.codegen.ui:2.7.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.codegen:2.9.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.common.ui:2.8.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.common:2.9.1.v20130827-0309"/>
+		<item value="org.eclipse.emf.compare:2.1.2.201310031412"/>
+		<item value="org.eclipse.emf.converter:2.9.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.databinding.edit:1.3.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.databinding:1.3.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.doc:2.8.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.ecore.edit:2.8.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.ecore.editor:2.9.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.ecore:2.9.1.v20130827-0309"/>
+		<item value="org.eclipse.emf.edit.ui:2.9.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.edit:2.9.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.eef.runtime-feature:1.3.0.201311221533"/>
+		<item value="org.eclipse.emf.mapping.ecore.editor:2.8.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.mapping.ecore:2.7.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.mapping.ui:2.7.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.mapping:2.7.0.v20130902-0605"/>
+		<item value="org.eclipse.emf.transaction:1.7.0.201306111400"/>
+		<item value="org.eclipse.emf.validation:1.7.0.201306111341"/>
+		<item value="org.eclipse.emf.workspace:1.7.0.201306111400"/>
+		<item value="org.eclipse.emf:2.9.1.v20130902-0605"/>
+		<item value="org.eclipse.epp.mpc:1.1.1.I20110907-0947"/>
+		<item value="org.eclipse.gef:3.9.1.201308190730"/>
+		<item value="org.eclipse.gmf.runtime.notation:1.7.0.201306101425"/>
+		<item value="org.eclipse.gmf:1.7.0.201306111432"/>
+		<item value="org.eclipse.help:1.4.1.v20120912-144938-8R7xFOXFLWUl7PpNBh_HIGkb4"/>
+		<item value="org.eclipse.jgit:2.2.0.201212191850-r"/>
+		<item value="org.eclipse.m2m.atl.doc:3.4.0.v201305211502"/>
+		<item value="org.eclipse.m2m.atl.examples:3.4.0.v201305211502"/>
+		<item value="org.eclipse.m2m.atl:3.4.0.v201305211502"/>
+		<item value="org.eclipse.platform:4.2.1.v20130118-173121-9MF7GHYdG0B5kx4E_SkfZV-1mNjVATf67ZAb7"/>
+		<item value="org.eclipse.rcp:4.2.2.v20130129-152330-7IARAABrMQkGSvMgQnUlz-DQz00h"/>
+	</list>
+	<section name="CleanDialogSettings">
+		<item value="500" key="DIALOG_WIDTH"/>
+		<item value="false" key="TOGGLE_SELECTED"/>
+		<item value="378" key="DIALOG_HEIGHT"/>
+		<item value="433" key="DIALOG_X_ORIGIN"/>
+		<item value="112" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

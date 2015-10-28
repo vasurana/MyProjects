@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 3 elements from workspace&#x0A;- Original elements:&#x0A;     com.example.beacon1.SessionManager.java&#x0A;     com.example.beacon1.SQLiteHandler.java&#x0A;     Idea/src/com.example.navigationdrawer" description="Delete elements" element1="=beacon1/src&lt;com.example.beacon1{SessionManager.java" element2="=beacon1/src&lt;com.example.beacon1{SQLiteHandler.java" element3="=Idea/src&lt;com.example.navigationdrawer" element4="=Idea/src&lt;com.example" element5="=Idea/src&lt;com" elements="5" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1445944958283" subPackages="false" version="1.0"/>
+</session>

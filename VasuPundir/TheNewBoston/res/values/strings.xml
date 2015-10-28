@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">The New Boston</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    
+    <string name="button">Button</string>
+    
+    <string name="commands">Type a Command</string>
+    
+    <string name="invalid">Invalid</string>
+    
+    <string name="togglebutton">ToggleButton</string>
+
+    
+
+</resources>

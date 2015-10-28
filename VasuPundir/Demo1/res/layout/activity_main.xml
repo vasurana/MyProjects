@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pic"
+    android:orientation="vertical"
+    android:paddingBottom="10dip"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
+    android:paddingTop="10dip"
+    android:weightSum="100"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click below to get HttpPost response "
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/b_send"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="15.82"
+        android:text="HttpPost"
+        android:textSize="15dip" />
+
+    <TextView
+        android:id="@+id/tv_httppost"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="13.19"
+         />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click below to get HttpGet response "
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/b_get"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="11.60"
+        android:text="HttpGet"
+        android:textSize="15dip" />
+
+    <TextView
+        android:id="@+id/tv_httpget"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="15.28"
+         />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click below to start Camera or Recorder"
+        android:textColor="#000000" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/b_image"
+            android:layout_width="148dp"
+            android:layout_height="68dp"
+            android:text="Take Image"
+            android:textSize="15dip" />
+
+        <Button
+            android:id="@+id/b_video"
+            android:layout_width="152dp"
+            android:layout_height="match_parent"
+            android:text="Record"
+            android:textSize="15dip" />
+    </LinearLayout>
+
+</LinearLayout>

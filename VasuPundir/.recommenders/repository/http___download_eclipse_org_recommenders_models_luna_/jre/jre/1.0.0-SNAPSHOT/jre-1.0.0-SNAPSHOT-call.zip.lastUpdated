@@ -1,0 +1,4 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Fri Apr 10 23:03:43 IST 2015
+@127.0.0.1\:8118>@default-models-http\://download.eclipse.org/recommenders/models/luna/.lastUpdated=1428687223607
+http\://download.eclipse.org/recommenders/models/luna/.error=Could not transfer artifact jre\:jre\:zip\:call\:1.0.0-SNAPSHOT from/to models (http\://download.eclipse.org/recommenders/models/luna/)\: Forwarding failure (503)

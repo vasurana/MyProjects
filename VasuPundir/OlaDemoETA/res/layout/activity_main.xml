@@ -1,0 +1,121 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.xvidia.olaDemoETA.MainActivity" >
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textSize="40dip" />
+
+    <LinearLayout
+        android:id="@+id/rgLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvLocation"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvLocation"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical" >
+
+        <RadioGroup
+            android:id="@+id/rgButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/rbManual"
+                android:layout_width="150dip"
+                android:layout_height="wrap_content"
+                android:text="Manual" />
+
+            <RadioButton
+                android:id="@+id/rbAutomatic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="18dp"
+                android:text="Automatic" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutManual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rgLayout"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Latitude" />
+
+            <EditText
+                android:id="@+id/etLatitude"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="numberSigned|numberDecimal"
+                android:maxLength="9" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitude" />
+
+            <EditText
+                android:id="@+id/etLongitude"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="numberSigned|numberDecimal"
+                android:maxLength="9" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutAuto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout1"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Latitude" />
+
+            <TextView
+                android:id="@+id/tvLatitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitude" />
+
+            <TextView
+                android:id="@+id/tvLongitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bProceed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rgLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Proceed" />
+
+</RelativeLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Xonecast</string>
+    <string name="action_settings">Xonecast Settings</string>
+    <string name="wifi_settings">Wifi Settings</string>
+    <string name="str_DisplayName">Display Name</string>
+    <string name="str_hint_DisplayName">display name</string>
+    <string name="str_Address">Address of the store</string>
+    <string name="str_hint_Address">Address of the store</string>    
+    <string name="str_Asset_Id">Asset ID</string>
+    <string name="str_hint_Asser_Id">Asset ID</string>
+    <string name="btnConnect">CONNECT</string>
+    <string name="btnStart">START</string>
+    <string name="btnSave">SAVE</string>
+    <string name="btnCancel">CANCEL</string>
+    <string name="btnSubmit">SUBMIT</string>
+    <string name="btnScan">SCAN</string>
+    <string name="str_authentication">AUTHENTICATION</string>
+    <string name="str_username">USERNAME</string>
+    <string name="str_password">PASSWORD</string>
+    <string name="str_hint_username">username</string>
+    <string name="str_hint_password">password</string>
+    <string name="btnRegister">REGISTER</string>
+    <string name="btnRefresh">REFRESH</string>
+    <string name="str_RegisterID">REGISTRATION ID:</string>
+    <string name="str_ScreenOrientation">SCREEN ORIENTATION</string>
+    <string name="str_macId">MAC ADDRESS: </string>
+    <string name="str_IpAddress">IP ADDRESS: </string>
+    <string name="str_location">LOCATION COORDINATES: </string>
+    <string name="str_app_version">APP VERSION: </string>
+    <string name="str_resolution">SCREEN RESOLUTION: </string>
+    <string name="str_connectionStatus">INTERNET STATUS: </string>
+    <string name="enter_diplay_name">enter display name</string>
+    <string name="diplay_name_saved">display name saved</string>
+    <string name="no_internet_connection">Please check your internet connection</string>
+    <string name="process_text">Please wait, while we download the latest content for the device.</string>
+    <string name="register_complete">Please call on below numbers to register the device.\n 11:00AM - 6:00PM -> 0124-4119356\n After 6:00PM -> 9540729875.\n  Make sure internet is connected.</string>
+    <string-array name="menu_orientation">
+        <item>Landscape Normal</item>
+        <item>Landscape Reverse</item>
+        <item>Portrait Normal</item>
+        <item>Portrait Reverse</item>
+    </string-array>
+</resources>
