@@ -41,7 +41,7 @@ public class MainActivity extends ActionBarActivity {
 	ListView listView;
 	ArrayAdapter<String> adapter;
 	FrameLayout layoutBeacon;
-	LinearLayout layoutList, layoutBeacon2;
+	LinearLayout layoutList, layoutBeacon2, layoutWhenBlank;
 	TextView tvDistance1, tvDistance2, tvNearestBeacon, tvOffer, tvInfo, tvListHeader;
 	String beaconDistance1;
 	String beaconDistance2;
@@ -129,6 +129,7 @@ public class MainActivity extends ActionBarActivity {
 		layoutBeacon = (FrameLayout) findViewById(R.id.layoutBeacon);
 		layoutBeacon2 = (LinearLayout) findViewById(R.id.layoutBeacon2);
 		layoutList = (LinearLayout) findViewById(R.id.listLayout);
+		//layoutWhenBlank = (LinearLayout) findViewById(R.id.ifBlank);
 		tvListHeader = (TextView) findViewById(R.id.listHeader);
 		tvOffer = (TextView) findViewById(R.id.offer);
 		tvOffer.setVisibility(View.GONE);
@@ -187,7 +188,7 @@ public class MainActivity extends ActionBarActivity {
 
 				for (com.sensoro.beacon.kit.Beacon beacon : beacons) {
 
-					if (beacon.getAccuracy() > 7) {
+					if (beacon.getAccuracy() > 5) {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								 dialog.dismiss();
@@ -291,7 +292,7 @@ public class MainActivity extends ActionBarActivity {
 		};
 		
 		 dialog = new ProgressDialog(MainActivity.this);
-         dialog.setMessage("Loading your today's offer. Please wait...");
+         dialog.setMessage("Taking long enough? Press Home. We'll notify you later.");
          dialog.show();
          sensoroManager.setBeaconManagerListener(beaconManagerListener);
          
@@ -316,15 +317,6 @@ public class MainActivity extends ActionBarActivity {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-
-								/*
-								 * Intent intent = new
-								 * Intent(Intent.ACTION_MAIN);
-								 * intent.addCategory(Intent.CATEGORY_HOME);
-								 * intent
-								 * .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-								 * startActivity(intent);
-								 */
 								android.os.Process
 										.killProcess(android.os.Process.myPid());
 								System.exit(0);
