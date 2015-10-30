@@ -32,13 +32,31 @@
         </activity>
         
           <activity
-            android:name=".Register"
+            android:name=".CheckUser"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+          <activity
+            android:name=".Register"
+            android:label="@string/app_name" >
+           
+        </activity>
+        
+           <activity
+            android:name=".BeaconNotInRange"
+            android:label="@string/app_name" >
+           
+        </activity>
+        
+           <activity
+            android:name=".WelcomeUser"
+            android:label="@string/app_name" >
+           
         </activity>
         
         <service android:name="com.sensoro.beacon.kit.BeaconService" >

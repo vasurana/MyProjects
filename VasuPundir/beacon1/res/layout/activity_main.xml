@@ -2,9 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.example.beacon1.MainActivity" >
 
-   <!--  <TextView
+    <!--
+    <TextView
         android:id="@+id/distance1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,24 +28,76 @@
         android:layout_alignLeft="@+id/distance2"
         android:layout_below="@+id/distance2"
         android:layout_marginTop="54dp"
-        android:text="TextView" /> -->
+        android:text="TextView" />
+    -->
 
-    <ImageView
-        android:id="@+id/image"
+    <LinearLayout
+        android:id="@+id/listLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/offer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-         />
+        <TextView
+            android:id="@+id/listHeader"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/white"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/bg_login" />
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/layoutBeacon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:padding="10dp"
+            android:textColor="@color/bg_login" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" />
+
+    </FrameLayout>
     
+     <LinearLayout
+        android:id="@+id/layoutBeacon2"
+        android:layout_width="match_parent"
+        android:gravity="bottom"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+     <TextView
+            android:id="@+id/offer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+             android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
+            android:background="@color/white"
+            android:padding="10dp"
+            android:textColor="@color/bg_login" />
+     </LinearLayout>
+
 </RelativeLayout>
