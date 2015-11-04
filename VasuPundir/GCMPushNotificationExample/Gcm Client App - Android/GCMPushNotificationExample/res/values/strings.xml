@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GCMPushNotificationExample</string>
+    <string name="welcome_txt">GCM App</string>
+    <string name="email">Email Address</string>
+    <string name="login">Register Me</string>
+    <string name="defaultmsg">Message sent by server will appear here.</string>
+    <string name="msg_title">Message</string>
+    <string name="user_title">Hello User</string>
+
+</resources>
