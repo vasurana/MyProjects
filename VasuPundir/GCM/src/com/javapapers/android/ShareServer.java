@@ -1,5 +1,6 @@
 package com.javapapers.android;
 
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,7 +37,7 @@ public class ShareServer extends Activity {
 
 	public String shareRegIdWithAppServer(final Context context,
 			final String regId) {
-
+		
 		RequestQueue queue = Volley.newRequestQueue(this);
 		Map<String, String> paramsMap = new HashMap<String, String>();
 		paramsMap.put("regId", regId);
@@ -44,18 +45,18 @@ public class ShareServer extends Activity {
 		String serverUrl = null;
 		serverUrl = new String(Config.APP_SERVER_URL);
 
-		StringBuilder postBody = new StringBuilder();
-		Iterator<Entry<String, String>> iterator = paramsMap.entrySet()
-				.iterator();
-
-		while (iterator.hasNext()) {
-			Entry<String, String> param = iterator.next();
-			postBody.append(param.getKey()).append('=')
-					.append(param.getValue());
-			if (iterator.hasNext()) {
-				postBody.append('&');
-			}
-		}
+//		StringBuilder postBody = new StringBuilder();
+//		Iterator<Entry<String, String>> iterator = paramsMap.entrySet()
+//				.iterator();
+//
+//		while (iterator.hasNext()) {
+//			Entry<String, String> param = iterator.next();
+//			postBody.append(param.getKey()).append('=')
+//					.append(param.getValue());
+//			if (iterator.hasNext()) {
+//				postBody.append('&');
+//			}
+//		}
 
 		JsonObjectRequest jsObjRequest = new JsonObjectRequest(
 				Request.Method.GET, serverUrl, null,
@@ -66,6 +67,7 @@ public class ShareServer extends Activity {
 						// TODO Auto-generated method stub
 						result = "RegId shared with Application Server. RegId: "
 								+ regId;
+						
 
 					}
 				}, new Response.ErrorListener() {
@@ -73,12 +75,13 @@ public class ShareServer extends Activity {
 					@Override
 					public void onErrorResponse(VolleyError error) {
 						// TODO Auto-generated method stub
-						NetworkResponse networkResponse = error.networkResponse;
-						if (networkResponse != null) {
+						Integer v = error.networkResponse.statusCode;
+						if (v != null) {
 							result = "Post Failure." + " Status: "
 									+ error.networkResponse.statusCode;
+							
 						} else {
-							Log.d(TAG, "Volley Error object equals NULL");
+							Log.d(TAG, "Volley Error: error object equals NULL");
 						}
 					}
 				}) {
@@ -91,15 +94,10 @@ public class ShareServer extends Activity {
 				return params;
 			}
 		};
+		AppController.getInstance().addToRequestQueue(jsObjRequest);
 
 		return result;
 
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
 	}
 
 }
