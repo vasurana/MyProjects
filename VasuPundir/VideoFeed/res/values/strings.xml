@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Vowme</string>
+    
+    <!-- Strings related to login -->
+    <string name="prompt_name">Full name</string>
+    <string name="content_file_provider_authority">com.mysampleapp.fileprovider</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_phone">Phone number</string>
+    <string name="action_next">Next</string>
+    <string name="action_save">Save</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_name">This name is too short</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="register_profile_name">Name</string>
+    <string name="register_profile_status">Status message</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions." </string>
+    <string name="download_queue_provider_authority">com.amazonaws.mobile.downloader-com.xvidia.vowme.test</string>
+    <string name="facebook_app_id">1695261640696908</string>
+    <string name="twitter_consumer_key">BO10vaSZiIiWoxpPNQIAhjgWl</string>
+    <string name="twitter_secret_key">OfFs35MkcCoyrT2tudJeZnF5B2tP5zvuNkU0wlp6TRfiMzrIHC</string>
+
+    <!-- Network service apis-->
+    <string name="base_url">http://54.251.255.172:9898</string>
+</resources>
