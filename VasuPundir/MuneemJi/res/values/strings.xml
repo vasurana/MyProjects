@@ -12,8 +12,8 @@
     <string name="welcome">Welcome</string>
     <string name="btn_logout">LOGOUT</string>
     <string name="name">Fullname</string>
-    <string name="hint_phonenumber">Contact Number</string>
+    <string name="hint_phonenumber">Number</string>
     <string name="address">Address</string>
-    <string name="pin">Pin Code</string>
+    <string name="pin">Pincode</string>
 
 </resources>

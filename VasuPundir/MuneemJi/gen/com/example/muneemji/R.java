@@ -17,6 +17,10 @@ public final class R {
         public static final int abc_slide_in_top=0x7f040005;
         public static final int abc_slide_out_bottom=0x7f040006;
         public static final int abc_slide_out_top=0x7f040007;
+        public static final int slide_in_from_left=0x7f040008;
+        public static final int slide_in_from_right=0x7f040009;
+        public static final int slide_out_to_left=0x7f04000a;
+        public static final int slide_out_to_right=0x7f04000b;
     }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
@@ -2136,8 +2140,10 @@ containing a value of this type.
         public static final int ic_plusone_small_off_client=0x7f020058;
         public static final int ic_plusone_standard_off_client=0x7f020059;
         public static final int ic_plusone_tall_off_client=0x7f02005a;
-        public static final int powered_by_google_dark=0x7f02005b;
-        public static final int powered_by_google_light=0x7f02005c;
+        public static final int muneemji=0x7f02005b;
+        public static final int mybutton=0x7f02005c;
+        public static final int powered_by_google_dark=0x7f02005d;
+        public static final int powered_by_google_light=0x7f02005e;
     }
     public static final class id {
         public static final int action_bar=0x7f08004e;
@@ -2153,9 +2159,9 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f08004b;
         public static final int action_mode_bar_stub=0x7f08004a;
         public static final int action_mode_close_button=0x7f08003d;
-        public static final int action_settings=0x7f080067;
+        public static final int action_settings=0x7f080069;
         public static final int activity_chooser_view_content=0x7f08003e;
-        public static final int address=0x7f080064;
+        public static final int address=0x7f080063;
         public static final int adjust_height=0x7f08000a;
         public static final int adjust_width=0x7f08000b;
         public static final int always=0x7f080031;
@@ -2165,7 +2171,8 @@ containing a value of this type.
         public static final int btnLinkToRegisterScreen=0x7f08005f;
         public static final int btnLogin=0x7f08005e;
         public static final int btnLogout=0x7f080061;
-        public static final int btnRegister=0x7f080062;
+        public static final int btnNext=0x7f080068;
+        public static final int btnRegister=0x7f080065;
         public static final int buyButton=0x7f080017;
         public static final int buy_now=0x7f08001c;
         public static final int buy_with=0x7f08001d;
@@ -2209,8 +2216,8 @@ containing a value of this type.
         public static final int none=0x7f08000c;
         public static final int normal=0x7f08000e;
         public static final int password=0x7f08005d;
-        public static final int phone_number=0x7f080063;
-        public static final int pincode=0x7f080065;
+        public static final int phone_number=0x7f080062;
+        public static final int pincode=0x7f080064;
         public static final int production=0x7f080013;
         public static final int progress_circular=0x7f080008;
         public static final int progress_horizontal=0x7f080009;
@@ -2242,6 +2249,7 @@ containing a value of this type.
         public static final int title=0x7f080044;
         public static final int up=0x7f080002;
         public static final int useLogo=0x7f080030;
+        public static final int viewflipper=0x7f080067;
         public static final int withText=0x7f080035;
         public static final int wrap_content=0x7f08001a;
     }
@@ -2301,7 +2309,8 @@ containing a value of this type.
         public static final int activity_login=0x7f030016;
         public static final int activity_main=0x7f030017;
         public static final int activity_register=0x7f030018;
-        public static final int support_simple_spinner_dropdown_item=0x7f030019;
+        public static final int register_flipper=0x7f030019;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001a;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
