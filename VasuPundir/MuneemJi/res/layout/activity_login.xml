@@ -1,31 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/muneemji"
-    android:orientation="vertical"
-    android:padding="5dp" >
+    android:layout_height="fill_parent"
+    android:background="#777777"
+    android:orientation="vertical" >
 
-  
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp" >
+        android:padding="10dip" >
+
+      
+           <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="MuneemJi"
+            android:layout_marginBottom="50dip"
+            android:textColor="#ffffff"
+            android:textSize="50dip"
+            android:textStyle="italic|normal|bold" /> 
+            
+           
 
         <EditText
             android:id="@+id/email"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/white"
+            android:background="@drawable/customedittext"
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:singleLine="true"
-            android:textColor="@color/input_login"
+            android:textColor="@color/input_login_new"
             android:textColorHint="@color/input_login_hint" />
 
         <EditText
@@ -33,29 +43,29 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/white"
+            android:background="@drawable/customedittext"
             android:hint="@string/hint_password"
             android:inputType="textPassword"
             android:padding="10dp"
             android:singleLine="true"
-            android:textColor="@color/input_login"
+            android:textColor="@color/input_login_new"
             android:textColorHint="@color/input_login_hint" />
 
         <Button
-                android:id="@+id/btnLogin"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dip"
-                android:background="@color/btn_login"
-                android:text="@string/btn_login"
-                android:textColor="@color/btn_login_bg" />
+            android:id="@+id/btnLogin"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:background="@color/btn_login"
+            android:text="@string/btn_login"
+            android:textColor="@color/btn_login_bg" />
 
         <Button
             android:id="@+id/btnLinkToRegisterScreen"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dip"
-            android:background="@color/btn_login"
+            android:background="@null"
             android:padding="10dp"
             android:radius="10dip"
             android:text="@string/btn_link_to_register"
@@ -64,4 +74,4 @@
             android:textSize="15dp" />
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

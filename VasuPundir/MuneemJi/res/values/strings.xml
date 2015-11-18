@@ -13,7 +13,10 @@
     <string name="btn_logout">LOGOUT</string>
     <string name="name">Fullname</string>
     <string name="hint_phonenumber">Number</string>
-    <string name="address">Address</string>
+    <string name="house_number">Flat/House No.</string>
     <string name="pin">Pincode</string>
+    <string name="street">Street/Locality</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
 
 </resources>

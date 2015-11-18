@@ -36,11 +36,11 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class RegisterFlipper extends Activity {
-	private static final String TAG = RegisterActivity.class.getSimpleName();
+	private static final String TAG = RegisterFlipper.class.getSimpleName();
 	private Button btnRegister;
 	private Button btnLinkToLogin;
-	private EditText inputFullName, inputEmail, inputPassword, inputAddress,
-			inputNumber, inputPincode;
+	private EditText inputFullName, inputEmail, inputPassword, inputHouse,
+			inputStreet, inputCity, inputState, inputNumber, inputPincode;
 	private ProgressDialog pDialog;
 	private SessionManager session;
 	private SQLiteHandler db;
@@ -50,18 +50,23 @@ public class RegisterFlipper extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		/*requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
+		/*
+		 * requestWindowFeature(Window.FEATURE_NO_TITLE);
+		 * getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		 * WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		 */
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.register_flipper);
 		inputFullName = (EditText) findViewById(R.id.name);
-		 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.showSoftInput(inputFullName, InputMethodManager.SHOW_IMPLICIT);
-        inputPassword = (EditText) findViewById(R.id.password);
+		inputPassword = (EditText) findViewById(R.id.password);
 		inputEmail = (EditText) findViewById(R.id.email);
 		inputPassword = (EditText) findViewById(R.id.password);
-		inputAddress = (EditText) findViewById(R.id.address);
+		inputHouse = (EditText) findViewById(R.id.house_no);
+		inputStreet = (EditText) findViewById(R.id.street);
+		inputCity = (EditText) findViewById(R.id.city);
+		inputState = (EditText) findViewById(R.id.state);
 		inputNumber = (EditText) findViewById(R.id.phone_number);
 		inputPincode = (EditText) findViewById(R.id.pincode);
 		btnRegister = (Button) findViewById(R.id.btnRegister);
@@ -176,14 +181,18 @@ public class RegisterFlipper extends Activity {
 				String name = inputFullName.getText().toString().trim();
 				String email = inputEmail.getText().toString().trim();
 				String password = inputPassword.getText().toString().trim();
-				String address = inputAddress.getText().toString().trim();
+				String house = inputHouse.getText().toString().trim();
+				String street = inputStreet.getText().toString().trim();
+				String city = inputCity.getText().toString().trim();
+				String state = inputState.getText().toString().trim();
 				String number = inputNumber.getText().toString().trim();
 				String pincode = inputPincode.getText().toString().trim();
 
 				if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()
-						&& !address.isEmpty() && !number.isEmpty()
-						&& !pincode.isEmpty()) {
-					registerUser(name, email, password, address, number,
+						&& !house.isEmpty() && !street.isEmpty()
+						&& !city.isEmpty() && !state.isEmpty()
+						&& !number.isEmpty() && !pincode.isEmpty()) {
+					registerUser(name, email, password, house, street, city, state, number,
 							pincode);
 				} else {
 					Toast.makeText(getApplicationContext(),
@@ -241,7 +250,7 @@ public class RegisterFlipper extends Activity {
 	}
 
 	private void registerUser(final String name, final String email,
-			final String password, final String address, final String number,
+			final String password, final String house, final String street, final String city, final String state, final String number,
 			final String pincode) {
 		// Tag used to cancel the request
 		String tag_string_req = "req_register";
@@ -316,7 +325,10 @@ public class RegisterFlipper extends Activity {
 				params.put("name", name);
 				params.put("email", email);
 				params.put("password", password);
-				params.put("address", address);
+				params.put("house", house);
+				params.put("street", street);
+				params.put("city", city);
+				params.put("state", state);
 				params.put("number", number);
 				params.put("pincode", pincode);
 
@@ -328,13 +340,14 @@ public class RegisterFlipper extends Activity {
 		// Adding request to request queue
 		AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 	}
-	 private void showDialog() {
-	        if (!pDialog.isShowing())
-	            pDialog.show();
-	    }
 
-	    private void hideDialog() {
-	        if (pDialog.isShowing())
-	            pDialog.dismiss();
-	    }
+	private void showDialog() {
+		if (!pDialog.isShowing())
+			pDialog.show();
+	}
+
+	private void hideDialog() {
+		if (pDialog.isShowing())
+			pDialog.dismiss();
+	}
 }

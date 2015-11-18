@@ -34,7 +34,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.idea.NaviActivity"
+            android:name="net.xvidia.xonecast.NaviActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,12 +43,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.idea.Players"
+            android:name="net.xvidia.xonecast.Players"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Holo.Light" >
         </activity>
         <activity
-            android:name="com.example.idea.Map"
+            android:name="net.xvidia.xonecast.Map"
             android:label="@string/app_name" >
         </activity>
 
