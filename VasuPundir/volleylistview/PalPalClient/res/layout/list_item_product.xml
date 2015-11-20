@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingBottom="10dp" >
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/productImage"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="8dp"
+        android:scaleType="fitCenter" >
+    </com.android.volley.toolbox.NetworkImageView>
+
+    <TextView
+        android:id="@+id/productName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/productImage"
+        android:padding="5dp"
+        android:textColor="@color/lbl_product_name"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/productDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productName"
+        android:layout_toRightOf="@id/productImage"
+        android:padding="5dp"
+        android:textColor="@color/lbl_product_description" />
+
+    <TextView
+        android:id="@+id/productPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productDescription"
+        android:layout_toRightOf="@id/productImage"
+        android:padding="5dp"
+        android:textColor="@color/lbl_product_description" />
+
+    <Button
+        android:id="@+id/btnAddToCart"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@id/productPrice"
+        android:layout_margin="5dp"
+        android:layout_toRightOf="@id/productImage"
+        android:background="#64d048"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="@string/add_to_cart"
+        android:textColor="@color/white" />
+
+</RelativeLayout>
