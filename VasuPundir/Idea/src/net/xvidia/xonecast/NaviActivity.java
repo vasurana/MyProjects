@@ -59,7 +59,8 @@ public class NaviActivity extends ActionBarActivity {
 								 startActivity(intentPlayers);
 								break;
 							case 1:
-								
+								Intent intentLayouts = new Intent(NaviActivity.this, Layouts.class);
+								 startActivity(intentLayouts);
 								break;
 							case 2:
 

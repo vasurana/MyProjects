@@ -115,6 +115,7 @@ public class LoginActivity extends Activity {
                 Intent i = new Intent(getApplicationContext(),
                         RegisterFlipper.class);
                 startActivity(i);
+                overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
                 //finish();
             }
         });
@@ -286,7 +287,7 @@ public class LoginActivity extends Activity {
 
                         // Now store the user in SQLite
                         String uid = jObj.getString("uid");
-
+                        
                         JSONObject user = jObj.getJSONObject("user");
                         String name = user.getString("name");
                         String email = user.getString("email");

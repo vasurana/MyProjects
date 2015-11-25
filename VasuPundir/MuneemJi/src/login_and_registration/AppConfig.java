@@ -10,4 +10,7 @@ public class AppConfig {
 
 	// Server user register url
 	public static String URL_REGISTER = "";
+	
+	// Server user register url
+		public static String URL_CATEGORIES = "http://jsonplaceholder.typicode.com/users";
 }

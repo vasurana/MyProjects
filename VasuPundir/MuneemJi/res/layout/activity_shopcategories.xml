@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#777777"
+     android:padding="5dip"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/txtItem"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnAdd"
+        android:layout_alignParentTop="true"
+       
+        android:background="@drawable/customedittext"
+        android:layout_marginRight="2.5dp"
+        android:hint="@string/hintTxtItem"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textColor="@color/input_login_new"
+        android:textColorHint="@color/input_login_hint" />
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="fill_parent"
+         android:background="@drawable/mybutton" 
+         android:textAllCaps="false"
+        android:layout_height="wrap_content"
+         android:textColor="@color/btn_login_bg"
+        android:layout_toRightOf="@id/txtItem"
+        android:text="@string/lblBtnAdd" />
+
+   <!--  <TextView
+        android:id="@android:id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtItem"
+        android:gravity="center_horizontal"
+        android:text="@string/txtEmpty" /> -->
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtItem"
+        android:choiceMode="multipleChoice" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@android:id/list"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:weightSum="10" >
+
+        <Button
+            android:id="@+id/btnDel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="5"
+             android:layout_marginRight="2.5dp"
+            android:background="@drawable/mybutton"
+            android:text="@string/lblBtnDel"
+            android:textAllCaps="false"
+            android:textColor="@color/btn_login_bg" />
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="5"
+             android:layout_marginLeft="2.5dp"
+            android:background="@drawable/mybutton"
+            android:text="@string/lblBtnDone"
+            android:textAllCaps="false"
+            android:textColor="@color/btn_login_bg" />
+    </LinearLayout>
+
+</RelativeLayout>

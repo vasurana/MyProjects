@@ -14,6 +14,7 @@
     <string name="btn_register">REGISTER</string>
    
     <string name="welcome">Welcome</string>
+    <string name = "menu_search">Search</string>
     <string name="btn_logout">LOGOUT</string>
     <string name="name">Fullname</string>
     <string-array name="players">

@@ -500,7 +500,7 @@ int id action_menu_presenter 0x7f080007
 int id action_mode_bar 0x7f08004b
 int id action_mode_bar_stub 0x7f08004a
 int id action_mode_close_button 0x7f08003d
-int id action_settings 0x7f080070
+int id action_settings 0x7f080071
 int id activity_chooser_view_content 0x7f08003e
 int id adjust_height 0x7f08000a
 int id adjust_width 0x7f08000b
@@ -556,6 +556,7 @@ int id loggedInStatus 0x7f08006d
 int id logo_only 0x7f080021
 int id mapFragment 0x7f080067
 int id match_parent 0x7f080019
+int id menu_search 0x7f080072
 int id middle 0x7f08003a
 int id monochrome 0x7f080027
 int id navList 0x7f080061
@@ -568,6 +569,7 @@ int id production 0x7f080013
 int id progress_circular 0x7f080008
 int id progress_horizontal 0x7f080009
 int id radio 0x7f080048
+int id rowTextView 0x7f080070
 int id sandbox 0x7f080014
 int id satellite 0x7f08000f
 int id search_badge 0x7f080052
@@ -629,12 +631,14 @@ int layout activity_login 0x7f030016
 int layout activity_main 0x7f030017
 int layout grid_single 0x7f030018
 int layout groups_single_row 0x7f030019
-int layout map 0x7f03001a
-int layout players 0x7f03001b
-int layout players_single_row 0x7f03001c
-int layout playersgroup 0x7f03001d
-int layout playersname 0x7f03001e
-int layout support_simple_spinner_dropdown_item 0x7f03001f
+int layout layouts 0x7f03001a
+int layout map 0x7f03001b
+int layout players 0x7f03001c
+int layout players_single_row 0x7f03001d
+int layout playersgroup 0x7f03001e
+int layout playersname 0x7f03001f
+int layout simplerow 0x7f030020
+int layout support_simple_spinner_dropdown_item 0x7f030021
 int menu main 0x7f0e0000
 int raw gtm_analytics 0x7f050000
 int string abc_action_bar_home_description 0x7f07002d
@@ -659,7 +663,7 @@ int string app_name 0x7f07003c
 int string auth_google_play_services_client_facebook_display_name 0x7f070007
 int string auth_google_play_services_client_google_display_name 0x7f070006
 int string btn_login 0x7f070044
-int string btn_logout 0x7f070047
+int string btn_logout 0x7f070048
 int string btn_register 0x7f070045
 int string cast_notification_connected_message 0x7f07000b
 int string cast_notification_connecting_message 0x7f07000a
@@ -705,7 +709,8 @@ int string hello_world 0x7f07003d
 int string hint_email 0x7f070041
 int string hint_name 0x7f070043
 int string hint_password 0x7f070042
-int string name 0x7f070048
+int string menu_search 0x7f070047
+int string name 0x7f070049
 int string store_picture_message 0x7f070001
 int string store_picture_title 0x7f070000
 int string wallet_buy_button_place_holder 0x7f07002b

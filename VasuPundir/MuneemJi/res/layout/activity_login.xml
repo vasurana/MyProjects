@@ -8,22 +8,12 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="center"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="10dip" >
 
       
-           <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="MuneemJi"
-            android:layout_marginBottom="50dip"
-            android:textColor="#ffffff"
-            android:textSize="50dip"
-            android:textStyle="italic|normal|bold" /> 
-            
-           
+         
 
         <EditText
             android:id="@+id/email"
@@ -33,6 +23,7 @@
             android:background="@drawable/customedittext"
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
+            android:drawableLeft="@drawable/email1"
             android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/input_login_new"
@@ -45,6 +36,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/customedittext"
             android:hint="@string/hint_password"
+             android:drawableLeft="@drawable/lock"
             android:inputType="textPassword"
             android:padding="10dp"
             android:singleLine="true"

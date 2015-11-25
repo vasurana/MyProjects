@@ -2181,7 +2181,7 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f08004b;
         public static final int action_mode_bar_stub=0x7f08004a;
         public static final int action_mode_close_button=0x7f08003d;
-        public static final int action_settings=0x7f080070;
+        public static final int action_settings=0x7f080071;
         public static final int activity_chooser_view_content=0x7f08003e;
         public static final int adjust_height=0x7f08000a;
         public static final int adjust_width=0x7f08000b;
@@ -2237,6 +2237,7 @@ containing a value of this type.
         public static final int logo_only=0x7f080021;
         public static final int mapFragment=0x7f080067;
         public static final int match_parent=0x7f080019;
+        public static final int menu_search=0x7f080072;
         public static final int middle=0x7f08003a;
         public static final int monochrome=0x7f080027;
         public static final int navList=0x7f080061;
@@ -2249,6 +2250,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f080008;
         public static final int progress_horizontal=0x7f080009;
         public static final int radio=0x7f080048;
+        public static final int rowTextView=0x7f080070;
         public static final int sandbox=0x7f080014;
         public static final int satellite=0x7f08000f;
         public static final int search_badge=0x7f080052;
@@ -2338,12 +2340,14 @@ containing a value of this type.
         public static final int activity_main=0x7f030017;
         public static final int grid_single=0x7f030018;
         public static final int groups_single_row=0x7f030019;
-        public static final int map=0x7f03001a;
-        public static final int players=0x7f03001b;
-        public static final int players_single_row=0x7f03001c;
-        public static final int playersgroup=0x7f03001d;
-        public static final int playersname=0x7f03001e;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001f;
+        public static final int layouts=0x7f03001a;
+        public static final int map=0x7f03001b;
+        public static final int players=0x7f03001c;
+        public static final int players_single_row=0x7f03001d;
+        public static final int playersgroup=0x7f03001e;
+        public static final int playersname=0x7f03001f;
+        public static final int simplerow=0x7f030020;
+        public static final int support_simple_spinner_dropdown_item=0x7f030021;
     }
     public static final class menu {
         public static final int main=0x7f0e0000;
@@ -2418,7 +2422,7 @@ containing a value of this type.
          */
         public static final int auth_google_play_services_client_google_display_name=0x7f070006;
         public static final int btn_login=0x7f070044;
-        public static final int btn_logout=0x7f070047;
+        public static final int btn_logout=0x7f070048;
         public static final int btn_register=0x7f070045;
         /**  Message of the notification to indicate an active cast display connection.  [CHAR LIMIT=80] NOTE: Same text as msgid="794424023757290105" 
          */
@@ -2550,7 +2554,8 @@ containing a value of this type.
         public static final int hint_email=0x7f070041;
         public static final int hint_name=0x7f070043;
         public static final int hint_password=0x7f070042;
-        public static final int name=0x7f070048;
+        public static final int menu_search=0x7f070047;
+        public static final int name=0x7f070049;
         public static final int store_picture_message=0x7f070001;
         public static final int store_picture_title=0x7f070000;
         /**  Text on a placeholder buy button when Google Play services is not

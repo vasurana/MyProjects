@@ -86,6 +86,7 @@ public class Players extends FragmentActivity implements ActionBar.TabListener {
 		// on tab selected
 		// show respected fragment view
 		viewPager.setCurrentItem(tab.getPosition());
+		
 	}
 
 	@Override

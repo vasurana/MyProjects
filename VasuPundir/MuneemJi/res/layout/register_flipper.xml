@@ -69,6 +69,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dip"
+                    android:textAllCaps="false"
                     android:background="@color/btn_login"
                     android:text="Next"
                     android:textColor="@color/white" />
@@ -199,6 +200,7 @@
                     <Button
                         android:id="@+id/btnRegister"
                         android:layout_width="fill_parent"
+                        android:textAllCaps="false"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dip"
                         android:background="@color/btn_login"
